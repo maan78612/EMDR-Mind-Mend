@@ -1,9 +1,7 @@
-
 import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
-import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -115,21 +113,22 @@ class _CustomInputField extends State<CustomInputField> {
           onTap: widget.onTap,
           textAlignVertical: TextAlignVertical.center,
           style: widget.textStyle ??
-              PoppinsStyles.regular
-                  .copyWith(color: AppColors.blackColor, fontSize: 16.sp),
+              PoppinsStyles.regular.copyWith(fontSize: 15.sp),
           keyboardType: widget.keyboardType,
           inputFormatters: widget.inputFormatters,
           obscureText: obscure,
           obscuringCharacter: "•",
           textInputAction: widget.textInputAction,
           decoration: InputDecoration(
-            constraints: BoxConstraints(maxHeight: inputFieldHeight),
             focusColor: widget.focusColor ?? AppColors.primaryColor,
             hintText: widget.hint,
             counterText: "",
-            hintStyle: widget.hintStyle ?? PoppinsStyles.regular,
+            hintStyle: widget.hintStyle ??
+                PoppinsStyles.regular
+                    .copyWith(fontSize: 15.sp, color: AppColors.hintColor),
             contentPadding: widget.contentPadding ??
-                EdgeInsets.symmetric(horizontal: 13.sp, vertical: 0),
+                EdgeInsets.symmetric(
+                    horizontal: 13.sp, vertical: ((50 - 16) / 2).sp),
             filled: widget.isFilled,
             fillColor: AppColors.whiteColor,
             border: widget.isDecorationEnable ?? false
@@ -170,10 +169,11 @@ class _CustomInputField extends State<CustomInputField> {
                         child: Padding(
                           padding: EdgeInsetsDirectional.only(end: 10.sp),
                           child: Icon(
+                            size: 20,
                             obscure
                                 ? Icons.visibility_outlined
                                 : Icons.visibility_off_outlined,
-                            color: AppColors.greyColor,
+                            color: AppColors.blackColor.withOpacity(0.5),
                           ),
                         ),
                       )

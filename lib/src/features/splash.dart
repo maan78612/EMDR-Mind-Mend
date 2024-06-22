@@ -1,10 +1,10 @@
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
+import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/views/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -31,9 +31,28 @@ class _SplashScreenState extends State<SplashScreen>
       body: Center(
         child: ScaleTransition(
           scale: _animation,
-          child: SvgPicture.asset(
-            AppImages.appIcon,
-            width: 250.w,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(AppImages.logo, width: 150.w,height:110.h,fit: BoxFit.contain),
+              20.verticalSpace,
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "mind",
+                      style: PoppinsStyles.medium.copyWith(fontSize: 30.sp),
+                    ),
+                    TextSpan(
+                      text: "mend",
+                      style: PoppinsStyles.extraBold.copyWith(fontSize: 30.sp),
+                    ),
+                  ],
+                ),
+              )
+            ],
           ),
         ),
       ),

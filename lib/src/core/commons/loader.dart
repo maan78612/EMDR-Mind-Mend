@@ -1,9 +1,6 @@
-
-
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 
 class CustomLoader extends StatefulWidget {
@@ -11,10 +8,10 @@ class CustomLoader extends StatefulWidget {
   final Widget child;
 
   const CustomLoader({
-    Key? key,
+    super.key,
     required this.isLoading,
     required this.child,
-  }) : super(key: key);
+  });
 
   @override
   State<StatefulWidget> createState() => _CustomLoaderState();
@@ -53,8 +50,8 @@ class _CustomLoaderState extends State<CustomLoader>
       opacity: 0.5,
       progressIndicator: ScaleTransition(
         scale: _animation,
-        child: SvgPicture.asset(
-          AppImages.appIcon,
+        child: Image.asset(
+          AppImages.logo,
           width: 100.sp,
         ),
       ),

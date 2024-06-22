@@ -1,5 +1,5 @@
-
 import 'package:emdr_mindmend/src/core/commons/custom_button.dart';
+import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_input_field.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
@@ -10,7 +10,6 @@ import 'package:emdr_mindmend/src/features/auth/presentation/viewmodels/login_vi
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 
 class LoginScreen extends ConsumerWidget {
   final loginViewModelProvider = ChangeNotifierProvider<LoginViewModel>((ref) {
@@ -26,32 +25,28 @@ class LoginScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       resizeToAvoidBottomInset: true,
-      body: Center(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: hMargin),
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: hMargin),
+          child: SingleChildScrollView(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SvgPicture.asset(
-                  AppImages.appIcon,
-                  width: 180.w,
-                ),
-                35.verticalSpace,
+                120.verticalSpace,
                 Text(
-                  "Welcome",
-                  style: PoppinsStyles.semiBold
-                      .copyWith(fontSize: 24.sp, color: AppColors.blackColor),
+                  "Welcome Back!",
+                  style: PoppinsStyles.bold.copyWith(fontSize: 22.sp),
                 ),
-                21.verticalSpace,
+                10.verticalSpace,
                 Text(
-                  "Please enter your details below to login",
-                  style: PoppinsStyles.regular,
+                  "Please enter your account here",
+                  style: PoppinsStyles.regular
+                      .copyWith(fontSize: 14.sp, color: AppColors.greyColor),
                 ),
                 35.verticalSpace,
                 CustomInputField(
-                  title: "User ID",
-                  hint: "Enter user ID",
+                  prefixWidget: Image.asset(AppImages.email),
+                  hint: "Email",
                   controller: loginViewModel.uIdCon,
                   onChange: (value) {
                     loginViewModel.onChange(
@@ -62,6 +57,7 @@ class LoginScreen extends ConsumerWidget {
                 ),
                 21.verticalSpace,
                 CustomInputField(
+                  prefixWidget: Image.asset(AppImages.password),
                   title: "Password",
                   hint: "Enter password",
                   controller: loginViewModel.passwordCon,
@@ -74,6 +70,12 @@ class LoginScreen extends ConsumerWidget {
                   obscure: true,
                 ),
                 21.verticalSpace,
+                Text(
+                  "Forgot Password?",
+                  style: PoppinsStyles.medium
+                      .copyWith(fontSize: 15.sp, color: AppColors.primaryColor),
+                ),
+                21.verticalSpace,
                 CustomButton(
                   title: 'Login',
                   isEnable: loginViewModel.isBtnEnable,
@@ -82,17 +84,104 @@ class LoginScreen extends ConsumerWidget {
                     loginViewModel.login();
                   },
                 ),
+                40.verticalSpace,
+                separator(),
                 30.verticalSpace,
-                CustomInputField(
-                  title: "Tenant URL",
-                  hint: "Enter tenant url",
-                  controller: loginViewModel.tenantCon,
-                ),
+                socialLoginButtons(),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: 40.sp),
+                  child: RichText(
+                    textAlign: TextAlign.center,
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: "Don’t have an account? ",
+                          style:
+                              PoppinsStyles.regular.copyWith(fontSize: 16.sp),
+                        ),
+                        WidgetSpan(
+                          child: CommonInkWell(
+                              onTap: () {},
+                              child: Text(
+                                " Sign Up",
+                                style: PoppinsStyles.bold.copyWith(
+                                    fontSize: 16.sp,
+                                    color: AppColors.primaryColor),
+                              )),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget socialLoginButtons() {
+    return Row(
+      children: [
+        Expanded(
+          child: CommonInkWell(
+            onTap: () {},
+            child: Container(
+              height: inputFieldHeight,
+              decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.borderColor),
+                  borderRadius: BorderRadius.all(Radius.circular(10.r))),
+              child: Image.asset(
+                AppImages.google,
+              ),
+            ),
+          ),
+        ),
+        15.horizontalSpace,
+        Expanded(
+          child: CommonInkWell(
+            onTap: () {},
+            child: Container(
+              height: inputFieldHeight,
+              decoration: BoxDecoration(
+                  border: Border.all(color: AppColors.borderColor),
+                  borderRadius: BorderRadius.all(Radius.circular(10.r))),
+              child: Image.asset(
+                AppImages.apple,
+              ),
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget separator() {
+    return Row(
+      children: [
+        const Expanded(
+          child: Divider(
+            endIndent: 30,
+            indent: 10,
+            color: AppColors.borderColor,
+            height: 1,
+          ),
+        ),
+        Text(
+          'OR',
+          style: PoppinsStyles.medium
+              .copyWith(fontSize: 15.sp, color: AppColors.greyColor),
+        ),
+        const Expanded(
+          child: Divider(
+            endIndent: 10,
+            indent: 30,
+            color: AppColors.borderColor,
+            height: 1,
+          ),
+        ),
+      ],
     );
   }
 }
