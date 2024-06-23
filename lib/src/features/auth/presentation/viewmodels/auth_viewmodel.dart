@@ -1,16 +1,21 @@
+import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
 import 'package:emdr_mindmend/src/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/repositories/auth_repository.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/home_screen.dart';
 import 'package:flutter/material.dart';
 
-class LoginViewModel with ChangeNotifier {
+class AuthViewModel with ChangeNotifier {
   final AuthRepository _authRepository = AuthRepositoryImpl();
 
-  CustomTextController uIdCon = CustomTextController(
+  CustomTextController emailCon = CustomTextController(
       controller: TextEditingController(), focusNode: FocusNode());
   CustomTextController passwordCon = CustomTextController(
       controller: TextEditingController(), focusNode: FocusNode());
-  CustomTextController tenantCon = CustomTextController(
+
+  CustomTextController confirmPasswordCon = CustomTextController(
+      controller: TextEditingController(), focusNode: FocusNode());
+  CustomTextController nameCon = CustomTextController(
       controller: TextEditingController(), focusNode: FocusNode());
 
   bool _isLoading = false;
@@ -36,9 +41,9 @@ class LoginViewModel with ChangeNotifier {
   }
 
   void setEnableBtn() {
-    if (uIdCon.controller.text.isNotEmpty &&
+    if (emailCon.controller.text.isNotEmpty &&
         passwordCon.controller.text.isNotEmpty) {
-      if (uIdCon.error == null && passwordCon.error == null) {
+      if (emailCon.error == null && passwordCon.error == null) {
         _isBtnEnable = true;
       } else {
         _isBtnEnable = false;
@@ -50,5 +55,8 @@ class LoginViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login() async {}
+  Future<void> login() async {
+
+    CustomNavigation().pushReplacement(const HomeScreen());
+  }
 }

@@ -1,4 +1,3 @@
-
 import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
@@ -7,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomButton extends StatelessWidget {
-  final String title;
+  final String? title;
   final bool isEnable;
   final Function() onPressed;
+  final Widget? icon;
   final Color bgColor;
   final Color textColor;
   final Color loadingColor;
@@ -18,8 +18,9 @@ class CustomButton extends StatelessWidget {
 
   const CustomButton(
       {super.key,
-      required this.title,
+      this.title,
       required this.bgColor,
+      this.icon,
       this.isEnable = true,
       this.loadingColor = AppColors.whiteColor,
       this.isLoading = false,
@@ -49,9 +50,18 @@ class CustomButton extends StatelessWidget {
                   valueColor: AlwaysStoppedAnimation<Color>(loadingColor),
                 ),
               )
-            : Text(title,
-                textAlign: TextAlign.center,
-                style: PoppinsStyles.semiBold.copyWith(color: textColor)),
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (icon != null) icon!,
+                  if (icon != null && title != null) 8.horizontalSpace,
+                  if (title != null)
+                    Text(title!,
+                        textAlign: TextAlign.center,
+                        style:
+                            PoppinsStyles.semiBold.copyWith(color: textColor)),
+                ],
+              ),
       ),
     );
   }

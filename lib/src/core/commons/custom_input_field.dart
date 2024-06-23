@@ -17,7 +17,7 @@ class CustomInputField extends StatefulWidget {
   final bool? enable;
   final bool? textAlignCenter;
   final int? maxLines;
-  final FocusNode? focusNode;
+
   final Function(String)? onChange;
   final Function()? onEditingComplete;
   final bool? verticalAlign;
@@ -39,7 +39,6 @@ class CustomInputField extends StatefulWidget {
 
   const CustomInputField(
       {super.key,
-      this.focusNode,
       this.title,
       this.isDecorationEnable = true,
       this.verticalAlign = false,
@@ -58,7 +57,7 @@ class CustomInputField extends StatefulWidget {
       this.inputFormatters,
       this.textInputAction = TextInputAction.done,
       this.onTap,
-      this.borderRadius = 5,
+      this.borderRadius = 10,
       this.suffixWidget,
       this.maxLength,
       this.contentPadding,
@@ -96,7 +95,7 @@ class _CustomInputField extends State<CustomInputField> {
         ],
         TextFormField(
           autofocus: widget.autoFocus,
-          focusNode: widget.focusNode,
+          focusNode: widget.controller.focusNode,
           onFieldSubmitted: widget.onSubmit,
           maxLength: widget.maxLength,
           cursorColor: AppColors.primaryColor,
@@ -142,7 +141,9 @@ class _CustomInputField extends State<CustomInputField> {
                 : InputBorder.none,
             focusedBorder: inputBorder.copyWith(
                 borderSide: BorderSide(
-              color: AppColors.focusedBorderColor,
+              color: widget.controller.error == null
+                  ? AppColors.focusedBorderColor
+                  : AppColors.redColor,
               width: widget.borderWidth,
             )),
             disabledBorder: widget.isDecorationEnable ?? false
@@ -151,7 +152,7 @@ class _CustomInputField extends State<CustomInputField> {
             prefixIconConstraints: BoxConstraints(maxHeight: 20.sp),
             suffixIconConstraints: BoxConstraints(maxHeight: 20.sp),
             prefixIcon: Padding(
-              padding: EdgeInsetsDirectional.symmetric(horizontal: 5.sp),
+              padding: EdgeInsetsDirectional.symmetric(horizontal: 8.sp),
               child: widget.prefixWidget,
             ),
             suffixIcon: (widget.suffixWidget != null && widget.obscure == false)
@@ -180,11 +181,13 @@ class _CustomInputField extends State<CustomInputField> {
                     : null,
           ),
         ),
-        4.verticalSpace,
-        Text(
-          widget.controller.error ?? "",
-          style: PoppinsStyles.regular
-              .copyWith(fontSize: 10.sp, color: AppColors.redColor),
+        Padding(
+          padding: EdgeInsets.all(6.sp),
+          child: Text(
+            widget.controller.error ?? "",
+            style: PoppinsStyles.regular
+                .copyWith(fontSize: 10.sp, color: AppColors.redColor),
+          ),
         )
       ],
     );
