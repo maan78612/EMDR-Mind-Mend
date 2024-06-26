@@ -2,7 +2,7 @@ import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
-import 'package:emdr_mindmend/src/features/auth/presentation/views/login_screen.dart';
+import 'package:emdr_mindmend/src/features/on_boarding/presentation/views/on_boarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -35,7 +35,8 @@ class _SplashScreenState extends State<SplashScreen>
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset(AppImages.logo, width: 150.w,height:110.h,fit: BoxFit.contain),
+              Image.asset(AppImages.logo,
+                  width: 150.w, height: 110.h, fit: BoxFit.contain),
               20.verticalSpace,
               RichText(
                 textAlign: TextAlign.center,
@@ -68,7 +69,7 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
     _controller.addListener(() {
       if (_controller.status == AnimationStatus.completed) {
-        CustomNavigation().pushReplacement(LoginScreen());
+        CustomNavigation().pushReplacement(const OnBoardingScreen());
       }
     });
   }

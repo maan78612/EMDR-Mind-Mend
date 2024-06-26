@@ -7,22 +7,22 @@ import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/constants/text_field_validator.dart';
-import 'package:emdr_mindmend/src/features/auth/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/auth/presentation/viewmodels/signup_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/views/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SignUpScreen extends ConsumerWidget {
-  final authViewModelProvider = ChangeNotifierProvider<AuthViewModel>((ref) {
-    return AuthViewModel();
+  final signupViewModelProvider = ChangeNotifierProvider<SignViewModel>((ref) {
+    return SignViewModel();
   });
 
   SignUpScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authViewModel = ref.watch(authViewModelProvider);
+    final signupViewModel = ref.watch(signupViewModelProvider);
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
@@ -54,10 +54,10 @@ class SignUpScreen extends ConsumerWidget {
                       fit: BoxFit.contain),
                   hint: "Name",
                   textInputAction: TextInputAction.next,
-                  controller: authViewModel.nameCon,
+                  controller: signupViewModel.nameCon,
                   onChange: (value) {
-                    authViewModel.onChange(
-                        con: authViewModel.nameCon,
+                    signupViewModel.onChange(
+                        con: signupViewModel.nameCon,
                         value: value,
                         validator: TextFieldValidator.validatePersonName);
                   },
@@ -65,11 +65,11 @@ class SignUpScreen extends ConsumerWidget {
                 CustomInputField(
                   prefixWidget: Image.asset(AppImages.email),
                   hint: "Email",
-                  controller: authViewModel.emailCon,
+                  controller: signupViewModel.emailCon,
                   textInputAction: TextInputAction.next,
                   onChange: (value) {
-                    authViewModel.onChange(
-                        con: authViewModel.emailCon,
+                    signupViewModel.onChange(
+                        con: signupViewModel.emailCon,
                         value: value,
                         validator: TextFieldValidator.validateEmail);
                   },
@@ -77,11 +77,11 @@ class SignUpScreen extends ConsumerWidget {
                 CustomInputField(
                   prefixWidget: Image.asset(AppImages.password),
                   hint: "Password",
-                  controller: authViewModel.passwordCon,
+                  controller: signupViewModel.passwordCon,
                   textInputAction: TextInputAction.next,
                   onChange: (value) {
-                    authViewModel.onChange(
-                        con: authViewModel.passwordCon,
+                    signupViewModel.onChange(
+                        con: signupViewModel.passwordCon,
                         value: value,
                         validator: TextFieldValidator.validatePassword);
                   },
@@ -91,10 +91,10 @@ class SignUpScreen extends ConsumerWidget {
                   prefixWidget: Image.asset(AppImages.password),
                   hint: "Confirm Password",
                   textInputAction: TextInputAction.done,
-                  controller: authViewModel.confirmPasswordCon,
+                  controller: signupViewModel.confirmPasswordCon,
                   onChange: (value) {
-                    authViewModel.onChange(
-                        con: authViewModel.confirmPasswordCon,
+                    signupViewModel.onChange(
+                        con: signupViewModel.confirmPasswordCon,
                         value: value,
                         validator: TextFieldValidator.validatePassword);
                   },
@@ -103,10 +103,10 @@ class SignUpScreen extends ConsumerWidget {
                 21.verticalSpace,
                 CustomButton(
                   title: 'Sign Up',
-                  isEnable: authViewModel.isBtnEnable,
+                  isEnable: signupViewModel.isBtnEnable,
                   bgColor: AppColors.primaryColor,
                   onPressed: () {
-                    authViewModel.login();
+                    signupViewModel.signUpButton(context);
                   },
                 ),
                 Padding(
@@ -150,7 +150,7 @@ class SignUpScreen extends ConsumerWidget {
       padding: EdgeInsets.only(top: 30.h, bottom: 50.h),
       child: CommonInkWell(
         onTap: () {
-          // CustomNavigation().pop();
+          CustomNavigation().pop();
         },
         child: const Align(
             alignment: Alignment.topLeft,

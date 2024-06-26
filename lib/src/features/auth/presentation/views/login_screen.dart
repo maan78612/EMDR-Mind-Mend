@@ -7,22 +7,23 @@ import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/constants/text_field_validator.dart';
-import 'package:emdr_mindmend/src/features/auth/presentation/viewmodels/auth_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/auth/presentation/viewmodels/login_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/auth/presentation/views/forget_password.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/views/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class LoginScreen extends ConsumerWidget {
-  final authViewModelProvider = ChangeNotifierProvider<AuthViewModel>((ref) {
-    return AuthViewModel();
+  final loginViewModelProvider = ChangeNotifierProvider<LoginViewModel>((ref) {
+    return LoginViewModel();
   });
 
   LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final authViewModel = ref.watch(authViewModelProvider);
+    final loginViewModel = ref.watch(loginViewModelProvider);
 
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
@@ -50,10 +51,10 @@ class LoginScreen extends ConsumerWidget {
                   prefixWidget: Image.asset(AppImages.email),
                   hint: "Email",
                   textInputAction: TextInputAction.next,
-                  controller: authViewModel.emailCon,
+                  controller: loginViewModel.emailCon,
                   onChange: (value) {
-                    authViewModel.onChange(
-                        con: authViewModel.emailCon,
+                    loginViewModel.onChange(
+                        con: loginViewModel.emailCon,
                         value: value,
                         validator: TextFieldValidator.validateEmail);
                   },
@@ -62,28 +63,33 @@ class LoginScreen extends ConsumerWidget {
                   prefixWidget: Image.asset(AppImages.password),
                   hint: "Password",
                   textInputAction: TextInputAction.done,
-                  controller: authViewModel.passwordCon,
+                  controller: loginViewModel.passwordCon,
                   onChange: (value) {
-                    authViewModel.onChange(
-                        con: authViewModel.passwordCon,
+                    loginViewModel.onChange(
+                        con: loginViewModel.passwordCon,
                         value: value,
                         validator: TextFieldValidator.validatePassword);
                   },
                   obscure: true,
                 ),
                 21.verticalSpace,
-                Text(
-                  "Forgot Password?",
-                  style: PoppinsStyles.medium
-                      .copyWith(fontSize: 15.sp, color: AppColors.primaryColor),
+                CommonInkWell(
+                  onTap: () {
+                    CustomNavigation().push(ForgetPasswordScreen());
+                  },
+                  child: Text(
+                    "Forgot Password?",
+                    style: PoppinsStyles.medium.copyWith(
+                        fontSize: 15.sp, color: AppColors.primaryColor),
+                  ),
                 ),
                 21.verticalSpace,
                 CustomButton(
                   title: 'Login',
-                  isEnable: authViewModel.isBtnEnable,
+                  isEnable: loginViewModel.isBtnEnable,
                   bgColor: AppColors.primaryColor,
                   onPressed: () {
-                    authViewModel.login();
+                    loginViewModel.login();
                   },
                 ),
                 40.verticalSpace,
@@ -104,8 +110,8 @@ class LoginScreen extends ConsumerWidget {
                         WidgetSpan(
                           child: CommonInkWell(
                               onTap: () {
-                                CustomNavigation()
-                                    .pushReplacement(SignUpScreen());
+                                loginViewModel.clearForm();
+                                CustomNavigation().push(SignUpScreen());
                               },
                               child: Text(
                                 " Sign Up",
@@ -195,7 +201,7 @@ class LoginScreen extends ConsumerWidget {
       padding: EdgeInsets.only(top: 30.h, bottom: 50.h),
       child: CommonInkWell(
         onTap: () {
-          CustomNavigation().pop();
+          // CustomNavigation().pop();
         },
         child: const Align(
             alignment: Alignment.topLeft,

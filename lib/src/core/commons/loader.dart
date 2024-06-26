@@ -6,12 +6,10 @@ import 'package:modal_progress_hud_nsn/modal_progress_hud_nsn.dart';
 class CustomLoader extends StatefulWidget {
   final bool isLoading;
   final Widget child;
+  final Widget? loader;
 
-  const CustomLoader({
-    super.key,
-    required this.isLoading,
-    required this.child,
-  });
+  const CustomLoader(
+      {super.key, required this.isLoading, required this.child, this.loader});
 
   @override
   State<StatefulWidget> createState() => _CustomLoaderState();
@@ -50,10 +48,11 @@ class _CustomLoaderState extends State<CustomLoader>
       opacity: 0.5,
       progressIndicator: ScaleTransition(
         scale: _animation,
-        child: Image.asset(
-          AppImages.logo,
-          width: 100.sp,
-        ),
+        child: widget.loader ??
+            Image.asset(
+              AppImages.logo,
+              width: 100.sp,
+            ),
       ),
       child: widget.child,
     );

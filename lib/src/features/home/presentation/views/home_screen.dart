@@ -8,6 +8,7 @@ import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/drawer_screen.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/home_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/animation_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,7 +35,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final homeViewModel = ref.watch(homeViewModelProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: AppColors.whiteBg,
       body: CustomLoader(
         isLoading: homeViewModel.isLoading,
         child: SafeArea(
@@ -161,7 +162,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: CustomButton(
             title: 'Start',
             bgColor: AppColors.primaryColor,
-            onPressed: () {},
+            onPressed: () {
+              CustomNavigation().push(const PendulumAnimation());
+            },
             icon: Image.asset(
               AppImages.startIcon,
               width: 16.sp,

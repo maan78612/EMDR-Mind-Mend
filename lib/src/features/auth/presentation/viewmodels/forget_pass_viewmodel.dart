@@ -2,20 +2,12 @@ import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
 import 'package:emdr_mindmend/src/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/repositories/auth_repository.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/home_screen.dart';
 import 'package:flutter/material.dart';
 
-class AuthViewModel with ChangeNotifier {
+class ForgetPassViewModel with ChangeNotifier {
   final AuthRepository _authRepository = AuthRepositoryImpl();
 
   CustomTextController emailCon = CustomTextController(
-      controller: TextEditingController(), focusNode: FocusNode());
-  CustomTextController passwordCon = CustomTextController(
-      controller: TextEditingController(), focusNode: FocusNode());
-
-  CustomTextController confirmPasswordCon = CustomTextController(
-      controller: TextEditingController(), focusNode: FocusNode());
-  CustomTextController nameCon = CustomTextController(
       controller: TextEditingController(), focusNode: FocusNode());
 
   bool _isLoading = false;
@@ -41,9 +33,8 @@ class AuthViewModel with ChangeNotifier {
   }
 
   void setEnableBtn() {
-    if (emailCon.controller.text.isNotEmpty &&
-        passwordCon.controller.text.isNotEmpty) {
-      if (emailCon.error == null && passwordCon.error == null) {
+    if (emailCon.controller.text.isNotEmpty) {
+      if (emailCon.error == null) {
         _isBtnEnable = true;
       } else {
         _isBtnEnable = false;
@@ -55,8 +46,7 @@ class AuthViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login() async {
-
-    CustomNavigation().pushReplacement(const HomeScreen());
+  Future<void> forgetPass() async {
+    CustomNavigation().pop();
   }
 }

@@ -1,6 +1,7 @@
 import 'package:emdr_mindmend/src/features/home/data/repositories/home_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/home/domain/repositories/home_repository.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 class HomeViewModel with ChangeNotifier {
   final HomeRepository _homeRepository = HomeRepositoryImpl();
@@ -13,4 +14,6 @@ class HomeViewModel with ChangeNotifier {
     _isLoading = loading;
     notifyListeners();
   }
+
+
 }

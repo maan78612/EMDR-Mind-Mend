@@ -7,6 +7,7 @@ import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/views/login_screen.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/drawer_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/views/setting_screen/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -34,7 +35,7 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
     final drawerViewModel = ref.watch(drawerViewModelProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: AppColors.whiteBg,
       body: CustomLoader(
         isLoading: drawerViewModel.isLoading,
         child: SafeArea(
@@ -50,7 +51,11 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                     title: "My Profile",
                     onTap: () {}),
                 drawerOption(
-                    img: AppImages.settings, title: "Settings", onTap: () {}),
+                    img: AppImages.settings,
+                    title: "Settings",
+                    onTap: () {
+                      CustomNavigation().push(SettingScreen());
+                    }),
                 drawerOption(
                     img: AppImages.contactUs,
                     title: "Contact Us",
@@ -175,7 +180,7 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
               child: Text('Cancel',
                   style: PoppinsStyles.medium.copyWith(fontSize: 14.sp)),
               onPressed: () {
-                CustomNavigation().pop();  // Dismiss the dialog
+                CustomNavigation().pop(); // Dismiss the dialog
               },
             ),
             TextButton(
@@ -183,7 +188,8 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                   style: PoppinsStyles.medium
                       .copyWith(fontSize: 14.sp, color: AppColors.redColor)),
               onPressed: () {
-                CustomNavigation().pushAndRemoveUntil(LoginScreen()); // Dismiss the dialog
+                CustomNavigation()
+                    .pushAndRemoveUntil(LoginScreen()); // Dismiss the dialog
               },
             ),
           ],
