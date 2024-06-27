@@ -40,37 +40,22 @@ class SettingViewModel with ChangeNotifier {
 
   bool isPlaying = false;
 
-  void playSound(int audioSourceIndex) async {
-    if (selectedToneIndex != audioSourceIndex) {
-      isPlaying = true;
+  void selectTone(int audioSourceIndex) {
+    if (selectedToneIndex != audioSourceIndex && isPlaying == true) {
       selectedToneIndex = audioSourceIndex;
+
+    }
+    playSound();
+  }
+
+  void playSound() async {
+    audioPlayer = AudioPlayer();
+    isPlaying = true;
+    notifyListeners();
+    while (isPlaying) {
+      await audioPlayer.play(AssetSource(toneList[selectedToneIndex]));
+      await Future.delayed(Duration(milliseconds: 5000 ~/ (speed * 5)));
       notifyListeners();
-
-      double balance = -1.0; // Start from the left speaker
-      double balanceIncrement = 0.1; // Amount to increment balance
-
-      while (isPlaying) {
-        // Loop for left to right transition
-        while (balance <= 1.0 && isPlaying) {
-          await audioPlayer.setBalance(balance);
-          await audioPlayer.play(AssetSource(toneList[selectedToneIndex]));
-          await Future.delayed(const Duration(milliseconds: 50)); // Adjust as needed for smoother transition
-          balance += balanceIncrement;
-        }
-
-        // Loop for right to left transition
-        while (balance >= -1.0 && isPlaying) {
-          await audioPlayer.setBalance(balance);
-          await audioPlayer.play(AssetSource(toneList[selectedToneIndex]));
-          await Future.delayed(const Duration(milliseconds: 50)); // Adjust as needed for smoother transition
-          balance -= balanceIncrement;
-        }
-
-        // Ensure balance ends exactly at -1.0 for next iteration
-        if (balance < -1.0) {
-          balance = -1.0;
-        }
-      }
     }
   }
 
@@ -112,12 +97,22 @@ class SettingViewModel with ChangeNotifier {
 
   void setBallColor(BallColor color) {
     ballColor = color;
+
     notifyListeners();
   }
 
-  /*------------------------------------------------------*/
-  /*-----------------------ANIMATION----------------------*/
-  /*------------------------------------------------------*/
+  List<Color> bgColorList = [AppColors.whiteColor, AppColors.blackColor];
+
+  Color bgColor = AppColors.whiteColor;
+
+  void setBgColor(Color color) {
+    bgColor = color;
+    notifyListeners();
+  }
+
+/*------------------------------------------------------*/
+/*-----------------------ANIMATION----------------------*/
+/*------------------------------------------------------*/
 
   bool isAnimationInitialize = false;
 

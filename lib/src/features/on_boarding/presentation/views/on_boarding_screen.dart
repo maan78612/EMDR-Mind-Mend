@@ -14,10 +14,10 @@ class OnBoardingScreen extends ConsumerStatefulWidget {
   const OnBoardingScreen({super.key});
 
   @override
-  ConsumerState<OnBoardingScreen> createState() => _HomeScreenState();
+  ConsumerState<OnBoardingScreen> createState() => _OnBoardingScreen();
 }
 
-class _HomeScreenState extends ConsumerState<OnBoardingScreen> {
+class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
   final onBoardingViewModelProvider =
       ChangeNotifierProvider<OnBoardingViewModel>((ref) {
     return OnBoardingViewModel();

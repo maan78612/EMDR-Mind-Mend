@@ -3,6 +3,7 @@ import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
+import 'package:emdr_mindmend/src/core/enums/color_ball.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -55,9 +56,9 @@ class _PendulumAnimationState extends ConsumerState<PendulumAnimation>
     final settingViewModel = ref.watch(settingViewModelProvider);
 
     return Scaffold(
-      backgroundColor: AppColors.blackColor,
+      backgroundColor: settingViewModel.bgColor,
       appBar: AppBar(
-        backgroundColor: AppColors.blackColor,
+        backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         centerTitle: true,
         leading: CommonInkWell(
@@ -68,11 +69,12 @@ class _PendulumAnimationState extends ConsumerState<PendulumAnimation>
             ref.read(settingViewModelProvider).initAnimation(false);
             CustomNavigation().pop();
           },
-          child: const Icon(Icons.arrow_back_ios, color: AppColors.whiteColor),
+          child: Icon(Icons.arrow_back_ios,
+              color: settingViewModel.bgColor == AppColors.blackColor
+                  ? AppColors.whiteColor
+                  : AppColors.blackColor),
+
         ),
-        title: Text("Animation",
-            style: PoppinsStyles.medium
-                .copyWith(fontSize: 18, color: AppColors.whiteColor)),
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(10),
           child: Divider(color: AppColors.borderColor),
@@ -97,16 +99,23 @@ class _PendulumAnimationState extends ConsumerState<PendulumAnimation>
                           width: 35,
                           height: 35,
                           decoration: BoxDecoration(
-                            color: AppColors.whiteColor,
+                            color: settingViewModel
+                                .getColor(settingViewModel.ballColor),
                             border: Border.all(
-                                color: settingViewModel
-                                    .getColor(settingViewModel.ballColor)),
+                                color: settingViewModel.ballColor ==
+                                        BallColor.black
+                                    ? AppColors.whiteColor
+                                    : settingViewModel
+                                        .getColor(settingViewModel.ballColor)),
                             shape: BoxShape.circle,
                             boxShadow: [
                               BoxShadow(
-                                color: settingViewModel
-                                    .getColor(settingViewModel.ballColor)
-                                    .withOpacity(0.4),
+                                color: settingViewModel.ballColor ==
+                                        BallColor.black
+                                    ? AppColors.whiteColor
+                                    : settingViewModel
+                                        .getColor(settingViewModel.ballColor)
+                                        .withOpacity(0.4),
                                 blurRadius: 10,
                                 spreadRadius: 2,
                                 blurStyle: BlurStyle.normal,

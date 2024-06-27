@@ -8,7 +8,7 @@ import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/drawer_screen.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/home_viewmodel.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/animation_screen.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/intro_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -62,9 +62,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
                 infoWidget(
                   img: AppImages.audio,
-                  title: 'Visual and auditory Stimulations',
+                  title: 'Visual and auditory Stimulation\'s',
                   description:
-                      'use the 2 most common stimulations\n(visual and auditory) to aid your\ntreatment. You can skip to these if\ncomfortable to do so',
+                      'use the 2 most common stimulation\'s\n(visual and auditory) to aid your\ntreatment. You can skip to these if\ncomfortable to do so',
                 ),
                 const Spacer(),
                 homeButtons(),
@@ -163,7 +163,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             title: 'Start',
             bgColor: AppColors.primaryColor,
             onPressed: () {
-              CustomNavigation().push(const PendulumAnimation());
+              _showAlertDialog();
             },
             icon: Image.asset(
               AppImages.startIcon,
@@ -189,5 +189,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ],
     );
+  }
+
+  Future<void> _showAlertDialog() {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            backgroundColor: const Color(0xff1E1E1E).withOpacity(0.75),
+            alignment: Alignment.center,
+            title: Text(
+              "Warning",
+              textAlign: TextAlign.center,
+              style: PoppinsStyles.semiBold
+                  .copyWith(fontSize: 17.sp, color: AppColors.whiteColor),
+            ),
+            content: Text(
+              "This application is not intended to substitute professional healthcare. We strongly advise that the initial use is conducted with the guidance of a trained psychologist. If you have any uncertainties, please consult a doctor or psychologist.",
+              style: PoppinsStyles.light.copyWith(
+                  fontSize: 13.sp, color: AppColors.whiteColor, height: 1.2.sp),
+            ),
+            actions: [
+              Center(
+                child: CommonInkWell(
+                  onTap: () =>
+                      CustomNavigation().pushReplacement(IntroScreen()),
+                  child: Text("OK",
+                      textAlign: TextAlign.center,
+                      style: PoppinsStyles.semiBold.copyWith(
+                          fontSize: 17.sp, color: AppColors.whiteColor)),
+                ),
+              )
+            ],
+          );
+        });
   }
 }

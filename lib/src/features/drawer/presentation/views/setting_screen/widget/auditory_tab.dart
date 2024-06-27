@@ -36,7 +36,7 @@ class AuditoryTab extends ConsumerWidget {
             children: List.generate(settingViewModel.toneList.length, (index) {
               return CommonInkWell(
                 onTap: () {
-                  settingViewModel.playSound(index);
+                  settingViewModel.selectTone(index);
                 },
                 child: Container(
                   width: settingViewModel.selectedToneIndex == index

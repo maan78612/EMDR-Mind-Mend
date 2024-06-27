@@ -18,7 +18,7 @@ class VisualTab extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         30.verticalSpace,
-        SpeedWidget(),
+        const SpeedWidget(),
         30.verticalSpace,
         Container(
           padding: EdgeInsets.symmetric(horizontal: 10.sp, vertical: 8.sp),
@@ -101,6 +101,43 @@ class VisualTab extends ConsumerWidget {
                         ))
                     .toList(),
               ),
+            ),
+          ],
+        ),
+        20.verticalSpace,
+        Row(
+          children: [
+            Text(
+              "Background Color",
+              style: PoppinsStyles.semiBold.copyWith(fontSize: 22.sp),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children:
+                  List.generate(settingViewModel.bgColorList.length, (index) {
+                Color bgColor = settingViewModel.bgColorList[index];
+                return GestureDetector(
+                  onTap: () {
+                    settingViewModel.setBgColor(bgColor);
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      width: 30,
+                      height: 30,
+                      decoration: BoxDecoration(
+                          color: bgColor,
+                          shape: BoxShape.circle,
+                          border: Border.all(
+                            width: 2,
+                              color: bgColor == settingViewModel.bgColor
+                                  ? AppColors.primaryColor
+
+                                  : Colors.transparent)),
+                    ),
+                  ),
+                );
+              }),
             ),
           ],
         ),
