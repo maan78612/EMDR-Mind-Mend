@@ -7,7 +7,6 @@ double inputFieldHeight = 50.sp;
 double hMargin = 24.sp;
 String? fcmToken;
 final settingViewModelProvider =
-ChangeNotifierProvider<SettingViewModel>((ref) {
+    ChangeNotifierProvider<SettingViewModel>((ref) {
   return SettingViewModel();
 });
-

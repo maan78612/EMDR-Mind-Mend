@@ -1,8 +1,11 @@
 import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
+import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/setting_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/intro_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/animation_screen.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/views/intro_views/widgets/intro_description.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/views/intro_views/widgets/intro_heading.dart';
 import 'package:flutter/material.dart';
@@ -34,63 +37,101 @@ class Intro8 extends ConsumerWidget {
           })),
         ),
         40.verticalSpace,
+        introViewModel.selectedDesensitisation == "Auditory"
+            ? auditory(settingViewModel)
+            : visual(settingViewModel),
+      ],
+    );
+  }
+
+  Widget auditory(SettingViewModel settingViewModel) {
+    return Column(
+      children: [
+        const IntroDescription(
+            description:
+                "Bilateral visual stimulation is ideal for processing most traumatic memories, while bilateral auditory stimulation is prefred if you have a severe visual impairment."),
+        30.verticalSpace,
+        const IntroDescription(
+            description:
+                "We strongly recommend that you use headphones or earphones for auditory stimulation. As you listen, please focus on the moment of the event that generated the emotion. Let the thoughts run through your mind, without judging their relevance"),
+        40.verticalSpace,
+        settingViewModel.isPlaying
+            ? stopButton(
+                settingViewModel: settingViewModel,
+                stopFunc: () => settingViewModel.stopSound())
+            : playButton(
+                settingViewModel: settingViewModel,
+                playFunc: () => settingViewModel.playSound()),
+      ],
+    );
+  }
+
+  Widget visual(SettingViewModel settingViewModel) {
+    return Column(
+      children: [
         const IntroDescription(
             description: "This is where we use the desensitisation "),
         40.verticalSpace,
-        settingViewModel.isPlaying
-            ? CommonInkWell(
-                onTap: () {
-                  settingViewModel.stopSound();
-                },
-                child: Center(
-                  child: Container(
-                    width: 110.w,
-                    height: 50.h,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.redColor),
-                        borderRadius: BorderRadius.all(Radius.circular(10.r))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.stop_circle,
-                            color: AppColors.redColor),
-                        Text(
-                          "Stop",
-                          style: PoppinsStyles.bold.copyWith(
-                              fontSize: 16, color: AppColors.redColor),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            : Center(
-                child: CommonInkWell(
-                  onTap: () => settingViewModel.playSound(),
-                  child: Container(
-                    width: 110.w,
-                    height: 50.h,
-                    decoration: BoxDecoration(
-                        border: Border.all(color: AppColors.primaryColor),
-                        borderRadius: BorderRadius.all(Radius.circular(10.r))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Icon(Icons.play_arrow,
-                            color: AppColors.primaryColor),
-                        Text(
-                          "Play",
-                          style: PoppinsStyles.bold.copyWith(
-                              fontSize: 16, color: AppColors.primaryColor),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
+        playButton(
+            settingViewModel: settingViewModel,
+            playFunc: () => CustomNavigation().push(const PendulumAnimation())),
       ],
+    );
+  }
+
+  Widget stopButton(
+      {required SettingViewModel settingViewModel,
+      required Function stopFunc}) {
+    return CommonInkWell(
+      onTap: () => stopFunc(),
+      child: Center(
+        child: Container(
+          width: 110.w,
+          height: 50.h,
+          decoration: BoxDecoration(
+              border: Border.all(color: AppColors.redColor),
+              borderRadius: BorderRadius.all(Radius.circular(10.r))),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.stop_circle, color: AppColors.redColor),
+              Text(
+                "Stop",
+                style: PoppinsStyles.bold
+                    .copyWith(fontSize: 16, color: AppColors.redColor),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  CommonInkWell playButton(
+      {required SettingViewModel settingViewModel,
+      required Function playFunc}) {
+    return CommonInkWell(
+      onTap: () => playFunc(),
+      child: Container(
+        width: 110.w,
+        height: 50.h,
+        decoration: BoxDecoration(
+            border: Border.all(color: AppColors.primaryColor),
+            borderRadius: BorderRadius.all(Radius.circular(10.r))),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.play_arrow, color: AppColors.primaryColor),
+            Text(
+              "Play",
+              style: PoppinsStyles.bold
+                  .copyWith(fontSize: 16, color: AppColors.primaryColor),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
