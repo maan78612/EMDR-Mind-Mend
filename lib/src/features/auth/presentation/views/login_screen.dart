@@ -89,7 +89,7 @@ class LoginScreen extends ConsumerWidget {
                   isEnable: loginViewModel.isBtnEnable,
                   bgColor: AppColors.primaryColor,
                   onPressed: () {
-                    loginViewModel.login();
+                    loginViewModel.login(context);
                   },
                 ),
                 40.verticalSpace,

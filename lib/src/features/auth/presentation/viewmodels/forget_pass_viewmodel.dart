@@ -1,5 +1,7 @@
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
+import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +19,7 @@ class ForgetPassViewModel with ChangeNotifier {
 
   bool get isBtnEnable => _isBtnEnable;
 
-  set setLoading(bool loading) {
+  void setLoading(bool loading) {
     _isLoading = loading;
     notifyListeners();
   }
@@ -46,7 +48,20 @@ class ForgetPassViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> forgetPass() async {
-    CustomNavigation().pop();
+  Future<void> forgetPass(BuildContext context) async {
+    try {
+      setLoading(true);
+
+      final body = {"email": emailCon.controller.text};
+
+      _authRepository.forgetPassword(body: body);
+      CustomNavigation().pop();
+      CustomSnackBar.showSnackBar("Email sent for reset password",
+          SnackBarType.success, context);
+    } catch (e) {
+      CustomSnackBar.showSnackBar(e.toString(), SnackBarType.error, context);
+    } finally {
+      setLoading(false);
+    }
   }
 }

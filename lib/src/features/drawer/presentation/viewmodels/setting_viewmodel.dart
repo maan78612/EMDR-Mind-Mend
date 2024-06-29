@@ -28,7 +28,7 @@ class SettingViewModel with ChangeNotifier {
   }
 
   /// Set Tone index
-  late AudioPlayer audioPlayer;
+   AudioPlayer? audioPlayer;
 
   List<String> toneList = [
     "sound/tone1.wav",
@@ -43,7 +43,6 @@ class SettingViewModel with ChangeNotifier {
   void selectTone(int audioSourceIndex) {
     if (selectedToneIndex != audioSourceIndex && isPlaying == true) {
       selectedToneIndex = audioSourceIndex;
-
     }
     playSound();
   }
@@ -53,15 +52,17 @@ class SettingViewModel with ChangeNotifier {
     isPlaying = true;
     notifyListeners();
     while (isPlaying) {
-      await audioPlayer.play(AssetSource(toneList[selectedToneIndex]));
+      await audioPlayer?.play(AssetSource(toneList[selectedToneIndex]));
       await Future.delayed(Duration(milliseconds: 5000 ~/ (speed * 5)));
       notifyListeners();
     }
   }
 
   void stopSound() {
-    isPlaying = false; // Set the flag to false to stop playing
-    audioPlayer.stop();
+    if (isPlaying) {
+      isPlaying = false; // Set the flag to false to stop playing
+      audioPlayer?.stop();
+    }
 
     notifyListeners(); // Stop the audio player
   }

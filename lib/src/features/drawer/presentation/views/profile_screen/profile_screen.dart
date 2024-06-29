@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:emdr_mindmend/src/core/commons/custom_button.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_input_field.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
@@ -7,6 +6,7 @@ import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
+import 'package:emdr_mindmend/src/core/constants/text_field_validator.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/widgets/drawer_widgets_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -30,43 +30,106 @@ class ProfileScreen extends ConsumerWidget {
       appBar: const DrawerAppBar(title: 'Profile'),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: hMargin),
-        child: Column(
+        child: ListView(
           children: [
             30.verticalSpace,
-            profileViewModel.profileImage != null
-                ? CircleAvatar(
-                    radius: 50,
-                    backgroundImage:
-                        Image.file(profileViewModel.profileImage!).image,
-                  )
-                : CircleAvatar(
-                    radius: 50,
-                    child: IconButton(
-                      icon: Icon(Icons.add),
-                      onPressed: () async {
-                        _showImageOptions(context, profileViewModel);
-                      },
-                    ),
-                  ),
+            profileViewModel.profileImage == null
+                ? noImageAdded(context, profileViewModel)
+                : imageAddedFromFile(profileViewModel),
+            30.verticalSpace,
             CustomInputField(
-              prefixWidget: Image.asset(AppImages.person,
-                  color: AppColors.blackColor,
-                  width: 16.sp,
-                  height: 16.sp,
-                  fit: BoxFit.contain),
+              prefixWidget: Image.asset(
+                AppImages.person,
+                color: AppColors.blackColor,
+                width: 16.sp,
+                height: 16.sp,
+                fit: BoxFit.contain,
+              ),
               hint: "Name",
               textInputAction: TextInputAction.next,
               controller: profileViewModel.nameCon,
-              onChange: (value) {},
+              onChange: (value) {
+                profileViewModel.onChange(
+                    con: profileViewModel.nameCon,
+                    value: value,
+                    validator: TextFieldValidator.validatePersonName);
+              },
             ),
+            10.verticalSpace,
             CustomInputField(
               prefixWidget: Image.asset(AppImages.email),
               hint: "Email",
+              enable: false,
               controller: profileViewModel.emailCon,
-            ), // Display email, not editable
-            ElevatedButton(
-              onPressed: () {},
-              child: Text('Save'),
+              textStyle: PoppinsStyles.regular
+                  .copyWith(fontSize: 15.sp, color: AppColors.greyColor),
+            ),
+            40.verticalSpace,
+            CustomButton(
+              onPressed: () {
+
+              },
+              bgColor: AppColors.primaryColor,
+              title: 'Save',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget imageAddedFromFile(ProfileViewModel profileViewModel) {
+    return Center(
+      child: Stack(
+        children: [
+          CircleAvatar(
+            radius: 75,
+            backgroundImage: Image.file(profileViewModel.profileImage!).image,
+          ),
+          Positioned(
+            bottom: 7.5.sp,
+            right: 7.5.sp,
+            child: CommonInkWell(
+              onTap: () => profileViewModel.deleteImage(),
+              child: CircleAvatar(
+                backgroundColor: AppColors.whiteColor,
+                radius: 15,
+                child: Icon(Icons.delete, size: 15.sp, color: AppColors.redColor),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget noImageAdded(BuildContext context, ProfileViewModel profileViewModel) {
+    return CommonInkWell(
+      onTap: () => _showImageOptions(context, profileViewModel),
+      child: Center(
+        child: Stack(
+          children: [
+            CircleAvatar(
+              backgroundColor: AppColors.primaryColor,
+              radius: 75,
+              child: Icon(
+                Icons.person,
+                size: 50.sp,
+                color: AppColors.whiteColor,
+              ),
+            ),
+            Positioned(
+              bottom: 7.5.sp,
+              right: 7.5.sp,
+              child: CircleAvatar(
+                backgroundColor: AppColors.whiteColor,
+                radius: 15,
+                child: Icon(
+                  Icons.add,
+                  size: 15.sp,
+                  color: AppColors.primaryColor,
+                ),
+              ),
             ),
           ],
         ),
@@ -76,15 +139,17 @@ class ProfileScreen extends ConsumerWidget {
 
   void _showImageOptions(
       BuildContext context, ProfileViewModel profileViewModel) {
-    showBottomSheet(
+    showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Container(
           decoration: BoxDecoration(
-              color: AppColors.primaryColor,
-              borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10.r),
-                  topRight: Radius.circular(10.r))),
+            color: AppColors.primaryColor,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(10.r),
+              topRight: Radius.circular(10.r),
+            ),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -120,7 +185,7 @@ class ProfileScreen extends ConsumerWidget {
                   CustomNavigation().pop();
                 },
               ),
-              20.verticalSpace
+              20.verticalSpace,
             ],
           ),
         );

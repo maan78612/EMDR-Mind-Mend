@@ -1,4 +1,6 @@
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
+import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/home/data/repositories/home_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/home/domain/repositories/home_repository.dart';
 import 'package:flutter/foundation.dart';
@@ -18,8 +20,15 @@ class IntroViewModel with ChangeNotifier {
 
   int introIndex = 0;
 
-  void incrementIndex() {
-    introIndex = introIndex + 1;
+  void incrementIndex(BuildContext context) {
+    if (introIndex < 10) {
+      introIndex = introIndex + 1;
+    } else {
+      CustomNavigation().pop();
+      CustomSnackBar.showSnackBar(
+          "Information survey completed", SnackBarType.success, context);
+    }
+
     notifyListeners();
   }
 
@@ -34,11 +43,17 @@ class IntroViewModel with ChangeNotifier {
 
   double intro5Slider = 1;
   double intro6Slider = 1;
+  double intro9Slider = 5;
+  double intro10Slider = 7;
 
   void changeSlider(int num, double value) {
     if (num == 1) {
       intro5Slider = value;
     } else if (num == 2) {
+      intro6Slider = value;
+    } else if (num == 3) {
+      intro6Slider = value;
+    } else if (num == 4) {
       intro6Slider = value;
     }
 

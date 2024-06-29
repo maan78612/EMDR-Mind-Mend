@@ -1,5 +1,7 @@
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
+import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/views/home_screen.dart';
@@ -20,7 +22,7 @@ class LoginViewModel with ChangeNotifier {
 
   bool get isBtnEnable => _isBtnEnable;
 
-  set setLoading(bool loading) {
+  void setLoading(bool loading) {
     _isLoading = loading;
     notifyListeners();
   }
@@ -58,7 +60,20 @@ class LoginViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login() async {
-    CustomNavigation().pushReplacement(const HomeScreen());
+  Future<void> login(BuildContext context) async {
+    try {
+      setLoading(true);
+
+      final body = {
+        "email": emailCon.controller.text,
+        "password": passwordCon.controller.text,
+      };
+      _authRepository.login(body: body);
+      CustomNavigation().pushReplacement(const HomeScreen());
+    } catch (e) {
+      CustomSnackBar.showSnackBar(e.toString(), SnackBarType.error, context);
+    } finally {
+      setLoading(false);
+    }
   }
 }

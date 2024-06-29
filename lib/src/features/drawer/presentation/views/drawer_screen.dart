@@ -7,6 +7,9 @@ import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/views/login_screen.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/drawer_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/views/contact_us.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/views/help_faq_screen/help_faq_screen.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/views/profile_screen/profile_screen.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/setting_screen/setting_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,19 +52,27 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                 drawerOption(
                     img: AppImages.myProfile,
                     title: "My Profile",
-                    onTap: () {}),
+                    onTap: () {
+                      CustomNavigation().push(ProfileScreen());
+                    }),
                 drawerOption(
                     img: AppImages.settings,
                     title: "Settings",
                     onTap: () {
-                      CustomNavigation().push(SettingScreen());
+                      CustomNavigation().push(const SettingScreen());
                     }),
                 drawerOption(
                     img: AppImages.contactUs,
                     title: "Contact Us",
-                    onTap: () {}),
+                    onTap: () {
+                      CustomNavigation().push(ContactUsPage());
+                    }),
                 drawerOption(
-                    img: AppImages.faq, title: "Helps & FAQs", onTap: () {}),
+                    img: AppImages.faq,
+                    title: "Helps & FAQs",
+                    onTap: () {
+                      CustomNavigation().push(HelpFaqPage());
+                    }),
                 const Spacer(flex: 3),
                 drawerOption(
                     img: AppImages.logout,

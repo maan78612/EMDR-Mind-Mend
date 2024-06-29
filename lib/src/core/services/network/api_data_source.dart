@@ -91,7 +91,7 @@ class NetworkApi {
     }
   }
 
-  Future put({
+  Future patch({
     required String url,
     required Map<String, dynamic> body,
     Map<String, dynamic>? customHeader,

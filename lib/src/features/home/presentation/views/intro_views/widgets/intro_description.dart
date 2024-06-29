@@ -4,14 +4,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IntroDescription extends StatelessWidget {
   final String description;
-  final String? boldDescription;
+  final String? boldDescriptionStart;
+  final String? boldDescriptionEnd;
   final bool isBullet;
 
-  const IntroDescription(
-      {super.key,
-      required this.description,
-      this.isBullet = false,
-      this.boldDescription});
+  const IntroDescription({
+    super.key,
+    required this.description,
+    this.isBullet = false,
+    this.boldDescriptionStart,
+    this.boldDescriptionEnd,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +25,7 @@ class IntroDescription extends StatelessWidget {
           Container(
             width: 7.sp,
             height: 7.sp,
-            margin: EdgeInsets.only(right: 6.sp,top: 6.sp),
+            margin: EdgeInsets.only(right: 6.sp, top: 6.sp),
             decoration: const BoxDecoration(
                 shape: BoxShape.circle, color: Color(0xffDB902C)),
           ),
@@ -32,13 +35,21 @@ class IntroDescription extends StatelessWidget {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: boldDescription ?? "",
-                  style: PoppinsStyles.semiBold.copyWith(fontSize: 14.sp,height: 1.2.sp),
+                  text: boldDescriptionStart ?? "",
+                  style: PoppinsStyles.semiBold
+                      .copyWith(fontSize: 14.sp, height: 1.2.sp),
                 ),
                 TextSpan(
                   text: description,
                   style: PoppinsStyles.light.copyWith(
-                      fontSize: 14.sp, color: const Color(0xff424242),height: 1.2.sp),
+                      fontSize: 14.sp,
+                      color: const Color(0xff424242),
+                      height: 1.2.sp),
+                ),
+                TextSpan(
+                  text: boldDescriptionEnd ?? "",
+                  style: PoppinsStyles.semiBold
+                      .copyWith(fontSize: 14.sp, height: 1.2.sp),
                 ),
               ],
             ),

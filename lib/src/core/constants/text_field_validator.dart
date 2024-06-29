@@ -50,4 +50,11 @@ class TextFieldValidator {
     }
     return null;
   }
+
+  static String? validateMessage(String? value) {
+    if (value == null || value.isEmpty) {
+      return "Please enter message to proceed";
+    }
+    return null;
+  }
 }

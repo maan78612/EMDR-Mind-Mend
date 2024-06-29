@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
@@ -7,19 +5,16 @@ import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/drawer/data/repositories/drawer_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/drawer/domain/repositories/drawer_repository.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 
-class ProfileViewModel with ChangeNotifier {
+class ContactUsViewModel with ChangeNotifier {
   final DrawerRepository _drawerRepository = DrawerRepositoryImpl();
 
-  CustomTextController emailCon = CustomTextController(
-      controller: TextEditingController(text: "john@gmail.com"),
-      focusNode: FocusNode());
-  CustomTextController nameCon = CustomTextController(
-      controller: TextEditingController(text: "John"), focusNode: FocusNode());
-
-  File? profileImage;
-  final ImagePicker _picker = ImagePicker();
+  final CustomTextController nameController = CustomTextController(
+      controller: TextEditingController(), focusNode: FocusNode());
+  final CustomTextController emailController = CustomTextController(
+      controller: TextEditingController(), focusNode: FocusNode());
+  final CustomTextController messageController = CustomTextController(
+      controller: TextEditingController(), focusNode: FocusNode());
 
   bool _isBtnEnable = false;
 
@@ -34,22 +29,6 @@ class ProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> imageOptionClick(ImageSource source) async {
-    final pickedFile = await _picker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      profileImage = File(pickedFile.path);
-      notifyListeners();
-    }
-  }
-
-  void deleteImage() {
-    if (profileImage != null) {
-      profileImage = null;
-    }
-    notifyListeners();
-  }
-
   void onChange(
       {required CustomTextController con,
       String? Function(String?)? validator,
@@ -61,8 +40,12 @@ class ProfileViewModel with ChangeNotifier {
   }
 
   void setEnableBtn() {
-    if (nameCon.controller.text.isNotEmpty) {
-      if (nameCon.error == null) {
+    if (nameController.controller.text.isNotEmpty &&
+        emailController.controller.text.isNotEmpty &&
+        messageController.controller.text.isNotEmpty) {
+      if (nameController.error == null &&
+          emailController.error == null &&
+          messageController.error == null) {
         _isBtnEnable = true;
       } else {
         _isBtnEnable = false;
@@ -74,19 +57,19 @@ class ProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void editProfile(BuildContext context) {
+  void submitContactUs(BuildContext context) {
     try {
       setLoading(true);
-      List<MapEntry<String, File>> files = [
-        MapEntry('file_field', profileImage!),
-      ];
+
       final body = {
-        "name": nameCon.controller.text,
+        "email": emailController.controller.text,
+        "name": nameController.controller.text,
+        "message": messageController.controller.text
       };
-      _drawerRepository.editProfile(body: body, files: files);
+      _drawerRepository.contactUs(body: body);
       CustomNavigation().pop();
       CustomSnackBar.showSnackBar(
-          "Profile saved", SnackBarType.success, context);
+          "Message sent", SnackBarType.success, context);
     } catch (e) {
       CustomSnackBar.showSnackBar(e.toString(), SnackBarType.error, context);
     } finally {

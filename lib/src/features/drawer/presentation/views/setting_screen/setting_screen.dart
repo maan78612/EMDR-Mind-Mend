@@ -20,7 +20,6 @@ class SettingScreen extends ConsumerStatefulWidget {
 class _SettingScreenState extends ConsumerState<SettingScreen> {
   @override
   void initState() {
-
     super.initState();
   }
 
@@ -36,7 +35,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
           onBack: () {
             CustomNavigation().pop();
             settingViewModel.stopSound();
-            settingViewModel.audioPlayer.dispose();
+            settingViewModel.audioPlayer?.dispose();
           },
         ),
         body: Padding(

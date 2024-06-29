@@ -16,7 +16,7 @@ class CustomInputField extends StatefulWidget {
   final bool expand;
   final bool? enable;
   final bool? textAlignCenter;
-  final int? maxLines;
+  final int maxLines;
 
   final Function(String)? onChange;
   final Function()? onEditingComplete;
@@ -51,7 +51,7 @@ class CustomInputField extends StatefulWidget {
       this.autoFocus = false,
       this.enable = true,
       this.textAlignCenter = false,
-      this.maxLines,
+      this.maxLines=1,
       this.focusColor,
       this.onChange,
       this.inputFormatters,
@@ -99,7 +99,8 @@ class _CustomInputField extends State<CustomInputField> {
           onFieldSubmitted: widget.onSubmit,
           maxLength: widget.maxLength,
           cursorColor: AppColors.primaryColor,
-          maxLines: 1,
+          maxLines: widget.maxLines,
+
           minLines: 1,
           cursorHeight: 16.sp,
           onChanged: widget.onChange,
@@ -118,68 +119,7 @@ class _CustomInputField extends State<CustomInputField> {
           obscureText: obscure,
           obscuringCharacter: "•",
           textInputAction: widget.textInputAction,
-          decoration: InputDecoration(
-            focusColor: widget.focusColor ?? AppColors.primaryColor,
-            hintText: widget.hint,
-            counterText: "",
-            hintStyle: widget.hintStyle ??
-                PoppinsStyles.regular
-                    .copyWith(fontSize: 15.sp, color: AppColors.hintColor),
-            contentPadding: widget.contentPadding ??
-                EdgeInsets.symmetric(
-                    horizontal: 13.sp, vertical: ((50 - 16) / 2).sp),
-            filled: widget.isFilled,
-            fillColor: AppColors.whiteColor,
-            border: widget.isDecorationEnable ?? false
-                ? inputBorder
-                : InputBorder.none,
-            enabledBorder: widget.isDecorationEnable ?? false
-                ? inputBorder
-                : InputBorder.none,
-            errorBorder: widget.isDecorationEnable ?? false
-                ? inputBorder
-                : InputBorder.none,
-            focusedBorder: inputBorder.copyWith(
-                borderSide: BorderSide(
-              color: widget.controller.error == null
-                  ? AppColors.focusedBorderColor
-                  : AppColors.redColor,
-              width: widget.borderWidth,
-            )),
-            disabledBorder: widget.isDecorationEnable ?? false
-                ? inputBorder
-                : InputBorder.none,
-            prefixIconConstraints: BoxConstraints(maxHeight: 20.sp),
-            suffixIconConstraints: BoxConstraints(maxHeight: 20.sp),
-            prefixIcon: Padding(
-              padding: EdgeInsetsDirectional.symmetric(horizontal: 8.sp),
-              child: widget.prefixWidget,
-            ),
-            suffixIcon: (widget.suffixWidget != null && widget.obscure == false)
-                ? Padding(
-                    padding: EdgeInsetsDirectional.only(end: 10.sp),
-                    child: widget.suffixWidget,
-                  )
-                : widget.obscure == true
-                    ? CommonInkWell(
-                        onTap: () {
-                          setState(() {
-                            obscure = !obscure;
-                          });
-                        },
-                        child: Padding(
-                          padding: EdgeInsetsDirectional.only(end: 10.sp),
-                          child: Icon(
-                            size: 20,
-                            obscure
-                                ? Icons.visibility_outlined
-                                : Icons.visibility_off_outlined,
-                            color: AppColors.blackColor.withOpacity(0.5),
-                          ),
-                        ),
-                      )
-                    : null,
-          ),
+          decoration: decorationComponent(),
         ),
         Padding(
           padding: EdgeInsets.all(6.sp),
@@ -191,6 +131,72 @@ class _CustomInputField extends State<CustomInputField> {
         )
       ],
     );
+  }
+
+  InputDecoration decorationComponent() {
+    return InputDecoration(
+          focusColor: widget.focusColor ?? AppColors.primaryColor,
+          hintText: widget.hint,
+          counterText: "",
+
+          hintStyle: widget.hintStyle ??
+              PoppinsStyles.regular
+                  .copyWith(fontSize: 15.sp, color: AppColors.hintColor),
+          contentPadding: widget.contentPadding ??
+              EdgeInsets.symmetric(
+                  horizontal: 13.sp, vertical: ((50 - 16) / 2).sp),
+          filled: widget.isFilled,
+          fillColor: AppColors.whiteColor,
+          border: widget.isDecorationEnable ?? false
+              ? inputBorder
+              : InputBorder.none,
+          enabledBorder: widget.isDecorationEnable ?? false
+              ? inputBorder
+              : InputBorder.none,
+          errorBorder: widget.isDecorationEnable ?? false
+              ? inputBorder
+              : InputBorder.none,
+          focusedBorder: inputBorder.copyWith(
+              borderSide: BorderSide(
+            color: widget.controller.error == null
+                ? AppColors.focusedBorderColor
+                : AppColors.redColor,
+            width: widget.borderWidth,
+          )),
+          disabledBorder: widget.isDecorationEnable ?? false
+              ? inputBorder
+              : InputBorder.none,
+          prefixIconConstraints: BoxConstraints(maxHeight: 20.sp),
+          suffixIconConstraints: BoxConstraints(maxHeight: 20.sp),
+          prefixIcon: Padding(
+            padding: EdgeInsetsDirectional.symmetric(horizontal: 8.sp),
+            child: widget.prefixWidget,
+          ),
+          suffixIcon: (widget.suffixWidget != null && widget.obscure == false)
+              ? Padding(
+                  padding: EdgeInsetsDirectional.only(end: 10.sp),
+                  child: widget.suffixWidget,
+                )
+              : widget.obscure == true
+                  ? CommonInkWell(
+                      onTap: () {
+                        setState(() {
+                          obscure = !obscure;
+                        });
+                      },
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.only(end: 10.sp),
+                        child: Icon(
+                          size: 20,
+                          obscure
+                              ? Icons.visibility_outlined
+                              : Icons.visibility_off_outlined,
+                          color: AppColors.blackColor.withOpacity(0.5),
+                        ),
+                      ),
+                    )
+                  : null,
+        );
   }
 
   InputBorder get inputBorder {

@@ -26,7 +26,7 @@ class SignViewModel with ChangeNotifier {
 
   bool get isBtnEnable => _isBtnEnable;
 
-  set setLoading(bool loading) {
+  void setLoading(bool loading) {
     _isLoading = loading;
     notifyListeners();
   }
@@ -67,12 +67,26 @@ class SignViewModel with ChangeNotifier {
           "Password and confirm password does not match",
           SnackBarType.error,
           context);
-    }else{
-      CustomNavigation().pop();
-      CustomSnackBar.showSnackBar(
-          "Account has been created successfully",
-          SnackBarType.success,
-          context);
+    } else {
+      try {
+        setLoading(true);
+
+        final body = {
+          "email": emailCon.controller.text,
+          "password": passwordCon.controller.text,
+          "confirmPassword": confirmPasswordCon.controller.text,
+          "name": nameCon.controller.text,
+        };
+
+        _authRepository.register(body: body);
+        CustomNavigation().pop();
+        CustomSnackBar.showSnackBar("Account has been created successfully",
+            SnackBarType.success, context);
+      } catch (e) {
+        CustomSnackBar.showSnackBar(e.toString(), SnackBarType.error, context);
+      } finally {
+        setLoading(false);
+      }
     }
   }
 }

@@ -68,7 +68,7 @@ class ForgetPasswordScreen extends ConsumerWidget {
                   isEnable: forgetPassViewModel.isBtnEnable,
                   bgColor: AppColors.primaryColor,
                   onPressed: () {
-                    forgetPassViewModel.forgetPass();
+                    forgetPassViewModel.forgetPass(context);
                   },
                 ),
                 40.verticalSpace,

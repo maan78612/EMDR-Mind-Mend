@@ -1,8 +1,8 @@
 import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
 
 abstract class AuthRepository {
-  Future<User> login({required String username, required String password});
-  Future<void> register(User user);
-  Future<void> logout();
-  Future<User> getUser();
+  Future<User> login({required Map<String, dynamic> body});
+  Future<void> register({required Map<String, dynamic> body});
+  Future<void> forgetPassword({required Map<String, dynamic> body});
+
 }
