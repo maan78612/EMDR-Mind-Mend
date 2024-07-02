@@ -22,13 +22,16 @@ class SettingViewModel with ChangeNotifier {
   List<String> settingOptions = ["Auditory", "Visual"];
 
   void setPageIndex(int index) {
+    if (isPlaying) {
+      stopSound();
+    }
     settingPageIndex = index;
 
     notifyListeners();
   }
 
   /// Set Tone index
-   AudioPlayer? audioPlayer;
+  AudioPlayer? audioPlayer;
 
   List<String> toneList = [
     "sound/tone1.wav",
@@ -41,19 +44,20 @@ class SettingViewModel with ChangeNotifier {
   bool isPlaying = false;
 
   void selectTone(int audioSourceIndex) {
-    if (selectedToneIndex != audioSourceIndex && isPlaying == true) {
+    if (selectedToneIndex != audioSourceIndex) {
       selectedToneIndex = audioSourceIndex;
+      notifyListeners();
     }
     playSound();
   }
 
   void playSound() async {
-    audioPlayer = AudioPlayer();
     isPlaying = true;
+    audioPlayer = AudioPlayer();
     notifyListeners();
     while (isPlaying) {
       await audioPlayer?.play(AssetSource(toneList[selectedToneIndex]));
-      await Future.delayed(Duration(milliseconds: 5000 ~/ (speed * 5)));
+      await Future.delayed(Duration(milliseconds: 5000 ~/ (auditorySpeed * 5)));
       notifyListeners();
     }
   }
@@ -68,10 +72,16 @@ class SettingViewModel with ChangeNotifier {
   }
 
   /// Set Speed index
-  double speed = 1;
+  double visualSpeed = 1;
+  double auditorySpeed = 1;
 
-  void setSpeed(double index) {
-    speed = index;
+  void setVisualSpeed(double index) {
+    visualSpeed = index;
+    notifyListeners();
+  }
+
+  void setAuditorySpeed(double index) {
+    auditorySpeed = index;
     notifyListeners();
   }
 

@@ -45,12 +45,12 @@ class _CustomLoaderState extends State<CustomLoader>
   Widget build(BuildContext context) {
     return ModalProgressHUD(
       inAsyncCall: widget.isLoading,
-      opacity: 0.5,
+      opacity: 0.55,
       progressIndicator: ScaleTransition(
         scale: _animation,
         child: widget.loader ??
             Image.asset(
-              AppImages.logo,
+              AppImages.loader,
               width: 100.sp,
             ),
       ),

@@ -21,6 +21,7 @@ class AppImages {
   static const String logout = "assets/images/logout.png";
   static const String left = "assets/images/left.png";
   static const String right = "assets/images/right.png";
+  static const String loader = "assets/images/loader.png";
 
 
   static const String profilePic = "assets/images/profile_pic.jpg";

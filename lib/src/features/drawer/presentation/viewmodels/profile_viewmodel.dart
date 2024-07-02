@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
-import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/drawer/data/repositories/drawer_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/drawer/domain/repositories/drawer_repository.dart';
 import 'package:flutter/material.dart';
@@ -74,21 +73,27 @@ class ProfileViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void editProfile(BuildContext context) {
+  Future<void> editProfile(
+      {required Function({
+        required SnackBarType snackType,
+        required String message,
+      }) showSnackBarMsg}) async {
+    List<MapEntry<String, File>> files = [];
     try {
       setLoading(true);
-      List<MapEntry<String, File>> files = [
-        MapEntry('file_field', profileImage!),
-      ];
+      if (profileImage != null) {
+        files.add(MapEntry('image', profileImage!));
+      }
+
       final body = {
-        "name": nameCon.controller.text,
+        "username": nameCon.controller.text,
       };
-      _drawerRepository.editProfile(body: body, files: files);
+      // await _drawerRepository.editProfile(body: body, files: files);
       CustomNavigation().pop();
-      CustomSnackBar.showSnackBar(
-          "Profile saved", SnackBarType.success, context);
+      showSnackBarMsg(
+          message: "Profile saved", snackType: SnackBarType.success);
     } catch (e) {
-      CustomSnackBar.showSnackBar(e.toString(), SnackBarType.error, context);
+      showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
     } finally {
       setLoading(false);
     }

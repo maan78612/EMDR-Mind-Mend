@@ -1,3 +1,4 @@
+import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/setting_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,3 +11,5 @@ final settingViewModelProvider =
     ChangeNotifierProvider<SettingViewModel>((ref) {
   return SettingViewModel();
 });
+
+User? userData;

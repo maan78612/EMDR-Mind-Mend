@@ -1,4 +1,4 @@
-import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
+
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
@@ -47,24 +47,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
               (settingViewModel.settingPageIndex == 0)
                   ? const AuditoryTab()
                   : const VisualTab(),
-              if (settingViewModel.isPlaying)
-                CommonInkWell(
-                  onTap: () {
-                    settingViewModel.stopSound();
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: AppColors.redColor,
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    child: const Icon(
-                      Icons.stop,
-                      color: Colors.white,
-                      size: 20,
-                    ),
-                  ),
-                )
+
             ],
           ),
         ),

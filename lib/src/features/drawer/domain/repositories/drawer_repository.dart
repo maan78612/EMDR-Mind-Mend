@@ -6,4 +6,6 @@ abstract class DrawerRepository {
       required Map<String, dynamic> body});
 
   Future<void> contactUs({required Map<String, dynamic> body});
+
+  Future<void> logout({required Map<String, dynamic> body});
 }

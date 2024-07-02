@@ -2,11 +2,14 @@ import 'package:emdr_mindmend/src/core/commons/custom_button.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_input_field.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
+import 'package:emdr_mindmend/src/core/commons/loader.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/constants/text_field_validator.dart';
+import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/widgets/drawer_widgets_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -25,54 +28,64 @@ class ProfileScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final profileViewModel = ref.watch(profileViewModelProvider);
-    return Scaffold(
-      backgroundColor: AppColors.whiteBg,
-      appBar: const DrawerAppBar(title: 'Profile'),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: hMargin),
-        child: ListView(
-          children: [
-            30.verticalSpace,
-            profileViewModel.profileImage == null
-                ? noImageAdded(context, profileViewModel)
-                : imageAddedFromFile(profileViewModel),
-            30.verticalSpace,
-            CustomInputField(
-              prefixWidget: Image.asset(
-                AppImages.person,
-                color: AppColors.blackColor,
-                width: 16.sp,
-                height: 16.sp,
-                fit: BoxFit.contain,
+    return CustomLoader(
+      isLoading: profileViewModel.isLoading,
+      child: Scaffold(
+        backgroundColor: AppColors.whiteBg,
+        appBar: const DrawerAppBar(title: 'Profile'),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: hMargin),
+          child: ListView(
+            children: [
+              30.verticalSpace,
+              profileViewModel.profileImage == null
+                  ? noImageAdded(context, profileViewModel)
+                  : imageAddedFromFile(profileViewModel),
+              30.verticalSpace,
+              CustomInputField(
+                prefixWidget: Image.asset(
+                  AppImages.person,
+                  color: AppColors.blackColor,
+                  width: 16.sp,
+                  height: 16.sp,
+                  fit: BoxFit.contain,
+                ),
+                hint: "Name",
+                textInputAction: TextInputAction.next,
+                controller: profileViewModel.nameCon,
+                onChange: (value) {
+                  profileViewModel.onChange(
+                      con: profileViewModel.nameCon,
+                      value: value,
+                      validator: TextFieldValidator.validatePersonName);
+                },
               ),
-              hint: "Name",
-              textInputAction: TextInputAction.next,
-              controller: profileViewModel.nameCon,
-              onChange: (value) {
-                profileViewModel.onChange(
-                    con: profileViewModel.nameCon,
-                    value: value,
-                    validator: TextFieldValidator.validatePersonName);
-              },
-            ),
-            10.verticalSpace,
-            CustomInputField(
-              prefixWidget: Image.asset(AppImages.email),
-              hint: "Email",
-              enable: false,
-              controller: profileViewModel.emailCon,
-              textStyle: PoppinsStyles.regular
-                  .copyWith(fontSize: 15.sp, color: AppColors.greyColor),
-            ),
-            40.verticalSpace,
-            CustomButton(
-              onPressed: () {
-
-              },
-              bgColor: AppColors.primaryColor,
-              title: 'Save',
-            ),
-          ],
+              10.verticalSpace,
+              CustomInputField(
+                prefixWidget: Image.asset(AppImages.email),
+                hint: "Email",
+                enable: false,
+                controller: profileViewModel.emailCon,
+                textStyle: PoppinsStyles.regular
+                    .copyWith(fontSize: 15.sp, color: AppColors.greyColor),
+              ),
+              40.verticalSpace,
+              CustomButton(
+                onPressed: () {
+                  profileViewModel.editProfile(
+                    showSnackBarMsg: ({
+                      required SnackBarType snackType,
+                      required String message,
+                    }) =>
+                        CustomSnackBar.showSnackBar(
+                            message, snackType, context),
+                  );
+                },
+                bgColor: AppColors.primaryColor,
+                title: 'Save',
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -94,7 +107,8 @@ class ProfileScreen extends ConsumerWidget {
               child: CircleAvatar(
                 backgroundColor: AppColors.whiteColor,
                 radius: 15,
-                child: Icon(Icons.delete, size: 15.sp, color: AppColors.redColor),
+                child:
+                    Icon(Icons.delete, size: 15.sp, color: AppColors.redColor),
               ),
             ),
           )

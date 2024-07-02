@@ -2,6 +2,7 @@ import 'package:emdr_mindmend/src/core/commons/custom_button.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_input_field.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
+import 'package:emdr_mindmend/src/core/commons/loader.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
@@ -25,106 +26,109 @@ class LoginScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final loginViewModel = ref.watch(loginViewModelProvider);
 
-    return Scaffold(
-      backgroundColor: AppColors.whiteColor,
-      resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: hMargin),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                closeIcon(),
-                Text(
-                  "Welcome Back!",
-                  style: PoppinsStyles.bold.copyWith(fontSize: 22.sp),
-                ),
-                10.verticalSpace,
-                Text(
-                  "Please enter your account here",
-                  style: PoppinsStyles.regular
-                      .copyWith(fontSize: 14.sp, color: AppColors.greyColor),
-                ),
-                35.verticalSpace,
-                CustomInputField(
-                  prefixWidget: Image.asset(AppImages.email),
-                  hint: "Email",
-                  textInputAction: TextInputAction.next,
-                  controller: loginViewModel.emailCon,
-                  onChange: (value) {
-                    loginViewModel.onChange(
-                        con: loginViewModel.emailCon,
-                        value: value,
-                        validator: TextFieldValidator.validateEmail);
-                  },
-                ),
-                CustomInputField(
-                  prefixWidget: Image.asset(AppImages.password),
-                  hint: "Password",
-                  textInputAction: TextInputAction.done,
-                  controller: loginViewModel.passwordCon,
-                  onChange: (value) {
-                    loginViewModel.onChange(
-                        con: loginViewModel.passwordCon,
-                        value: value,
-                        validator: TextFieldValidator.validatePassword);
-                  },
-                  obscure: true,
-                ),
-                21.verticalSpace,
-                CommonInkWell(
-                  onTap: () {
-                    CustomNavigation().push(ForgetPasswordScreen());
-                  },
-                  child: Text(
-                    "Forgot Password?",
-                    style: PoppinsStyles.medium.copyWith(
-                        fontSize: 15.sp, color: AppColors.primaryColor),
+    return CustomLoader(
+      isLoading: loginViewModel.isLoading,
+      child: Scaffold(
+        backgroundColor: AppColors.whiteColor,
+        resizeToAvoidBottomInset: true,
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: hMargin),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  closeIcon(),
+                  Text(
+                    "Welcome Back!",
+                    style: PoppinsStyles.bold.copyWith(fontSize: 22.sp),
                   ),
-                ),
-                21.verticalSpace,
-                CustomButton(
-                  title: 'Login',
-                  isEnable: loginViewModel.isBtnEnable,
-                  bgColor: AppColors.primaryColor,
-                  onPressed: () {
-                    loginViewModel.login(context);
-                  },
-                ),
-                40.verticalSpace,
-                separator(),
-                30.verticalSpace,
-                socialLoginButtons(),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 40.sp),
-                  child: RichText(
-                    textAlign: TextAlign.center,
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: "Don’t have an account? ",
-                          style:
-                              PoppinsStyles.regular.copyWith(fontSize: 16.sp),
-                        ),
-                        WidgetSpan(
-                          child: CommonInkWell(
-                              onTap: () {
-                                loginViewModel.clearForm();
-                                CustomNavigation().push(SignUpScreen());
-                              },
-                              child: Text(
-                                " Sign Up",
-                                style: PoppinsStyles.bold.copyWith(
-                                    fontSize: 16.sp,
-                                    color: AppColors.primaryColor),
-                              )),
-                        ),
-                      ],
+                  10.verticalSpace,
+                  Text(
+                    "Please enter your account here",
+                    style: PoppinsStyles.regular
+                        .copyWith(fontSize: 14.sp, color: AppColors.greyColor),
+                  ),
+                  35.verticalSpace,
+                  CustomInputField(
+                    prefixWidget: Image.asset(AppImages.email),
+                    hint: "Email",
+                    textInputAction: TextInputAction.next,
+                    controller: loginViewModel.emailCon,
+                    onChange: (value) {
+                      loginViewModel.onChange(
+                          con: loginViewModel.emailCon,
+                          value: value,
+                          validator: TextFieldValidator.validateEmail);
+                    },
+                  ),
+                  CustomInputField(
+                    prefixWidget: Image.asset(AppImages.password),
+                    hint: "Password",
+                    textInputAction: TextInputAction.done,
+                    controller: loginViewModel.passwordCon,
+                    onChange: (value) {
+                      loginViewModel.onChange(
+                          con: loginViewModel.passwordCon,
+                          value: value,
+                          validator: TextFieldValidator.validatePassword);
+                    },
+                    obscure: true,
+                  ),
+                  21.verticalSpace,
+                  CommonInkWell(
+                    onTap: () {
+                      CustomNavigation().push(ForgetPasswordScreen());
+                    },
+                    child: Text(
+                      "Forgot Password?",
+                      style: PoppinsStyles.medium.copyWith(
+                          fontSize: 15.sp, color: AppColors.primaryColor),
                     ),
                   ),
-                )
-              ],
+                  21.verticalSpace,
+                  CustomButton(
+                    title: 'Login',
+                    isEnable: loginViewModel.isBtnEnable,
+                    bgColor: AppColors.primaryColor,
+                    onPressed: () {
+                      loginViewModel.login(context);
+                    },
+                  ),
+                  40.verticalSpace,
+                  separator(),
+                  30.verticalSpace,
+                  socialLoginButtons(),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 40.sp),
+                    child: RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "Don’t have an account? ",
+                            style:
+                                PoppinsStyles.regular.copyWith(fontSize: 16.sp),
+                          ),
+                          WidgetSpan(
+                            child: CommonInkWell(
+                                onTap: () {
+                                  loginViewModel.clearForm();
+                                  CustomNavigation().push(SignUpScreen());
+                                },
+                                child: Text(
+                                  " Sign Up",
+                                  style: PoppinsStyles.bold.copyWith(
+                                      fontSize: 16.sp,
+                                      color: AppColors.primaryColor),
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

@@ -3,7 +3,6 @@ import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
 import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/home/data/repositories/home_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/home/domain/repositories/home_repository.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class IntroViewModel with ChangeNotifier {
@@ -52,9 +51,9 @@ class IntroViewModel with ChangeNotifier {
     } else if (num == 2) {
       intro6Slider = value;
     } else if (num == 3) {
-      intro6Slider = value;
+      intro9Slider = value;
     } else if (num == 4) {
-      intro6Slider = value;
+      intro10Slider = value;
     }
 
     notifyListeners();

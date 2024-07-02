@@ -1,20 +1,21 @@
 class User {
-  int? id;
+  String? refreshToken;
 
-  DateTime? createdAt;
+  String? accessToken;
 
-  User({this.id, this.createdAt});
+  User({this.refreshToken, this.accessToken});
 
   User.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
+    refreshToken = json['refresh_token'];
 
-    createdAt = DateTime.parse(json['created_at']);
+    accessToken = json['access_token'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
 
-    data['created_at'] = createdAt;
+    data['refresh_token'] = refreshToken;
+    data['access_token'] = accessToken;
     return data;
   }
 }

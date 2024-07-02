@@ -43,7 +43,7 @@ class _PendulumAnimationState extends ConsumerState<PendulumAnimation>
         vsync: this,
         duration: Duration(
             milliseconds:
-                5000 ~/ (ref.read(settingViewModelProvider).speed * 3)),
+                5000 ~/ (ref.read(settingViewModelProvider).visualSpeed * 3)),
       )..repeat(reverse: true);
       _animation = Tween<double>(begin: -1, end: 1).animate(_controller);
 
@@ -73,7 +73,6 @@ class _PendulumAnimationState extends ConsumerState<PendulumAnimation>
               color: settingViewModel.bgColor == AppColors.blackColor
                   ? AppColors.whiteColor
                   : AppColors.blackColor),
-
         ),
         bottom: const PreferredSize(
           preferredSize: Size.fromHeight(10),

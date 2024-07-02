@@ -1,6 +1,8 @@
-
+import 'package:emdr_mindmend/src/core/commons/loader.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/text_field_validator.dart';
+import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/contact_us_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/widgets/drawer_widgets_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -21,54 +23,63 @@ class ContactUsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final contactUsViewModel = ref.watch(contactUsViewModelProvider);
-    return Scaffold(
-      backgroundColor: AppColors.whiteBg,
-      appBar: const DrawerAppBar(title: "Contact Us"),
-      body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CustomInputField(
-              title: "Name",
-              hint: "Enter your name",
-              controller: contactUsViewModel.nameController,
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.name,
-              onChange: (value) {
-                contactUsViewModel.onChange(
-                    con: contactUsViewModel.nameController,
-                    value: value,
-                    validator: TextFieldValidator.validatePersonName);
-              },
-            ),
-            20.verticalSpace,
-            CustomInputField(
-              title: "Email",
-              hint: "Enter your email",
-              controller: contactUsViewModel.emailController,
-              textInputAction: TextInputAction.next,
-              keyboardType: TextInputType.emailAddress,
-              onChange: (value) {
-                contactUsViewModel.onChange(
-                    con: contactUsViewModel.emailController,
-                    value: value,
-                    validator: TextFieldValidator.validateEmail);
-              },
-            ),
-            20.verticalSpace,
-            messageInputField(contactUsViewModel),
-            30.verticalSpace,
-            CustomButton(
-              title: "Submit",
-              isEnable: contactUsViewModel.isBtnEnable,
-              bgColor: AppColors.primaryColor,
-              textColor: AppColors.whiteColor,
-              onPressed: () {
-
-              },
-            ),
-          ],
+    return CustomLoader(
+      isLoading: contactUsViewModel.isLoading,
+      child: Scaffold(
+        backgroundColor: AppColors.whiteBg,
+        appBar: const DrawerAppBar(title: "Contact Us"),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomInputField(
+                title: "Name",
+                hint: "Enter your name",
+                controller: contactUsViewModel.nameController,
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.name,
+                onChange: (value) {
+                  contactUsViewModel.onChange(
+                      con: contactUsViewModel.nameController,
+                      value: value,
+                      validator: TextFieldValidator.validatePersonName);
+                },
+              ),
+              20.verticalSpace,
+              CustomInputField(
+                title: "Email",
+                hint: "Enter your email",
+                controller: contactUsViewModel.emailController,
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.emailAddress,
+                onChange: (value) {
+                  contactUsViewModel.onChange(
+                      con: contactUsViewModel.emailController,
+                      value: value,
+                      validator: TextFieldValidator.validateEmail);
+                },
+              ),
+              20.verticalSpace,
+              messageInputField(contactUsViewModel),
+              30.verticalSpace,
+              CustomButton(
+                title: "Submit",
+                isEnable: contactUsViewModel.isBtnEnable,
+                bgColor: AppColors.primaryColor,
+                textColor: AppColors.whiteColor,
+                onPressed: () {
+                  contactUsViewModel.submitContactUs(
+                      showSnackBarMsg: ({
+                    required SnackBarType snackType,
+                    required String message,
+                  }) =>
+                          CustomSnackBar.showSnackBar(
+                              message, snackType, context));
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

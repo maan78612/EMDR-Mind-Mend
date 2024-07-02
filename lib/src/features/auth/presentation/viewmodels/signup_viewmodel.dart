@@ -1,7 +1,6 @@
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
-import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:flutter/material.dart';
@@ -61,12 +60,16 @@ class SignViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void signUpButton(BuildContext context) {
+  Future<void> signUpButton(
+      {required Function({
+        required SnackBarType snackType,
+        required String message,
+      }) showSnackBarMsg}) async {
     if (passwordCon.controller.text != confirmPasswordCon.controller.text) {
-      CustomSnackBar.showSnackBar(
-          "Password and confirm password does not match",
-          SnackBarType.error,
-          context);
+      showSnackBarMsg(
+        message: "Password and confirm password does not match",
+        snackType: SnackBarType.error,
+      );
     } else {
       try {
         setLoading(true);
@@ -74,16 +77,20 @@ class SignViewModel with ChangeNotifier {
         final body = {
           "email": emailCon.controller.text,
           "password": passwordCon.controller.text,
-          "confirmPassword": confirmPasswordCon.controller.text,
-          "name": nameCon.controller.text,
+          "username": nameCon.controller.text,
         };
 
-        _authRepository.register(body: body);
+        await _authRepository.register(body: body);
         CustomNavigation().pop();
-        CustomSnackBar.showSnackBar("Account has been created successfully",
-            SnackBarType.success, context);
+        showSnackBarMsg(
+          message: "Account has been created successfully",
+          snackType: SnackBarType.success,
+        );
       } catch (e) {
-        CustomSnackBar.showSnackBar(e.toString(), SnackBarType.error, context);
+        showSnackBarMsg(
+          message: e.toString(),
+          snackType: SnackBarType.error,
+        );
       } finally {
         setLoading(false);
       }

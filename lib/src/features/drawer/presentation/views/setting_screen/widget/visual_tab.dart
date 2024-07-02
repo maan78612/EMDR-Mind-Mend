@@ -3,6 +3,7 @@ import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/enums/color_ball.dart';
+import 'package:emdr_mindmend/src/core/enums/setting_slider.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/setting_screen/widget/speed_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -18,7 +19,7 @@ class VisualTab extends ConsumerWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         30.verticalSpace,
-        const SpeedWidget(),
+        const SpeedWidget(slider: SettingSlider.visual),
         30.verticalSpace,
         Container(
           padding: EdgeInsets.symmetric(horizontal: 10.sp, vertical: 8.sp),
@@ -129,10 +130,9 @@ class VisualTab extends ConsumerWidget {
                           color: bgColor,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            width: 2,
+                              width: 2,
                               color: bgColor == settingViewModel.bgColor
                                   ? AppColors.primaryColor
-
                                   : Colors.transparent)),
                     ),
                   ),

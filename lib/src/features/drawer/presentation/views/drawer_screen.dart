@@ -5,7 +5,8 @@ import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
-import 'package:emdr_mindmend/src/features/auth/presentation/views/login_screen.dart';
+import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/drawer_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/contact_us.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/help_faq_screen/help_faq_screen.dart';
@@ -37,51 +38,54 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
   Widget build(BuildContext context) {
     final drawerViewModel = ref.watch(drawerViewModelProvider);
 
-    return Scaffold(
-      backgroundColor: AppColors.whiteBg,
-      body: CustomLoader(
-        isLoading: drawerViewModel.isLoading,
-        child: SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: hMargin),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                header(),
-                const Spacer(),
-                drawerOption(
-                    img: AppImages.myProfile,
-                    title: "My Profile",
-                    onTap: () {
-                      CustomNavigation().push(ProfileScreen());
-                    }),
-                drawerOption(
-                    img: AppImages.settings,
-                    title: "Settings",
-                    onTap: () {
-                      CustomNavigation().push(const SettingScreen());
-                    }),
-                drawerOption(
-                    img: AppImages.contactUs,
-                    title: "Contact Us",
-                    onTap: () {
-                      CustomNavigation().push(ContactUsPage());
-                    }),
-                drawerOption(
-                    img: AppImages.faq,
-                    title: "Helps & FAQs",
-                    onTap: () {
-                      CustomNavigation().push(HelpFaqPage());
-                    }),
-                const Spacer(flex: 3),
-                drawerOption(
-                    img: AppImages.logout,
-                    title: "Log Out",
-                    onTap: () {
-                      _showLogoutDialog(context);
-                    }),
-                40.verticalSpace,
-              ],
+    return CustomLoader(
+      isLoading: drawerViewModel.isLoading,
+      child: Scaffold(
+        backgroundColor: AppColors.whiteBg,
+        body: CustomLoader(
+          isLoading: drawerViewModel.isLoading,
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: hMargin),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  header(),
+                  const Spacer(),
+                  drawerOption(
+                      img: AppImages.myProfile,
+                      title: "My Profile",
+                      onTap: () {
+                        CustomNavigation().push(ProfileScreen());
+                      }),
+                  drawerOption(
+                      img: AppImages.settings,
+                      title: "Settings",
+                      onTap: () {
+                        CustomNavigation().push(const SettingScreen());
+                      }),
+                  drawerOption(
+                      img: AppImages.contactUs,
+                      title: "Contact Us",
+                      onTap: () {
+                        CustomNavigation().push(ContactUsPage());
+                      }),
+                  drawerOption(
+                      img: AppImages.faq,
+                      title: "Helps & FAQs",
+                      onTap: () {
+                        CustomNavigation().push(HelpFaqPage());
+                      }),
+                  const Spacer(flex: 3),
+                  drawerOption(
+                      img: AppImages.logout,
+                      title: "Log Out",
+                      onTap: () {
+                        _showLogoutDialog(context, drawerViewModel);
+                      }),
+                  40.verticalSpace,
+                ],
+              ),
             ),
           ),
         ),
@@ -173,10 +177,11 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
     );
   }
 
-  void _showLogoutDialog(BuildContext context) {
+  void _showLogoutDialog(
+      BuildContext context, DrawerViewModel drawerViewModel) {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
+      builder: (BuildContext ctx) {
         return AlertDialog(
           backgroundColor: AppColors.whiteColor,
           title: Text(
@@ -199,8 +204,14 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                   style: PoppinsStyles.medium
                       .copyWith(fontSize: 14.sp, color: AppColors.redColor)),
               onPressed: () {
-                CustomNavigation()
-                    .pushAndRemoveUntil(LoginScreen()); // Dismiss the dialog
+                drawerViewModel.logout(
+                  showSnackBarMsg: ({
+                    required SnackBarType snackType,
+                    required String message,
+                  }) =>
+                      CustomSnackBar.showSnackBar(message, snackType, context),
+                );
+                // Dismiss the dialog
               },
             ),
           ],

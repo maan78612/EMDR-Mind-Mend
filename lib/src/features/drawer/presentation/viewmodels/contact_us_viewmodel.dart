@@ -1,7 +1,6 @@
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
-import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/drawer/data/repositories/drawer_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/drawer/domain/repositories/drawer_repository.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +56,11 @@ class ContactUsViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void submitContactUs(BuildContext context) {
+  Future<void> submitContactUs(
+      {required Function({
+        required SnackBarType snackType,
+        required String message,
+      }) showSnackBarMsg}) async {
     try {
       setLoading(true);
 
@@ -66,12 +69,11 @@ class ContactUsViewModel with ChangeNotifier {
         "name": nameController.controller.text,
         "message": messageController.controller.text
       };
-      _drawerRepository.contactUs(body: body);
+      await _drawerRepository.contactUs(body: body);
       CustomNavigation().pop();
-      CustomSnackBar.showSnackBar(
-          "Message sent", SnackBarType.success, context);
+      showSnackBarMsg(message: "Message sent", snackType: SnackBarType.success);
     } catch (e) {
-      CustomSnackBar.showSnackBar(e.toString(), SnackBarType.error, context);
+      showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
     } finally {
       setLoading(false);
     }

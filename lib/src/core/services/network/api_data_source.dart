@@ -40,7 +40,8 @@ class NetworkApi {
 
       return returnResponse(response);
     } on DioException catch (e) {
-      throw DioExceptionError(_getDioExceptionErrorMessage(e.type));
+      print(e.type);
+      throw DioExceptionError(_getDioExceptionErrorMessage(e));
     }
   }
 
@@ -50,8 +51,10 @@ class NetworkApi {
     Map<String, dynamic>? customHeader,
     List<MapEntry<String, File>>? files,
   }) async {
-    log("url = $url");
+    log("put url = $url");
+    log("body = $body");
     Response<dynamic> response;
+
     try {
       dynamic data;
       if (files != null && files.isNotEmpty) {
@@ -62,6 +65,7 @@ class NetworkApi {
 
         for (var fileEntry in files) {
           String fileName = fileEntry.value.path.split('/').last;
+          log("fileEntry key : ${fileEntry.key}       fileEntry value:${fileEntry.value.path}");
           formData.files.add(
             MapEntry(
               fileEntry.key,
@@ -87,7 +91,7 @@ class NetworkApi {
 
       return returnResponse(response);
     } on DioException catch (e) {
-      throw DioExceptionError(_getDioExceptionErrorMessage(e.type));
+      throw DioExceptionError(_getDioExceptionErrorMessage(e));
     }
   }
 
@@ -137,12 +141,68 @@ class NetworkApi {
 
       return returnResponse(response);
     } on DioException catch (e) {
-      throw DioExceptionError(_getDioExceptionErrorMessage(e.type));
+      throw DioExceptionError(_getDioExceptionErrorMessage(e));
     }
   }
 
-  String _getDioExceptionErrorMessage(DioExceptionType type) {
-    switch (type) {
+  Future put({
+    required String url,
+    required Map<String, dynamic> body,
+    Map<String, dynamic>? customHeader,
+    List<MapEntry<String, File>>? files,
+  }) async {
+    log("put url = $url");
+    log("body = $body");
+    if (customHeader != null) {
+      log("customHeader = $customHeader");
+    }
+    Response<dynamic> response;
+
+    try {
+      dynamic data;
+      if (files != null && files.isNotEmpty) {
+        FormData formData = FormData();
+        body.forEach((key, value) {
+          formData.fields.add(MapEntry(key, value.toString()));
+        });
+
+        for (var fileEntry in files) {
+          String fileName = fileEntry.value.path.split('/').last;
+          log("fileEntry key : ${fileEntry.key}       fileEntry value:${fileEntry.value.path}");
+          formData.files.add(
+            MapEntry(
+              fileEntry.key,
+              await MultipartFile.fromFile(fileEntry.value.path,
+                  filename: fileName),
+            ),
+          );
+        }
+        data = formData;
+      } else {
+        data = body;
+      }
+
+      response = await _dio.put(
+        url,
+        data: data,
+        options: Options(
+          sendTimeout: const Duration(milliseconds: 22000),
+          receiveTimeout: const Duration(milliseconds: 22000),
+          headers: customHeader ?? header,
+        ),
+      );
+
+      return returnResponse(response);
+    } on DioException catch (e) {
+      log(e.toString());
+      throw DioExceptionError(_getDioExceptionErrorMessage(e));
+    }
+  }
+
+  String _getDioExceptionErrorMessage(DioException exception) {
+    print(exception.type);
+    print(exception.response?.data['message']);
+    switch (exception.type) {
       case DioExceptionType.connectionTimeout:
         return "Connection timed out";
       case DioExceptionType.receiveTimeout:
@@ -154,7 +214,7 @@ class NetworkApi {
       case DioExceptionType.badCertificate:
         return "Invalid certificate";
       case DioExceptionType.badResponse:
-        return "Bad response";
+        return exception.response?.data['message'] ?? "Bad response";
       case DioExceptionType.connectionError:
         return "Connection error";
       case DioExceptionType.unknown:
@@ -174,6 +234,8 @@ class NetworkApi {
         dynamic jsonResponse = response.data;
         return jsonResponse;
       case 404:
+        throw BadRequestException(response.statusMessage);
+      case 401:
         throw BadRequestException(response.statusMessage);
       case 443:
       case 500:

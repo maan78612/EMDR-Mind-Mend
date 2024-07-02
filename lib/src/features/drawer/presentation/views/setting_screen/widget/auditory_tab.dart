@@ -2,6 +2,7 @@ import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
+import 'package:emdr_mindmend/src/core/enums/setting_slider.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/setting_screen/widget/speed_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/setting_viewmodel.dart'; // Make sure to update the import path
@@ -20,7 +21,25 @@ class AuditoryTab extends ConsumerWidget {
         25.verticalSpace,
         const Divider(color: AppColors.borderColor),
         25.verticalSpace,
-        const SpeedWidget(),
+        const SpeedWidget(slider: SettingSlider.auditory),
+        if (settingViewModel.isPlaying)
+          CommonInkWell(
+            onTap: () {
+              settingViewModel.stopSound();
+            },
+            child: Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: AppColors.redColor,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: const Icon(
+                Icons.stop,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+          )
       ],
     );
   }

@@ -1,5 +1,6 @@
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
+import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
 import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/auth/data/repositories/auth_repository_impl.dart';
@@ -68,7 +69,7 @@ class LoginViewModel with ChangeNotifier {
         "email": emailCon.controller.text,
         "password": passwordCon.controller.text,
       };
-      _authRepository.login(body: body);
+      userData = await _authRepository.login(body: body);
       CustomNavigation().pushReplacement(const HomeScreen());
     } catch (e) {
       CustomSnackBar.showSnackBar(e.toString(), SnackBarType.error, context);
