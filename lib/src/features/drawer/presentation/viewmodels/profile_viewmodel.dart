@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
+import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
 import 'package:emdr_mindmend/src/features/drawer/data/repositories/drawer_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/drawer/domain/repositories/drawer_repository.dart';
@@ -12,10 +13,11 @@ class ProfileViewModel with ChangeNotifier {
   final DrawerRepository _drawerRepository = DrawerRepositoryImpl();
 
   CustomTextController emailCon = CustomTextController(
-      controller: TextEditingController(text: "john@gmail.com"),
+      controller: TextEditingController(text: userData?.email),
       focusNode: FocusNode());
   CustomTextController nameCon = CustomTextController(
-      controller: TextEditingController(text: "John"), focusNode: FocusNode());
+      controller: TextEditingController(text: userData?.username),
+      focusNode: FocusNode());
 
   File? profileImage;
   final ImagePicker _picker = ImagePicker();
@@ -85,10 +87,15 @@ class ProfileViewModel with ChangeNotifier {
         files.add(MapEntry('image', profileImage!));
       }
 
-      final body = {
-        "username": nameCon.controller.text,
-      };
-      // await _drawerRepository.editProfile(body: body, files: files);
+      final body = {"username": nameCon.controller.text};
+      final response =
+          await _drawerRepository.editProfile(body: body, files: files);
+
+      userData?.username = response.data.username;
+      userData?.image = response.data.image;
+      userData?.accessToken = response.tokens.accessToken;
+      notifyListeners();
+
       CustomNavigation().pop();
       showSnackBarMsg(
           message: "Profile saved", snackType: SnackBarType.success);

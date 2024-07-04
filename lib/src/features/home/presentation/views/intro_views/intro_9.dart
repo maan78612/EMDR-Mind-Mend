@@ -30,7 +30,7 @@ class Intro9 extends ConsumerWidget {
                 "How many moments did you feel? (mark this from 1-10 below)"),
         30.verticalSpace,
         SliderWidget(
-          sliderValue: introViewModel.intro9Slider,
+          sliderValue: introViewModel.revaluationOne,
           introViewModelProvider: introViewModelProvider,
           sliderNum: 3,
         ),

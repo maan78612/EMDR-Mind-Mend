@@ -5,11 +5,11 @@ import 'package:emdr_mindmend/src/features/auth/domain/repositories/auth_reposit
 
 class AuthRepositoryImpl implements AuthRepository {
   @override
-  Future<User> login({required Map<String, dynamic> body}) async {
+  Future<UserData> login({required Map<String, dynamic> body}) async {
     try {
       final value =
           await NetworkApi.instance.post(url: ApiUrls.login, body: body);
-      return User.fromJson(value);
+      return UserData.fromJson(value["data"]);
     } catch (e) {
       rethrow;
     }
@@ -27,8 +27,7 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<void> forgetPassword({required Map<String, dynamic> body}) async {
     try {
-      var value =
-          await NetworkApi.instance.put(url: ApiUrls.forgetPass, body: body);
+      await NetworkApi.instance.post(url: ApiUrls.forgetPass, body: body);
     } catch (e) {
       rethrow;
     }

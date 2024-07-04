@@ -18,7 +18,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileScreen extends ConsumerWidget {
-  ProfileScreen({super.key});
+  final Function(bool isSuccess) apiCallback;
+
+  ProfileScreen({super.key, required this.apiCallback});
 
   final profileViewModelProvider =
       ChangeNotifierProvider<ProfileViewModel>((ref) {
@@ -38,9 +40,11 @@ class ProfileScreen extends ConsumerWidget {
           child: ListView(
             children: [
               30.verticalSpace,
-              profileViewModel.profileImage == null
-                  ? noImageAdded(context, profileViewModel)
-                  : imageAddedFromFile(profileViewModel),
+              profileViewModel.profileImage != null
+                  ? imageAddedFromFile(profileViewModel)
+                  : userData?.image != null
+                      ? imageAddedFromNetwork(profileViewModel, context)
+                      : noImageAdded(context, profileViewModel),
               30.verticalSpace,
               CustomInputField(
                 prefixWidget: Image.asset(
@@ -71,15 +75,16 @@ class ProfileScreen extends ConsumerWidget {
               ),
               40.verticalSpace,
               CustomButton(
-                onPressed: () {
-                  profileViewModel.editProfile(
-                    showSnackBarMsg: ({
-                      required SnackBarType snackType,
-                      required String message,
-                    }) =>
-                        CustomSnackBar.showSnackBar(
-                            message, snackType, context),
-                  );
+                onPressed: () async {
+                  await profileViewModel.editProfile(showSnackBarMsg: ({
+                    required SnackBarType snackType,
+                    required String message,
+                  }) {
+                    CustomSnackBar.showSnackBar(message, snackType, context);
+                    if (snackType == SnackBarType.success) {
+                      apiCallback(true);
+                    }
+                  });
                 },
                 bgColor: AppColors.primaryColor,
                 title: 'Save',
@@ -109,6 +114,35 @@ class ProfileScreen extends ConsumerWidget {
                 radius: 15,
                 child:
                     Icon(Icons.delete, size: 15.sp, color: AppColors.redColor),
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget imageAddedFromNetwork(
+      ProfileViewModel profileViewModel, BuildContext context) {
+    return Center(
+      child: Stack(
+        children: [
+          CircleAvatar(
+            radius: 75,
+            backgroundImage: NetworkImage(
+              userData!.image!,
+            ),
+          ),
+          Positioned(
+            bottom: 7.5.sp,
+            right: 7.5.sp,
+            child: CommonInkWell(
+              onTap: () => _showImageOptions(context, profileViewModel),
+              child: CircleAvatar(
+                backgroundColor: AppColors.whiteColor,
+                radius: 15,
+                child: Icon(Icons.edit,
+                    size: 15.sp, color: AppColors.primaryColor),
               ),
             ),
           )

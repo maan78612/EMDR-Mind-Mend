@@ -1,7 +1,9 @@
 import 'dart:io';
 
+import 'package:emdr_mindmend/src/features/drawer/domain/models/update_profile_response.dart';
+
 abstract class DrawerRepository {
-  Future<void> editProfile(
+  Future<UpdateProfileResponseModel> editProfile(
       {required List<MapEntry<String, File>> files,
       required Map<String, dynamic> body});
 

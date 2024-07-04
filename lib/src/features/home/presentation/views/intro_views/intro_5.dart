@@ -28,7 +28,7 @@ class Intro5 extends ConsumerWidget {
         ),
         20.verticalSpace,
         SliderWidget(
-          sliderValue: introViewModel.intro5Slider,
+          sliderValue: introViewModel.imageValue,
           introViewModelProvider: introViewModelProvider,
           sliderNum: 1,
         ),

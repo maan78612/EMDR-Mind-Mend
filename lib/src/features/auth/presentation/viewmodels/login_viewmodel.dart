@@ -2,7 +2,6 @@ import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
-import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/views/home_screen.dart';
@@ -61,7 +60,11 @@ class LoginViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> login(BuildContext context) async {
+  Future<void> login(
+      {required Function({
+        required SnackBarType snackType,
+        required String message,
+      }) showSnackBarMsg}) async {
     try {
       setLoading(true);
 
@@ -72,7 +75,7 @@ class LoginViewModel with ChangeNotifier {
       userData = await _authRepository.login(body: body);
       CustomNavigation().pushReplacement(const HomeScreen());
     } catch (e) {
-      CustomSnackBar.showSnackBar(e.toString(), SnackBarType.error, context);
+      showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
     } finally {
       setLoading(false);
     }

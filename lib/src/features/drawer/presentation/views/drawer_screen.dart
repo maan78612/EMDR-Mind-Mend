@@ -55,8 +55,12 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                   drawerOption(
                       img: AppImages.myProfile,
                       title: "My Profile",
-                      onTap: () {
-                        CustomNavigation().push(ProfileScreen());
+                      onTap: () async {
+                        await CustomNavigation().push(ProfileScreen(
+                          apiCallback: (bool isSuccess) {
+                            setState(() {});
+                          },
+                        ));
                       }),
                   drawerOption(
                       img: AppImages.settings,
@@ -99,14 +103,31 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.0.r),
-            // Adjust the radius as needed
-            child: Image.asset(
-              AppImages.profilePic,
-              width: 40.sp, // Adjust width as needed
-              height: 40.sp, // Adjust height as needed
-              fit: BoxFit.cover, // Adjust the fit as needed
+          SizedBox(
+            width: 40.sp, // Adjust width as needed
+            height: 40.sp,
+            child: Center(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10.0.r),
+                child: userData?.image == null
+                    ? Image.asset(
+                        AppImages.profile,
+
+                        color:
+                            AppColors.primaryColor, // Adjust height as needed
+                        fit: BoxFit.contain, // Adjust the fit as needed
+                      )
+                    : Image.network(
+                        userData!.image!,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(Icons.error,
+                              color: AppColors.redColor);
+                        },
+                        color:
+                            AppColors.primaryColor, // Adjust height as needed
+                        fit: BoxFit.contain,
+                      ),
+              ),
             ),
           ),
           14.horizontalSpace,
@@ -114,12 +135,12 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Hari Ran",
+                userData?.username ?? "",
                 style: PoppinsStyles.semiBold.copyWith(fontSize: 16.sp),
               ),
               6.verticalSpace,
               Text(
-                "hariran@gmail.com",
+                userData?.email ?? "",
                 style: PoppinsStyles.light.copyWith(fontSize: 12.sp),
               ),
             ],

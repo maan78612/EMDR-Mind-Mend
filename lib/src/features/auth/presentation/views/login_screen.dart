@@ -8,6 +8,8 @@ import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/constants/text_field_validator.dart';
+import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/viewmodels/login_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/views/forget_password.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/views/sign_up_screen.dart';
@@ -92,7 +94,13 @@ class LoginScreen extends ConsumerWidget {
                     isEnable: loginViewModel.isBtnEnable,
                     bgColor: AppColors.primaryColor,
                     onPressed: () {
-                      loginViewModel.login(context);
+                      loginViewModel.login(
+                          showSnackBarMsg: ({
+                        required SnackBarType snackType,
+                        required String message,
+                      }) =>
+                              CustomSnackBar.showSnackBar(
+                                  message, snackType, context));
                     },
                   ),
                   40.verticalSpace,

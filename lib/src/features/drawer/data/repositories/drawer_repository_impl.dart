@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:emdr_mindmend/src/core/constants/api_urls.dart';
-import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/services/network/api_data_source.dart';
+import 'package:emdr_mindmend/src/features/drawer/domain/models/update_profile_response.dart';
 import 'package:emdr_mindmend/src/features/drawer/domain/repositories/drawer_repository.dart';
 
 class DrawerRepositoryImpl implements DrawerRepository {
@@ -16,15 +16,14 @@ class DrawerRepositoryImpl implements DrawerRepository {
   }
 
   @override
-  Future<void> editProfile(
+  Future<UpdateProfileResponseModel> editProfile(
       {required List<MapEntry<String, File>> files,
       required Map<String, dynamic> body}) async {
     try {
-      await NetworkApi.instance.put(
-          url: ApiUrls.editProfile,
-          body: body,
-          files: files,
-          customHeader: {"Bearer": "${userData?.accessToken}"});
+      final value = await NetworkApi.instance
+          .put(url: ApiUrls.editProfile, body: body, files: files);
+      
+      return UpdateProfileResponseModel.fromJson(value);
     } catch (e) {
       rethrow;
     }

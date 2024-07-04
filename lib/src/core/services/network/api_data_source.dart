@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:dio/dio.dart';
+import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/services/network/app_exceptions.dart';
 import 'package:flutter/foundation.dart';
 
@@ -10,7 +11,11 @@ class NetworkApi {
   static final Dio _dio = Dio();
 
   static Map<String, dynamic> get header {
-    return {"Auth-Token": "StaticInfo.authToken"};
+    return {
+      "Authorization": userData?.accessToken != null
+          ? "Bearer ${userData!.accessToken}"
+          : null
+    };
   }
 
   NetworkApi._();
@@ -20,12 +25,11 @@ class NetworkApi {
     return _instance!;
   }
 
-  Future get({
-    required String url,
-    Map<String, dynamic>? params,
-    Map<String, dynamic>? customHeader,
-  }) async {
-    log("url = $url");
+  Future get(
+      {required String url,
+      Map<String, dynamic>? params,
+      Map<String, dynamic>? customHeader}) async {
+    printFunc(methodType: "GET", url: url, apiHeader: customHeader ?? header);
     try {
       final response = await _dio.get(
         url,
@@ -40,7 +44,7 @@ class NetworkApi {
 
       return returnResponse(response);
     } on DioException catch (e) {
-      print(e.type);
+
       throw DioExceptionError(_getDioExceptionErrorMessage(e));
     }
   }
@@ -51,8 +55,11 @@ class NetworkApi {
     Map<String, dynamic>? customHeader,
     List<MapEntry<String, File>>? files,
   }) async {
-    log("put url = $url");
-    log("body = $body");
+    printFunc(
+        methodType: "POST",
+        url: url,
+        apiHeader: customHeader ?? header,
+        body: body);
     Response<dynamic> response;
 
     try {
@@ -101,10 +108,13 @@ class NetworkApi {
     Map<String, dynamic>? customHeader,
     List<MapEntry<String, File>>? files,
   }) async {
-    log("put url = $url");
-
+    printFunc(
+        methodType: "PATCH",
+        url: url,
+        apiHeader: customHeader ?? header,
+        body: body);
     Response<dynamic> response;
-    log("body = $body");
+
     try {
       dynamic data;
       if (files != null && files.isNotEmpty) {
@@ -151,8 +161,11 @@ class NetworkApi {
     Map<String, dynamic>? customHeader,
     List<MapEntry<String, File>>? files,
   }) async {
-    log("put url = $url");
-    log("body = $body");
+    printFunc(
+        methodType: "PUT",
+        url: url,
+        apiHeader: customHeader ?? header,
+        body: body);
     if (customHeader != null) {
       log("customHeader = $customHeader");
     }
@@ -200,8 +213,9 @@ class NetworkApi {
   }
 
   String _getDioExceptionErrorMessage(DioException exception) {
-    print(exception.type);
-    print(exception.response?.data['message']);
+    if (kDebugMode) {
+      log("Exception type : ${exception.type}, Response: ${exception.response?.data}");
+    }
     switch (exception.type) {
       case DioExceptionType.connectionTimeout:
         return "Connection timed out";
@@ -239,14 +253,29 @@ class NetworkApi {
         throw BadRequestException(response.statusMessage);
       case 443:
       case 500:
-        throw InternalServerError(jsonDecode(response.data)['error']);
+        throw InternalServerError(jsonDecode(response.data)['message']);
       case 400:
         {
           dynamic jsonResponse = jsonDecode(response.data);
-          throw InvalidInputException(jsonResponse['error']);
+          throw InvalidInputException(jsonResponse['message']);
         }
       default:
         throw FetchDataException(response.statusMessage);
     }
+  }
+
+  void printFunc(
+      {required String methodType,
+      required String url,
+      Map<String, dynamic>? body,
+      required Map<String, dynamic> apiHeader}) {
+    debugPrint(
+        "------------------------- $methodType ---------------------------");
+    debugPrint("put url = $url");
+    if (body != null) debugPrint("body = $body");
+    debugPrint("header = $apiHeader");
+
+    debugPrint(
+        "-------------------------------------------------------------------");
   }
 }

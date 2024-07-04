@@ -1,21 +1,35 @@
-class User {
-  String? refreshToken;
+class UserData {
+  String refreshToken;
+  String accessToken;
+  String email;
+  String username;
+  String? image;
+  int userId;
 
-  String? accessToken;
+  UserData({
+    required this.refreshToken,
+    required this.accessToken,
+    required this.email,
+    required this.username,
+    required this.image,
+    required this.userId,
+  });
 
-  User({this.refreshToken, this.accessToken});
+  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
+        refreshToken: json["refresh_token"],
+        accessToken: json["access_token"],
+        email: json["email"],
+        username: json["username"],
+        image: json["image"],
+        userId: json["user_id"],
+      );
 
-  User.fromJson(Map<String, dynamic> json) {
-    refreshToken = json['refresh_token'];
-
-    accessToken = json['access_token'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-
-    data['refresh_token'] = refreshToken;
-    data['access_token'] = accessToken;
-    return data;
-  }
+  Map<String, dynamic> toJson() => {
+        "refresh_token": refreshToken,
+        "access_token": accessToken,
+        "email": email,
+        "username": username,
+        "image": image,
+        "user_id": userId,
+      };
 }

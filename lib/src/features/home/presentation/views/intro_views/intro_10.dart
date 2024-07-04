@@ -25,7 +25,7 @@ class Intro10 extends ConsumerWidget {
         ),
         30.verticalSpace,
         SliderWidget(
-          sliderValue: introViewModel.intro10Slider,
+          sliderValue: introViewModel.revaluationTwo,
           introViewModelProvider: introViewModelProvider,
           sliderNum: 4,
         ),

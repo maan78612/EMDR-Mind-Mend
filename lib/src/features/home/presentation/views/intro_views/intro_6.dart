@@ -25,7 +25,7 @@ class Intro6 extends ConsumerWidget {
         ),
         70.verticalSpace,
         SliderWidget(
-          sliderValue: introViewModel.intro6Slider,
+          sliderValue: introViewModel.generalEmotion,
           introViewModelProvider: introViewModelProvider,
           sliderNum: 2,
         ),

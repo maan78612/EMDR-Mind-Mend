@@ -2,6 +2,7 @@ import 'package:emdr_mindmend/src/core/commons/custom_button.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_input_field.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
+import 'package:emdr_mindmend/src/core/commons/loader.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
@@ -27,52 +28,55 @@ class ForgetPasswordScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
       resizeToAvoidBottomInset: true,
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: hMargin),
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                closeIcon(),
-                Image.asset(
-                  AppImages.logo,
-                  width: 100.sp,
-                ),
-                30.verticalSpace,
-                Text(
-                  "Forget Password!",
-                  style: PoppinsStyles.bold.copyWith(fontSize: 22.sp),
-                ),
-                10.verticalSpace,
-                Text(
-                  "Please enter your email to get reset link",
-                  style: PoppinsStyles.regular
-                      .copyWith(fontSize: 14.sp, color: AppColors.greyColor),
-                ),
-                35.verticalSpace,
-                CustomInputField(
-                  prefixWidget: Image.asset(AppImages.email),
-                  hint: "Email",
-                  textInputAction: TextInputAction.next,
-                  controller: forgetPassViewModel.emailCon,
-                  onChange: (value) {
-                    forgetPassViewModel.onChange(
-                        con: forgetPassViewModel.emailCon,
-                        value: value,
-                        validator: TextFieldValidator.validateEmail);
-                  },
-                ),
-                CustomButton(
-                  title: 'Submit',
-                  isEnable: forgetPassViewModel.isBtnEnable,
-                  bgColor: AppColors.primaryColor,
-                  onPressed: () {
-                    forgetPassViewModel.forgetPass(context);
-                  },
-                ),
-                40.verticalSpace,
-              ],
+      body: CustomLoader(
+        isLoading: forgetPassViewModel.isLoading,
+        child: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: hMargin),
+            child: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  closeIcon(),
+                  Image.asset(
+                    AppImages.logo,
+                    width: 100.sp,
+                  ),
+                  30.verticalSpace,
+                  Text(
+                    "Forget Password!",
+                    style: PoppinsStyles.bold.copyWith(fontSize: 22.sp),
+                  ),
+                  10.verticalSpace,
+                  Text(
+                    "Please enter your email to get reset link",
+                    style: PoppinsStyles.regular
+                        .copyWith(fontSize: 14.sp, color: AppColors.greyColor),
+                  ),
+                  35.verticalSpace,
+                  CustomInputField(
+                    prefixWidget: Image.asset(AppImages.email),
+                    hint: "Email",
+                    textInputAction: TextInputAction.next,
+                    controller: forgetPassViewModel.emailCon,
+                    onChange: (value) {
+                      forgetPassViewModel.onChange(
+                          con: forgetPassViewModel.emailCon,
+                          value: value,
+                          validator: TextFieldValidator.validateEmail);
+                    },
+                  ),
+                  CustomButton(
+                    title: 'Submit',
+                    isEnable: forgetPassViewModel.isBtnEnable,
+                    bgColor: AppColors.primaryColor,
+                    onPressed: () {
+                      forgetPassViewModel.forgetPass(context);
+                    },
+                  ),
+                  40.verticalSpace,
+                ],
+              ),
             ),
           ),
         ),

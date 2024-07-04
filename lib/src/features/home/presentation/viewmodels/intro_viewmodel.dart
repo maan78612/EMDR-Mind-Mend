@@ -1,6 +1,5 @@
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
-import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/home/data/repositories/home_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/home/domain/repositories/home_repository.dart';
 import 'package:flutter/material.dart';
@@ -12,23 +11,21 @@ class IntroViewModel with ChangeNotifier {
 
   bool get isLoading => _isLoading;
 
-  set setLoading(bool loading) {
+  void setLoading(bool loading) {
     _isLoading = loading;
     notifyListeners();
   }
 
   int introIndex = 0;
 
-  void incrementIndex(BuildContext context) {
+  bool incrementIndex(BuildContext context) {
     if (introIndex < 10) {
       introIndex = introIndex + 1;
+      notifyListeners();
+      return false;
     } else {
-      CustomNavigation().pop();
-      CustomSnackBar.showSnackBar(
-          "Information survey completed", SnackBarType.success, context);
+      return true;
     }
-
-    notifyListeners();
   }
 
   void decrementIndex() {
@@ -40,42 +37,38 @@ class IntroViewModel with ChangeNotifier {
     }
   }
 
-  double intro5Slider = 1;
-  double intro6Slider = 1;
-  double intro9Slider = 5;
-  double intro10Slider = 7;
+  double imageValue = 1;
+  double generalEmotion = 1;
+  double revaluationOne = 5;
+  double revaluationTwo = 7;
 
   void changeSlider(int num, double value) {
     if (num == 1) {
-      intro5Slider = value;
+      imageValue = value;
     } else if (num == 2) {
-      intro6Slider = value;
+      generalEmotion = value;
     } else if (num == 3) {
-      intro9Slider = value;
+      revaluationOne = value;
     } else if (num == 4) {
-      intro10Slider = value;
+      revaluationTwo = value;
     }
 
     notifyListeners();
   }
 
-  List<String> emotionList = [
-    "Fear",
-    "Sadness",
-    "Shame",
-    "Numbness",
-    "Anxiety",
-    "Helplessness",
-    "Anger",
-    "Guilt",
+  List<Map<int, String>> emotionList = [
+    {1: "Fear"},
+    {2: "Sadness"},
+    {3: "Shame"},
+    {4: "Numbness"},
+    {5: "Anxiety"},
+    {6: "Helplessness"},
+    {7: "Anger"},
+    {8: "Guilty"}, // Assuming this is an empty string with an associated number
   ];
+  List<int> addedEmotions = [2, 3];
 
-  List<String> addedEmotions = [
-    "Sadness",
-    "Anger",
-  ];
-
-  void addEmotion(String emotion) {
+  void addEmotion(int emotion) {
     if (addedEmotions.contains(emotion)) {
       addedEmotions.remove(emotion);
     } else {
@@ -94,5 +87,48 @@ class IntroViewModel with ChangeNotifier {
     selectedDesensitisation = value;
 
     notifyListeners();
+  }
+
+  Future<void> getScore(
+      {required Function({
+        required SnackBarType snackType,
+        required String message,
+      }) showSnackBarMsg}) async {
+    try {
+      setLoading(true);
+
+      await _homeRepository.getScore();
+    } catch (e) {
+      showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  Future<void> setScore(
+      {required Function({
+        required SnackBarType snackType,
+        required String message,
+      }) showSnackBarMsg}) async {
+    try {
+      setLoading(true);
+
+      final body = {
+        "image_value": imageValue,
+        "general_emotion_value": generalEmotion,
+        "revaluation_one": revaluationOne,
+        "revaluation_two": revaluationTwo,
+        "selected_emotions": addedEmotions,
+      };
+
+      await _homeRepository.sendScore(body: body);
+      CustomNavigation().pop();
+      showSnackBarMsg(
+          message: "User therapy info Saved", snackType: SnackBarType.success);
+    } catch (e) {
+      showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
+    } finally {
+      setLoading(false);
+    }
   }
 }

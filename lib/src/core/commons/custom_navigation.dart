@@ -14,8 +14,8 @@ class CustomNavigation {
 
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
 
-  void push(Widget page, {bool animate = true}) {
-    Navigator.of(_navigatorKey.currentContext!).push(
+  dynamic push(Widget page, {bool animate = true}) async {
+    await Navigator.of(_navigatorKey.currentContext!).push(
       RoutingAnimation(
         child: page,
         animate: animate,

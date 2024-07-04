@@ -28,7 +28,7 @@ class Intro7 extends ConsumerWidget {
           children: List.generate(
             introViewModel.emotionList.length ~/ 2,
             (index) {
-              List<String> data = [
+              List<Map<int, String>> data = [
                 introViewModel.emotionList[index * 2],
                 if (index * 2 + 1 < introViewModel.emotionList.length)
                   introViewModel.emotionList[index * 2 + 1]
@@ -42,7 +42,7 @@ class Intro7 extends ConsumerWidget {
                 child: Row(
                   children: List.generate(data.length, (index) {
                     return settingOptionWidget(
-                      title: data[index],
+                      emotionData: data[index],
                       introViewModel: introViewModel,
                     );
                   }),
@@ -56,24 +56,25 @@ class Intro7 extends ConsumerWidget {
   }
 
   Widget settingOptionWidget(
-      {required String title, required IntroViewModel introViewModel}) {
+      {required Map<int, String> emotionData,
+      required IntroViewModel introViewModel}) {
     return Expanded(
       child: CommonInkWell(
         onTap: () {
-          introViewModel.addEmotion(title);
+          introViewModel.addEmotion(emotionData.keys.first);
         },
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 6.sp),
           margin: EdgeInsets.all(4.sp),
-          decoration: introViewModel.addedEmotions.contains(title)
+          decoration: introViewModel.addedEmotions.contains(emotionData.keys.first)
               ? BoxDecoration(
                   color: AppColors.whiteColor,
                   borderRadius: BorderRadius.all(Radius.circular(30.r)))
               : const BoxDecoration(),
           child: Text(
-            title,
+            emotionData.values.first,
             textAlign: TextAlign.center,
-            style: introViewModel.addedEmotions.contains(title)
+            style: introViewModel.addedEmotions.contains(emotionData.keys.first)
                 ? PoppinsStyles.semiBold
                     .copyWith(fontSize: 14.sp, color: AppColors.primaryColor)
                 : PoppinsStyles.regular
