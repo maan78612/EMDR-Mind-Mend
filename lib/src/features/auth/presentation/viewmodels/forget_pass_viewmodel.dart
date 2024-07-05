@@ -56,10 +56,10 @@ class ForgetPassViewModel with ChangeNotifier {
 
       await _authRepository.forgetPassword(body: body);
       CustomNavigation().pop();
-      CustomSnackBar.showSnackBar(
+      Utils.showSnackBar(
           "Email sent for reset password", SnackBarType.success, context);
     } catch (e) {
-      CustomSnackBar.showSnackBar(e.toString(), SnackBarType.error, context);
+      Utils.showSnackBar(e.toString(), SnackBarType.error, context);
     } finally {
       setLoading(false);
     }

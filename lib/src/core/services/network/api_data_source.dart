@@ -49,7 +49,7 @@ class NetworkApi {
     }
   }
 
-  Future post({
+  Future<Response<dynamic>> post({
     required String url,
     required Map<String, dynamic> body,
     Map<String, dynamic>? customHeader,

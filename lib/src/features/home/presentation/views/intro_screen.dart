@@ -96,7 +96,7 @@ class IntroScreen extends ConsumerWidget {
                             required SnackBarType snackType,
                             required String message,
                           }) =>
-                                  CustomSnackBar.showSnackBar(
+                                  Utils.showSnackBar(
                                       message, snackType, context));
                         }
                       },
