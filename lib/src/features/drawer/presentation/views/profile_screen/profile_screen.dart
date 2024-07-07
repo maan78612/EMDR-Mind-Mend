@@ -80,7 +80,7 @@ class ProfileScreen extends ConsumerWidget {
                     required SnackBarType snackType,
                     required String message,
                   }) {
-                    CustomSnackBar.showSnackBar(message, snackType, context);
+                    Utils.showSnackBar(message, snackType, context);
                     if (snackType == SnackBarType.success) {
                       apiCallback(true);
                     }

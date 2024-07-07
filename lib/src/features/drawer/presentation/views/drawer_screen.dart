@@ -229,7 +229,7 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                     required SnackBarType snackType,
                     required String message,
                   }) =>
-                      CustomSnackBar.showSnackBar(message, snackType, context),
+                      Utils.showSnackBar(message, snackType, context),
                 );
                 // Dismiss the dialog
               },

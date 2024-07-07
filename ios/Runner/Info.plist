@@ -3,7 +3,10 @@
 <plist version="1.0">
 <dict>
     <key>NSCameraUsageDescription</key>
-    <string>This app needs access to your camera in order to take photos.</string>
+    <string>Scan your card to add it automatically</string>
+    <key>NSCameraUsageDescription
+    &lt;string&gt;To scan cards&lt;/string&gt;</key>
+    <string>To scan cards</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>This app needs access to your photo library in order to select photos.</string>
 	<key>CFBundleDevelopmentRegion</key>

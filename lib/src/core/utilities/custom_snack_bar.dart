@@ -5,7 +5,7 @@ import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class CustomSnackBar {
+class Utils {
   static void showSnackBar(
       String msg, SnackBarType type, BuildContext context) {
     Flushbar(
@@ -66,4 +66,5 @@ class CustomSnackBar {
         return Icons.warning;
     }
   }
+
 }
