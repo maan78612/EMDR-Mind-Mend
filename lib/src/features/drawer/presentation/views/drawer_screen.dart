@@ -112,20 +112,19 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                 child: userData?.image == null
                     ? Image.asset(
                         AppImages.profile,
-
                         color:
                             AppColors.primaryColor, // Adjust height as needed
                         fit: BoxFit.contain, // Adjust the fit as needed
                       )
-                    : Image.network(
-                        userData!.image!,
-                        errorBuilder: (context, error, stackTrace) {
-                          return const Icon(Icons.error,
-                              color: AppColors.redColor);
-                        },
-                        color:
-                            AppColors.primaryColor, // Adjust height as needed
-                        fit: BoxFit.contain,
+                    : Center(
+                        child: Image.network(
+                          userData?.image ?? "",
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Icon(Icons.error,
+                                color: AppColors.redColor);
+                          },
+                          fit: BoxFit.contain,
+                        ),
                       ),
               ),
             ),

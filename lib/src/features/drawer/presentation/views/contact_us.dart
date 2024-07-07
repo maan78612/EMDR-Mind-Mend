@@ -28,57 +28,59 @@ class ContactUsPage extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: AppColors.whiteBg,
         appBar: const DrawerAppBar(title: "Contact Us"),
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomInputField(
-                title: "Name",
-                hint: "Enter your name",
-                controller: contactUsViewModel.nameController,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.name,
-                onChange: (value) {
-                  contactUsViewModel.onChange(
-                      con: contactUsViewModel.nameController,
-                      value: value,
-                      validator: TextFieldValidator.validatePersonName);
-                },
-              ),
-              20.verticalSpace,
-              CustomInputField(
-                title: "Email",
-                hint: "Enter your email",
-                controller: contactUsViewModel.emailController,
-                textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.emailAddress,
-                onChange: (value) {
-                  contactUsViewModel.onChange(
-                      con: contactUsViewModel.emailController,
-                      value: value,
-                      validator: TextFieldValidator.validateEmail);
-                },
-              ),
-              20.verticalSpace,
-              messageInputField(contactUsViewModel),
-              30.verticalSpace,
-              CustomButton(
-                title: "Submit",
-                isEnable: contactUsViewModel.isBtnEnable,
-                bgColor: AppColors.primaryColor,
-                textColor: AppColors.whiteColor,
-                onPressed: () {
-                  contactUsViewModel.submitContactUs(
-                      showSnackBarMsg: ({
-                    required SnackBarType snackType,
-                    required String message,
-                  }) =>
-                          CustomSnackBar.showSnackBar(
-                              message, snackType, context));
-                },
-              ),
-            ],
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomInputField(
+                  title: "Name",
+                  hint: "Enter your name",
+                  controller: contactUsViewModel.nameController,
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.name,
+                  onChange: (value) {
+                    contactUsViewModel.onChange(
+                        con: contactUsViewModel.nameController,
+                        value: value,
+                        validator: TextFieldValidator.validatePersonName);
+                  },
+                ),
+                20.verticalSpace,
+                CustomInputField(
+                  title: "Email",
+                  hint: "Enter your email",
+                  controller: contactUsViewModel.emailController,
+                  textInputAction: TextInputAction.next,
+                  keyboardType: TextInputType.emailAddress,
+                  onChange: (value) {
+                    contactUsViewModel.onChange(
+                        con: contactUsViewModel.emailController,
+                        value: value,
+                        validator: TextFieldValidator.validateEmail);
+                  },
+                ),
+                20.verticalSpace,
+                messageInputField(contactUsViewModel),
+                30.verticalSpace,
+                CustomButton(
+                  title: "Submit",
+                  isEnable: contactUsViewModel.isBtnEnable,
+                  bgColor: AppColors.primaryColor,
+                  textColor: AppColors.whiteColor,
+                  onPressed: () {
+                    contactUsViewModel.submitContactUs(
+                        showSnackBarMsg: ({
+                      required SnackBarType snackType,
+                      required String message,
+                    }) =>
+                            CustomSnackBar.showSnackBar(
+                                message, snackType, context));
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),

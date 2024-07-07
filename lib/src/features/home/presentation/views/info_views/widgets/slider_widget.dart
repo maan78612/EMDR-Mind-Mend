@@ -1,16 +1,20 @@
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/intro_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/info_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SliderWidget extends ConsumerWidget {
-  double sliderValue;
-  int sliderNum;
-  ChangeNotifierProvider<IntroViewModel> introViewModelProvider;
-  SliderWidget({super.key, required this.sliderValue,required this.introViewModelProvider,required this.sliderNum});
+  final double sliderValue;
+  final int sliderNum;
+  final ChangeNotifierProvider<IntroViewModel> introViewModelProvider;
 
+  const SliderWidget(
+      {super.key,
+      required this.sliderValue,
+      required this.introViewModelProvider,
+      required this.sliderNum});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

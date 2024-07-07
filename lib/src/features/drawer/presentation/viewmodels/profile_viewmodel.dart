@@ -40,6 +40,7 @@ class ProfileViewModel with ChangeNotifier {
 
     if (pickedFile != null) {
       profileImage = File(pickedFile.path);
+
       notifyListeners();
     }
   }
@@ -93,7 +94,7 @@ class ProfileViewModel with ChangeNotifier {
 
       userData?.username = response.data.username;
       userData?.image = response.data.image;
-      userData?.accessToken = response.tokens.accessToken;
+
       notifyListeners();
 
       CustomNavigation().pop();

@@ -1,8 +1,8 @@
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/intro_viewmodel.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/intro_views/widgets/intro_description.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/intro_views/widgets/intro_heading.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/intro_views/widgets/slider_widget.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/info_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/widgets/intro_description.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/widgets/intro_heading.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/widgets/slider_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

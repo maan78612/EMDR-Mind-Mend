@@ -5,11 +5,11 @@ import 'package:emdr_mindmend/src/features/auth/domain/repositories/auth_reposit
 
 class AuthRepositoryImpl implements AuthRepository {
   @override
-  Future<UserData> login({required Map<String, dynamic> body}) async {
+  Future<UserModel> login({required Map<String, dynamic> body}) async {
     try {
       final value =
           await NetworkApi.instance.post(url: ApiUrls.login, body: body);
-      return UserData.fromJson(value["data"]);
+      return UserModel.fromJson(value["data"]);
     } catch (e) {
       rethrow;
     }

@@ -50,7 +50,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   padding: EdgeInsets.symmetric(vertical: 24.sp),
                   child: const Divider(color: AppColors.borderColor),
                 ),
-                Text("Helping with pTSD and other\ntrauma-related conditions",
+                Text("Helping with PTSD and other\ntrauma-related conditions",
                     style: PoppinsStyles.bold.copyWith(fontSize: 18.sp)),
                 10.verticalSpace,
                 Text("Based on and emdr protocal",
@@ -163,7 +163,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             title: 'Start',
             bgColor: AppColors.primaryColor,
             onPressed: () {
-              _showAlertDialog();
+              _showAlertDialog(false);
             },
             icon: Image.asset(
               AppImages.startIcon,
@@ -178,7 +178,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         Expanded(
           child: CustomButton(
             bgColor: AppColors.primaryColor,
-            onPressed: () {},
+            onPressed: () {
+              _showAlertDialog(true);
+            },
             icon: Image.asset(
               AppImages.eye,
               width: 30.sp,
@@ -191,7 +193,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Future<void> _showAlertDialog() {
+  Future<void> _showAlertDialog(bool isEye) {
     return showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -210,14 +212,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   fontSize: 13.sp, color: AppColors.whiteColor, height: 1.2.sp),
             ),
             actions: [
-              Center(
-                child: CommonInkWell(
-                  onTap: () =>
-                      CustomNavigation().pushReplacement(IntroScreen()),
-                  child: Text("OK",
-                      textAlign: TextAlign.center,
-                      style: PoppinsStyles.semiBold.copyWith(
-                          fontSize: 17.sp, color: AppColors.whiteColor)),
+              CommonInkWell(
+                onTap: () => CustomNavigation()
+                    .pushReplacement(InfoScreen(isEye: isEye)),
+                child: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text("OK",
+                        textAlign: TextAlign.center,
+                        style: PoppinsStyles.semiBold.copyWith(
+                            fontSize: 17.sp, color: AppColors.whiteColor)),
+                  ),
                 ),
               )
             ],

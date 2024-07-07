@@ -59,7 +59,7 @@ class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
                   children: List.generate(
                       onBoardingViewModel.onBoarding.length,
                       (index) => onBoardingWidget(
-                          onBoardingViewModel.onBoarding[index])),
+                          onBoardingViewModel.onBoarding[index],index)),
                 ),
               ),
               Row(
@@ -111,7 +111,7 @@ class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
     );
   }
 
-  Widget onBoardingWidget(OnBoardingModel onBoarding) {
+  Widget onBoardingWidget(OnBoardingModel onBoarding, int index) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -119,10 +119,28 @@ class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
         Image.asset(onBoarding.img,
             height: onBoarding.imgHeight, fit: BoxFit.fitHeight),
         30.verticalSpace,
-        Text(
-          onBoarding.title,
-          style: PoppinsStyles.bold.copyWith(fontSize: 24.sp),
-        ),
+
+        RichText(
+            textAlign: TextAlign.start,
+            text: TextSpan(
+              children: [
+                TextSpan(
+                  text: onBoarding.title,
+                  style: PoppinsStyles.bold.copyWith(fontSize: 24.sp),
+                ),
+                if(index==0)...[
+                  TextSpan(
+                    text: " mind",
+                    style: PoppinsStyles.regular.copyWith(fontSize: 24.sp),
+                  ),
+                  TextSpan(
+                    text: " mind",
+                    style: PoppinsStyles.bold.copyWith(fontSize: 24.sp),
+                  ),
+                ]
+
+              ],
+            )),
         30.verticalSpace,
         Padding(
           padding: EdgeInsets.symmetric(horizontal: 6.sp),

@@ -12,4 +12,4 @@ final settingViewModelProvider =
   return SettingViewModel();
 });
 
-UserData? userData;
+UserModel? userData;

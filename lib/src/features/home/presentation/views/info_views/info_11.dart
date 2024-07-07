@@ -1,7 +1,6 @@
-
-import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/intro_viewmodel.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/intro_views/widgets/intro_description.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/intro_views/widgets/intro_heading.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/info_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/widgets/intro_description.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/widgets/intro_heading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,20 +19,20 @@ class Intro11 extends ConsumerWidget {
         const IntroDescription(
             description: "According to the information you have given; "),
         30.verticalSpace,
-        const IntroDescription(
+        IntroDescription(
           description:
               "Your distress level before desensitisation therapy was ",
-          boldDescriptionEnd: "7/10",
+          boldDescriptionEnd: "${introViewModel.generalEmotion.toInt()}/10",
         ),
         30.verticalSpace,
-        const IntroDescription(
-          description:
-              "Your distress level after desensitisation therapy was ",
-          boldDescriptionEnd: "2/10",
+        IntroDescription(
+          description: "Your distress level after desensitisation therapy was ",
+          boldDescriptionEnd: "${introViewModel.revaluationOne.toInt()}/10",
         ),
         60.verticalSpace,
         const IntroDescription(
-            description: "This App has been developed for you to use as required until any disturbance is gone or reduced. "),
+            description:
+                "This App has been developed for you to use as required until any disturbance is gone or reduced. "),
       ],
     );
   }

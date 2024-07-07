@@ -74,10 +74,6 @@ class _PendulumAnimationState extends ConsumerState<PendulumAnimation>
                   ? AppColors.whiteColor
                   : AppColors.blackColor),
         ),
-        bottom: const PreferredSize(
-          preferredSize: Size.fromHeight(10),
-          child: Divider(color: AppColors.borderColor),
-        ),
       ),
       body: Stack(
         alignment: Alignment.topCenter,

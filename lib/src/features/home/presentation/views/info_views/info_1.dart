@@ -1,6 +1,6 @@
-import 'package:emdr_mindmend/src/features/home/presentation/views/intro_views/widgets/intro_description.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/intro_views/widgets/intro_heading.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/intro_views/widgets/intro_title.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/widgets/intro_description.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/widgets/intro_heading.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/widgets/intro_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 

@@ -8,7 +8,7 @@ class OnBoardingRepositoryImpl implements OnBoardingRepository {
   List<OnBoardingModel> populateData() {
     List<OnBoardingModel> onBoarding = [
       OnBoardingModel(
-          title: 'Welcome to mindmend',
+          title: 'Welcome to',
           description:
               'Your companion for managing anxiety, depression, and PTSD through EMDR therapy. Let\'s take a quick tour to help you get started.',
           img: AppImages.onBoarding1,

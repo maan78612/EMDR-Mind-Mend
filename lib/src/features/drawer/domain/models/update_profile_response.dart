@@ -11,24 +11,24 @@ String updateProfileResponseModelToJson(UpdateProfileResponseModel data) => json
 class UpdateProfileResponseModel {
   String message;
   Data data;
-  Tokens tokens;
+
 
   UpdateProfileResponseModel({
     required this.message,
     required this.data,
-    required this.tokens,
+
   });
 
   factory UpdateProfileResponseModel.fromJson(Map<String, dynamic> json) => UpdateProfileResponseModel(
     message: json["message"],
     data: Data.fromJson(json["data"]),
-    tokens: Tokens.fromJson(json["tokens"]),
+
   );
 
   Map<String, dynamic> toJson() => {
     "message": message,
     "data": data.toJson(),
-    "tokens": tokens.toJson(),
+
   };
 }
 
@@ -52,18 +52,4 @@ class Data {
   };
 }
 
-class Tokens {
-  String accessToken;
 
-  Tokens({
-    required this.accessToken,
-  });
-
-  factory Tokens.fromJson(Map<String, dynamic> json) => Tokens(
-    accessToken: json["access_token"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "access_token": accessToken,
-  };
-}

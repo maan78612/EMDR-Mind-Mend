@@ -4,10 +4,10 @@ import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/setting_viewmodel.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/intro_viewmodel.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/animation_screen.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/intro_views/widgets/intro_description.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/intro_views/widgets/intro_heading.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/info_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/animation_screen.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/widgets/intro_description.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/widgets/intro_heading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -33,7 +33,8 @@ class Intro8 extends ConsumerWidget {
                   (index) {
             return settingOptionWidget(
                 title: introViewModel.desensitisationList[index],
-                introViewModel: introViewModel);
+                introViewModel: introViewModel,
+                settingViewModel: settingViewModel);
           })),
         ),
         40.verticalSpace,
@@ -136,10 +137,16 @@ class Intro8 extends ConsumerWidget {
   }
 
   Widget settingOptionWidget(
-      {required String title, required IntroViewModel introViewModel}) {
+      {required String title,
+      required IntroViewModel introViewModel,
+      required SettingViewModel settingViewModel}) {
     return Expanded(
       child: CommonInkWell(
         onTap: () {
+          if (settingViewModel.isPlaying) {
+            settingViewModel.stopSound();
+          }
+
           introViewModel.setDesensitisation(title);
         },
         child: Container(
