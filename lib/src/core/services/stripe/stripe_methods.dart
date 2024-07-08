@@ -23,7 +23,7 @@ class PaymentService {
       /// Display Payment Sheet
       await _displayPaymentSheet();
     } catch (err) {
-      rethrow;
+      throw Exception(err);
     }
   }
 
@@ -51,6 +51,7 @@ class PaymentService {
   }
 
   Future<void> _displayPaymentSheet() async {
+    print("_displayPaymentSheet");
     try {
       await Stripe.instance
           .presentPaymentSheet()

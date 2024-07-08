@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 // import 'package:flutter_stripe/flutter_stripe.dart';
 
 void main() async {
@@ -18,7 +19,7 @@ Future<void> _initMethod() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   //Assign publishable key to flutter_stripe
-  // Stripe.publishableKey = "pk_test_24PsRoB2O46Bxxxxxxxxxxxxxxxxxxxxxxxx";
+  Stripe.publishableKey = "pk_test_51PYAajEKwl5ainCu3EVw6yoK06ULODPXurh21tbhvJBKKtwDh3ZOGfOZwaxvCGswgfZWJLXR0xYc07j5BuqqTeRx00LfJMq9tK";
 
   //Load our .env file that contains our Stripe Secret key
   await dotenv.load(fileName: "assets/.env");
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             navigatorKey: CustomNavigation().navigatorKey,
             title: 'Mind Mend',
-            home: const Subscription(),
+            home:  Subscription(),
           ),
         );
       },
