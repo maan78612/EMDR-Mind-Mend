@@ -1,4 +1,5 @@
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/subscription.dart';
 import 'package:emdr_mindmend/src/features/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -46,7 +47,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             navigatorKey: CustomNavigation().navigatorKey,
             title: 'Mind Mend',
-            home: const SplashScreen(),
+            home: const Subscription(),
           ),
         );
       },

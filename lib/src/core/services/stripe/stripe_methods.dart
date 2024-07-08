@@ -5,7 +5,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
 class PaymentService {
-  Map<String, dynamic>? paymentIntent;
+
 
   Future<void> makePayment(
       {required String amount, String currency = "USD"}) async {
@@ -55,7 +55,7 @@ class PaymentService {
   Future<void> _displayPaymentSheet() async {
     try {
       await Stripe.instance.presentPaymentSheet().then((value) {
-        paymentIntent = null;
+
       }).onError((error, stackTrace) {
         throw Exception(error);
       });
