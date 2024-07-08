@@ -5,8 +5,6 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
 class PaymentService {
-
-
   Future<void> makePayment(
       {required String amount, String currency = "USD"}) async {
     try {
@@ -25,7 +23,7 @@ class PaymentService {
       /// Display Payment Sheet
       await _displayPaymentSheet();
     } catch (err) {
-      throw Exception(err);
+      rethrow;
     }
   }
 
@@ -54,9 +52,10 @@ class PaymentService {
 
   Future<void> _displayPaymentSheet() async {
     try {
-      await Stripe.instance.presentPaymentSheet().then((value) {
-
-      }).onError((error, stackTrace) {
+      await Stripe.instance
+          .presentPaymentSheet()
+          .then((value) {})
+          .onError((error, stackTrace) {
         throw Exception(error);
       });
     } on StripeException catch (e) {

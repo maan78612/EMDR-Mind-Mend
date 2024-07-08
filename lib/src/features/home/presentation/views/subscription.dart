@@ -7,22 +7,25 @@ class Subscription extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          const Text("Subscription"),
-          30.verticalSpace,
-          ElevatedButton(
-            onPressed: () {
-              try {
-                PaymentService().makePayment(amount: "10");
-              } on Exception catch (e) {
-                debugPrint("stripe error =  ${e.toString()}");
-              }
-            },
-            child: const Text("submit"),
-          ),
-        ],
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text("Subscription"),
+            30.verticalSpace,
+            ElevatedButton(
+              onPressed: () {
+                try {
+                  PaymentService().makePayment(amount: "10");
+                } on Exception catch (e) {
+                  debugPrint("stripe error =  ${e.toString()}");
+                }
+              },
+              child: const Text("submit"),
+            ),
+          ],
+        ),
       ),
     );
   }
