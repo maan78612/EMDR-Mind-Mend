@@ -134,7 +134,7 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                userData?.username ?? "",
+                userData?.name ?? "",
                 style: PoppinsStyles.semiBold.copyWith(fontSize: 16.sp),
               ),
               6.verticalSpace,

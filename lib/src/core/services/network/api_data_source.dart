@@ -44,12 +44,11 @@ class NetworkApi {
 
       return returnResponse(response);
     } on DioException catch (e) {
-
       throw DioExceptionError(_getDioExceptionErrorMessage(e));
     }
   }
 
-  Future<Response<dynamic>> post({
+  Future post({
     required String url,
     required Map<String, dynamic> body,
     Map<String, dynamic>? customHeader,
@@ -271,7 +270,7 @@ class NetworkApi {
       required Map<String, dynamic> apiHeader}) {
     debugPrint(
         "------------------------- $methodType ---------------------------");
-    debugPrint("put url = $url");
+    debugPrint(" url = $url");
     if (body != null) debugPrint("body = $body");
     debugPrint("header = $apiHeader");
 

@@ -1,4 +1,5 @@
 class SubscriptionModel {
+  String id;
   String name;
   String description;
   double amount;
@@ -6,6 +7,7 @@ class SubscriptionModel {
 
   SubscriptionModel({
     required this.name,
+    required this.id,
     required this.description,
     required this.amount,
     required this.duration,
@@ -13,6 +15,7 @@ class SubscriptionModel {
 
   factory SubscriptionModel.fromJson(Map<String, dynamic> json) =>
       SubscriptionModel(
+        id: json["id"],
         name: json["name"],
         description: json["description"],
         amount: json["amount"]?.toDouble(),
@@ -20,6 +23,7 @@ class SubscriptionModel {
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "name": name,
         "description": description,
         "amount": amount,

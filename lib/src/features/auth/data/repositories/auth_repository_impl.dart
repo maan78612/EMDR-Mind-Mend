@@ -9,7 +9,7 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       final value =
           await NetworkApi.instance.post(url: ApiUrls.login, body: body);
-      return UserModel.fromJson(value.data["data"]);
+      return UserModel.fromJson(value["data"]);
     } catch (e) {
       rethrow;
     }

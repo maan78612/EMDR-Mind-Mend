@@ -2,7 +2,7 @@ class UserModel {
   String refreshToken;
   String accessToken;
   String email;
-  String username;
+  String name;
   int userId;
   String? image;
   Subscription? subscription;
@@ -12,7 +12,7 @@ class UserModel {
     required this.refreshToken,
     required this.accessToken,
     required this.email,
-    required this.username,
+    required this.name,
     required this.userId,
     required this.image,
     required this.subscription,
@@ -23,7 +23,7 @@ class UserModel {
         refreshToken: json["refresh_token"],
         accessToken: json["access_token"],
         email: json["email"],
-        username: json["username"],
+        name: json["name"],
         userId: json["user_id"],
         image: json["image"],
         subscription: json["subscription"] != null
@@ -36,7 +36,7 @@ class UserModel {
         "refresh_token": refreshToken,
         "access_token": accessToken,
         "email": email,
-        "username": username,
+        "name": name,
         "user_id": userId,
         "image": image,
         "subscription": subscription?.toJson(),

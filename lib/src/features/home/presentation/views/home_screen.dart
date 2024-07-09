@@ -6,9 +6,12 @@ import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
+import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/drawer_screen.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/home_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/views/info_screen.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/subscription.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,6 +30,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(homeViewModelProvider).getSubscriptionList(
+              showSnackBarMsg: ({
+            required SnackBarType snackType,
+            required String message,
+          }) =>
+                  Utils.showSnackBar(message, snackType,
+                      CustomNavigation().navigatorKey.currentState!.context));
+      if (userData?.isTrialValid == null ||
+          (userData?.isTrialValid == false &&
+              userData?.subscription != null &&
+              userData!.subscription!.expiryDate.isBefore(DateTime.now()))) {
+        CustomNavigation().push(
+          SubscriptionScreen(homeViewModelProvider: homeViewModelProvider),
+        );
+      }
+    });
     super.initState();
   }
 

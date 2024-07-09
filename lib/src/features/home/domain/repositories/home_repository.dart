@@ -6,4 +6,6 @@ abstract class HomeRepository {
   Future<void> getScore();
 
   Future<List<SubscriptionModel>> getSubscription();
+
+  Future<void> setSubscription({required Map<String, dynamic> body});
 }

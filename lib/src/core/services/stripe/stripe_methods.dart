@@ -1,34 +1,34 @@
-import 'dart:convert';
+import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/services/network/api_data_source.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
 class PaymentService {
-  Future<void> makePayment(
+  Future<bool> makePayment(
       {required String amount, String currency = "USD"}) async {
     try {
       /// Create Payment Intent
-      final paymentIntent = await _createPaymentIntent(amount, currency);
+      Map<String, dynamic> paymentIntent =
+          await _createPaymentIntent(amount, currency);
 
       /// Initialize Payment Sheet
       await Stripe.instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
-          paymentIntentClientSecret: paymentIntent!['client_secret'],
-          style: ThemeMode.dark,
-          merchantDisplayName: 'Ikay',
+          paymentIntentClientSecret: paymentIntent['client_secret'],
+          style: ThemeMode.light,
+          merchantDisplayName: userData?.name,
         ),
       );
 
       /// Display Payment Sheet
-      await _displayPaymentSheet();
+      return await _displayPaymentSheet();
     } catch (err) {
-      throw Exception(err);
+      rethrow;
     }
   }
 
-  Future<Map<String, dynamic>?> _createPaymentIntent(
-      String amount, String currency) async {
+  Future<dynamic> _createPaymentIntent(String amount, String currency) async {
     try {
       final body = {
         'amount': calculateAmount(amount),
@@ -44,25 +44,21 @@ class PaymentService {
         },
       );
 
-      return json.decode(response.data);
+      return response;
     } catch (err) {
       throw Exception(err.toString());
     }
   }
 
-  Future<void> _displayPaymentSheet() async {
-    print("_displayPaymentSheet");
+  Future<bool> _displayPaymentSheet() async {
+    debugPrint("_displayPaymentSheet");
     try {
-      await Stripe.instance
-          .presentPaymentSheet()
-          .then((value) {})
-          .onError((error, stackTrace) {
-        throw Exception(error);
-      });
+      await Stripe.instance.presentPaymentSheet();
+      return true;
     } on StripeException catch (e) {
-      throw Exception(e.toString());
+      throw Exception(e.error.message);
     } catch (e) {
-      debugPrint('$e');
+      throw Exception(e.toString());
     }
   }
 

@@ -15,6 +15,7 @@ class CustomButton extends StatelessWidget {
   final Color loadingColor;
   final bool isLoading;
   final double loadingSize;
+  final Color? borderColor;
 
   const CustomButton(
       {super.key,
@@ -26,7 +27,8 @@ class CustomButton extends StatelessWidget {
       this.isLoading = false,
       this.loadingSize = 25.0,
       this.textColor = AppColors.whiteColor,
-      required this.onPressed});
+      required this.onPressed,
+      this.borderColor});
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +39,7 @@ class CustomButton extends StatelessWidget {
         height: inputFieldHeight,
         alignment: Alignment.center,
         decoration: BoxDecoration(
+            border: Border.all(color: borderColor ?? bgColor),
             borderRadius: BorderRadius.circular(8.r),
             color: bgColor.withOpacity(isEnable ? 1 : 0.5)),
         child: isLoading

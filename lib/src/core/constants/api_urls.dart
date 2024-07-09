@@ -9,4 +9,5 @@ class ApiUrls {
   static const getScore = "${baseUrl}score-records/";
   static const saveScore = "${baseUrl}user_therapy_info/";
   static const getSubscription = "${baseUrl}subscriptions/";
+  static const setSubscription = "${baseUrl}subscriptions/create/";
 }

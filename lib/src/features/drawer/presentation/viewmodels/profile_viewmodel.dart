@@ -16,7 +16,7 @@ class ProfileViewModel with ChangeNotifier {
       controller: TextEditingController(text: userData?.email),
       focusNode: FocusNode());
   CustomTextController nameCon = CustomTextController(
-      controller: TextEditingController(text: userData?.username),
+      controller: TextEditingController(text: userData?.name),
       focusNode: FocusNode());
 
   File? profileImage;
@@ -92,7 +92,7 @@ class ProfileViewModel with ChangeNotifier {
       final response =
           await _drawerRepository.editProfile(body: body, files: files);
 
-      userData?.username = response.data.username;
+      userData?.name = response.data.username;
       userData?.image = response.data.image;
 
       notifyListeners();
