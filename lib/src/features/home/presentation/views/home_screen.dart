@@ -38,13 +38,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           }) =>
                   Utils.showSnackBar(message, snackType,
                       CustomNavigation().navigatorKey.currentState!.context));
-      if (userData?.isTrialValid == null ||
-          (userData?.isTrialValid == false &&
-              userData?.subscription != null &&
-              userData!.subscription!.expiryDate.isBefore(DateTime.now()))) {
+      if (checkSubscriptionStatus()) {
         CustomNavigation().push(
-          SubscriptionScreen(homeViewModelProvider: homeViewModelProvider),
-        );
+            SubscriptionScreen(homeViewModelProvider: homeViewModelProvider));
       }
     });
     super.initState();
@@ -61,8 +57,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: hMargin),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: ListView(
               children: [
                 profileButton(),
                 logo(),
@@ -86,7 +81,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   description:
                       'use the 2 most common stimulation\'s\n(visual and auditory) to aid your\ntreatment. You can skip to these if\ncomfortable to do so',
                 ),
-                const Spacer(),
+                60.verticalSpace,
                 homeButtons(),
                 30.verticalSpace,
               ],
@@ -183,7 +178,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             title: 'Start',
             bgColor: AppColors.primaryColor,
             onPressed: () {
-              _showAlertDialog(false);
+              if (checkSubscriptionStatus()) {
+                CustomNavigation().push(SubscriptionScreen(
+                    homeViewModelProvider: homeViewModelProvider));
+                ;
+              } else {
+                _showAlertDialog(false);
+              }
             },
             icon: Image.asset(
               AppImages.startIcon,

@@ -7,5 +7,5 @@ abstract class HomeRepository {
 
   Future<List<SubscriptionModel>> getSubscription();
 
-  Future<void> setSubscription({required Map<String, dynamic> body});
+  Future<SubscriptionModel> setSubscription({required Map<String, dynamic> body});
 }

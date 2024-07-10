@@ -35,9 +35,12 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<void> setSubscription({required Map<String, dynamic> body}) async {
+  Future<SubscriptionModel> setSubscription(
+      {required Map<String, dynamic> body}) async {
     try {
-      await NetworkApi.instance.post(url: ApiUrls.setSubscription, body: body);
+      final data = await NetworkApi.instance
+          .post(url: ApiUrls.setSubscription, body: body);
+      return SubscriptionModel.fromJson(data['data']);
     } catch (e) {
       rethrow;
     }

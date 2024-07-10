@@ -1,5 +1,6 @@
 import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/setting_viewmodel.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -13,3 +14,15 @@ final settingViewModelProvider =
 });
 
 UserModel? userData;
+
+bool checkSubscriptionStatus() {
+  if ((userData?.isTrialValid == null && userData?.subscription == null) ||
+      (userData?.isTrialValid == false &&
+          userData?.subscription != null &&
+          userData!.subscription!.expiryDate.isBefore(DateTime.now()))) {
+    debugPrint("subscription VALID");
+    return true;
+  }
+  debugPrint("subscription INVALID");
+  return false;
+}

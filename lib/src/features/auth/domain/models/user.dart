@@ -1,3 +1,5 @@
+import 'package:emdr_mindmend/src/features/home/domain/models/subscription.dart';
+
 class UserModel {
   String refreshToken;
   String accessToken;
@@ -5,7 +7,7 @@ class UserModel {
   String name;
   int userId;
   String? image;
-  Subscription? subscription;
+  SubscriptionModel? subscription;
   bool? isTrialValid;
 
   UserModel({
@@ -27,7 +29,7 @@ class UserModel {
         userId: json["user_id"],
         image: json["image"],
         subscription: json["subscription"] != null
-            ? Subscription.fromJson(json["subscription"])
+            ? SubscriptionModel.fromJson(json["subscription"])
             : null,
         isTrialValid: json["isTrialValid"],
       );
@@ -44,36 +46,4 @@ class UserModel {
       };
 }
 
-class Subscription {
-  int id;
-  String subscription;
-  bool isActive;
-  DateTime paymentDate;
-  DateTime expiryDate;
 
-  Subscription({
-    required this.id,
-    required this.subscription,
-    required this.isActive,
-    required this.paymentDate,
-    required this.expiryDate,
-  });
-
-  factory Subscription.fromJson(Map<String, dynamic> json) => Subscription(
-        id: json["id"],
-        subscription: json["subscription"],
-        isActive: json["is_active"],
-        paymentDate: DateTime.parse(json["payment_date"]),
-        expiryDate: DateTime.parse(json["expiry_date"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "subscription": subscription,
-        "is_active": isActive,
-        "payment_date":
-            "${paymentDate.year.toString().padLeft(4, '0')}-${paymentDate.month.toString().padLeft(2, '0')}-${paymentDate.day.toString().padLeft(2, '0')}",
-        "expiry_date":
-            "${expiryDate.year.toString().padLeft(4, '0')}-${expiryDate.month.toString().padLeft(2, '0')}-${expiryDate.day.toString().padLeft(2, '0')}",
-      };
-}

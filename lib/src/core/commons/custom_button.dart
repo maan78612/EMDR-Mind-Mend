@@ -11,6 +11,7 @@ class CustomButton extends StatelessWidget {
   final Function() onPressed;
   final Widget? icon;
   final Color bgColor;
+  final Color? disableBgColor;
   final Color textColor;
   final Color loadingColor;
   final bool isLoading;
@@ -21,6 +22,7 @@ class CustomButton extends StatelessWidget {
       {super.key,
       this.title,
       required this.bgColor,
+      this.disableBgColor,
       this.icon,
       this.isEnable = true,
       this.loadingColor = AppColors.whiteColor,
@@ -39,9 +41,13 @@ class CustomButton extends StatelessWidget {
         height: inputFieldHeight,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-            border: Border.all(color: borderColor ?? bgColor),
+            border: isEnable ? Border.all(color: borderColor ?? bgColor) : null,
             borderRadius: BorderRadius.circular(8.r),
-            color: bgColor.withOpacity(isEnable ? 1 : 0.5)),
+            color: (disableBgColor == null)
+                ? bgColor.withOpacity(isEnable ? 1 : 0.5)
+                : isEnable
+                    ? bgColor
+                    : disableBgColor),
         child: isLoading
             ? Container(
                 height: loadingSize,

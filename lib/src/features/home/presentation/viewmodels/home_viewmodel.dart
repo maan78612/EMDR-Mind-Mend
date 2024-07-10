@@ -1,5 +1,6 @@
-
+import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/core/services/stripe/stripe_methods.dart';
 import 'package:emdr_mindmend/src/features/home/data/repositories/home_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/home/domain/models/subscription.dart';
 import 'package:emdr_mindmend/src/features/home/domain/repositories/home_repository.dart';
@@ -22,6 +23,10 @@ class HomeViewModel with ChangeNotifier {
 
   bool get isBtnEnable => _isBtnEnable;
 
+  bool _isFreeTrailBtnEnable = false;
+
+  bool get isFreeTrailBtnEnable => _isFreeTrailBtnEnable;
+
   List<SubscriptionModel> subscriptionList = [];
 
   SubscriptionModel? selectedSubscription;
@@ -35,7 +40,6 @@ class HomeViewModel with ChangeNotifier {
       setLoading(true);
 
       subscriptionList = await _homeRepository.getSubscription();
-
     } catch (e) {
       showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
     } finally {
@@ -49,13 +53,20 @@ class HomeViewModel with ChangeNotifier {
         required String message,
       }) showSnackBarMsg}) async {
     try {
-      // if (selectedSubscription?.id != "1") {
-      //   await PaymentService().makePayment(amount: '1');
-      // }
-
       setLoading(true);
+      if (selectedSubscription?.id != "1") {
+        await PaymentService().makePayment(amount: '1');
+      }
+
       final body = {"subscription_id": selectedSubscription?.id};
       await _homeRepository.setSubscription(body: body);
+
+      CustomNavigation().pop();
+      showSnackBarMsg(
+          message: selectedSubscription?.id != "1"
+              ? "Subscribed successfully"
+              : "Free trail started",
+          snackType: SnackBarType.success);
     } catch (e) {
       showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
     } finally {
@@ -74,7 +85,13 @@ class HomeViewModel with ChangeNotifier {
 
   void setEnableBtn() {
     if (selectedSubscription != null) {
-      _isBtnEnable = true;
+      if (selectedSubscription?.id == "1") {
+        _isFreeTrailBtnEnable = true;
+        _isBtnEnable = false;
+      } else {
+        _isBtnEnable = true;
+        _isFreeTrailBtnEnable = false;
+      }
     } else {
       _isBtnEnable = false;
     }

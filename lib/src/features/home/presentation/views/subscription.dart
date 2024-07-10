@@ -42,8 +42,7 @@ class SubscriptionScreen extends ConsumerWidget {
         ),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: hMargin),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+          child: ListView(
             children: [
               20.verticalSpace,
               Text(
@@ -61,7 +60,7 @@ class SubscriptionScreen extends ConsumerWidget {
                       homeViewModel: homeViewModel);
                 }),
               ),
-              const Spacer(),
+              60.verticalSpace,
               CustomButton(
                 bgColor: AppColors.primaryColor,
                 isEnable: homeViewModel.isBtnEnable,
@@ -76,10 +75,19 @@ class SubscriptionScreen extends ConsumerWidget {
                 title: "Continue",
                 textColor: AppColors.whiteColor,
               ),
-              30.verticalSpace,
+              15.verticalSpace,
               CustomButton(
                 bgColor: AppColors.whiteColor,
-                onPressed: () {},
+                isEnable: homeViewModel.isFreeTrailBtnEnable,
+                onPressed: () {
+                  homeViewModel.setSubscription(
+                      showSnackBarMsg: ({
+                    required SnackBarType snackType,
+                    required String message,
+                  }) =>
+                          Utils.showSnackBar(message, snackType, context));
+                },
+                disableBgColor: AppColors.borderColor,
                 title: "Start free trial",
                 textColor: AppColors.primaryColor,
                 borderColor: AppColors.primaryColor,

@@ -77,7 +77,7 @@ class SignViewModel with ChangeNotifier {
         final body = {
           "email": emailCon.controller.text,
           "password": passwordCon.controller.text,
-          "username": nameCon.controller.text,
+          "name": nameCon.controller.text,
         };
 
         await _authRepository.register(body: body);
