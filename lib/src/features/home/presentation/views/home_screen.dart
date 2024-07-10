@@ -38,7 +38,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           }) =>
                   Utils.showSnackBar(message, snackType,
                       CustomNavigation().navigatorKey.currentState!.context));
-      if (checkSubscriptionStatus()) {
+      if (!subscriptionStatus()) {
         CustomNavigation().push(
             SubscriptionScreen(homeViewModelProvider: homeViewModelProvider));
       }
@@ -178,12 +178,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             title: 'Start',
             bgColor: AppColors.primaryColor,
             onPressed: () {
-              if (checkSubscriptionStatus()) {
+              if (subscriptionStatus()) {
+                _showAlertDialog(false);
+              } else {
                 CustomNavigation().push(SubscriptionScreen(
                     homeViewModelProvider: homeViewModelProvider));
                 ;
-              } else {
-                _showAlertDialog(false);
               }
             },
             icon: Image.asset(

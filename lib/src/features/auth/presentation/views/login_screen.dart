@@ -104,9 +104,9 @@ class LoginScreen extends ConsumerWidget {
                     },
                   ),
                   40.verticalSpace,
-                  separator(),
-                  30.verticalSpace,
-                  socialLoginButtons(),
+                  // separator(),
+                  // 30.verticalSpace,
+                  // socialLoginButtons(),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 40.sp),
                     child: RichText(

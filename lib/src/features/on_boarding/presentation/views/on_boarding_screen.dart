@@ -44,22 +44,24 @@ class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              10.verticalSpace,
               CommonInkWell(
                 onTap: () => CustomNavigation().pushReplacement(LoginScreen()),
-                child: Text(
-                  "skip",
-                  style: PoppinsStyles.regular.copyWith(fontSize: 14.sp),
+                child: Padding(
+                  padding:
+                      EdgeInsets.only(left: 10.sp, top: 10.sp, bottom: 10.sp),
+                  child: Text(
+                    "skip",
+                    style: PoppinsStyles.regular.copyWith(fontSize: 14.sp),
+                  ),
                 ),
               ),
-              10.verticalSpace,
               Expanded(
                 child: IndexedStack(
                   index: onBoardingViewModel.currentIndex,
                   children: List.generate(
                       onBoardingViewModel.onBoarding.length,
                       (index) => onBoardingWidget(
-                          onBoardingViewModel.onBoarding[index],index)),
+                          onBoardingViewModel.onBoarding[index], index)),
                 ),
               ),
               Row(
@@ -119,7 +121,6 @@ class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
         Image.asset(onBoarding.img,
             height: onBoarding.imgHeight, fit: BoxFit.fitHeight),
         30.verticalSpace,
-
         RichText(
             textAlign: TextAlign.start,
             text: TextSpan(
@@ -128,7 +129,7 @@ class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
                   text: onBoarding.title,
                   style: PoppinsStyles.bold.copyWith(fontSize: 24.sp),
                 ),
-                if(index==0)...[
+                if (index == 0) ...[
                   TextSpan(
                     text: " mind",
                     style: PoppinsStyles.regular.copyWith(fontSize: 24.sp),
@@ -138,7 +139,6 @@ class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
                     style: PoppinsStyles.bold.copyWith(fontSize: 24.sp),
                   ),
                 ]
-
               ],
             )),
         30.verticalSpace,

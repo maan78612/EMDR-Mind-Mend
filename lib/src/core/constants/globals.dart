@@ -15,14 +15,16 @@ final settingViewModelProvider =
 
 UserModel? userData;
 
-bool checkSubscriptionStatus() {
+bool subscriptionStatus() {
   if ((userData?.isTrialValid == null && userData?.subscription == null) ||
-      (userData?.isTrialValid == false &&
-          userData?.subscription != null &&
-          userData!.subscription!.expiryDate.isBefore(DateTime.now()))) {
+      (userData?.isTrialValid == false && userData?.subscription != null
+      // &&
+      // userData!.subscription!.expiryDate.isBefore(DateTime.now())
+      )) {
+    debugPrint("subscription INVALID");
+    return false;
+  } else {
     debugPrint("subscription VALID");
-    return true;
+    return false;
   }
-  debugPrint("subscription INVALID");
-  return false;
 }
