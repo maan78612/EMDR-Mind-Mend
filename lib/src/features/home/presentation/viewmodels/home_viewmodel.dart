@@ -1,6 +1,10 @@
+import 'dart:developer';
+
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
+import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
 import 'package:emdr_mindmend/src/core/services/stripe/stripe_methods.dart';
+import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
 import 'package:emdr_mindmend/src/features/home/data/repositories/home_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/home/domain/models/subscription.dart';
 import 'package:emdr_mindmend/src/features/home/domain/repositories/home_repository.dart';
@@ -27,9 +31,9 @@ class HomeViewModel with ChangeNotifier {
 
   bool get isFreeTrailBtnEnable => _isFreeTrailBtnEnable;
 
-  List<SubscriptionModel> subscriptionList = [];
+  List<GetSubscriptionModel> subscriptionList = [];
 
-  SubscriptionModel? selectedSubscription;
+  GetSubscriptionModel? selectedSubscription;
 
   Future<void> getSubscriptionList(
       {required Function({
@@ -55,26 +59,34 @@ class HomeViewModel with ChangeNotifier {
     try {
       setLoading(true);
       if (selectedSubscription?.id != "1") {
-        await PaymentService().makePayment(amount: '1');
+        debugPrint(selectedSubscription?.amount.toString());
+        await PaymentService()
+            .makePayment(amount: ((selectedSubscription?.amount ?? 0.0)));
       }
 
       final body = {"subscription_id": selectedSubscription?.id};
-      await _homeRepository.setSubscription(body: body);
+      final data = await _homeRepository.setSubscription(body: body);
 
+      userData?.subscription = Subscription.fromJson(data['subscription']);
+      userData?.isTrialValid = data['isTrialValid'];
+
+      notifyListeners();
       CustomNavigation().pop();
+
       showSnackBarMsg(
           message: selectedSubscription?.id != "1"
               ? "Subscribed successfully"
               : "Free trail started",
           snackType: SnackBarType.success);
     } catch (e) {
+      log(e.toString());
       showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
     } finally {
       setLoading(false);
     }
   }
 
-  void selectSubscription(SubscriptionModel selectedSubscription) {
+  void selectSubscription(GetSubscriptionModel selectedSubscription) {
     if (selectedSubscription != this.selectedSubscription) {
       this.selectedSubscription = selectedSubscription;
     } else {
@@ -94,6 +106,7 @@ class HomeViewModel with ChangeNotifier {
       }
     } else {
       _isBtnEnable = false;
+      _isFreeTrailBtnEnable = false;
     }
 
     notifyListeners();

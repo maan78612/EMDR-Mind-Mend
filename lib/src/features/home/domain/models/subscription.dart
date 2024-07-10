@@ -1,11 +1,11 @@
-class SubscriptionModel {
+class GetSubscriptionModel {
   String id;
   String name;
   String description;
   double amount;
   String duration;
 
-  SubscriptionModel({
+  GetSubscriptionModel({
     required this.name,
     required this.id,
     required this.description,
@@ -13,8 +13,8 @@ class SubscriptionModel {
     required this.duration,
   });
 
-  factory SubscriptionModel.fromJson(Map<String, dynamic> json) =>
-      SubscriptionModel(
+  factory GetSubscriptionModel.fromJson(Map<String, dynamic> json) =>
+      GetSubscriptionModel(
         id: json["id"],
         name: json["name"],
         description: json["description"],

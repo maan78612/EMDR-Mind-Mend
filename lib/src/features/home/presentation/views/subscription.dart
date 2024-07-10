@@ -65,12 +65,7 @@ class SubscriptionScreen extends ConsumerWidget {
                 bgColor: AppColors.primaryColor,
                 isEnable: homeViewModel.isBtnEnable,
                 onPressed: () {
-                  homeViewModel.setSubscription(
-                      showSnackBarMsg: ({
-                    required SnackBarType snackType,
-                    required String message,
-                  }) =>
-                          Utils.showSnackBar(message, snackType, context));
+                  getSubscriptionMethod(homeViewModel, context);
                 },
                 title: "Continue",
                 textColor: AppColors.whiteColor,
@@ -78,14 +73,10 @@ class SubscriptionScreen extends ConsumerWidget {
               15.verticalSpace,
               CustomButton(
                 bgColor: AppColors.whiteColor,
-                isEnable: homeViewModel.isFreeTrailBtnEnable,
+                isEnable: homeViewModel.isFreeTrailBtnEnable &&
+                    userData?.isTrialValid != false,
                 onPressed: () {
-                  homeViewModel.setSubscription(
-                      showSnackBarMsg: ({
-                    required SnackBarType snackType,
-                    required String message,
-                  }) =>
-                          Utils.showSnackBar(message, snackType, context));
+                  getSubscriptionMethod(homeViewModel, context);
                 },
                 disableBgColor: AppColors.borderColor,
                 title: "Start free trial",
@@ -100,8 +91,19 @@ class SubscriptionScreen extends ConsumerWidget {
     );
   }
 
+  void getSubscriptionMethod(
+      HomeViewModel homeViewModel, BuildContext context) {
+    homeViewModel.setSubscription(
+      showSnackBarMsg: ({
+        required SnackBarType snackType,
+        required String message,
+      }) =>
+          Utils.showSnackBar(message, snackType, context),
+    );
+  }
+
   Widget subscriptionTile(
-      {required SubscriptionModel subscription,
+      {required GetSubscriptionModel subscription,
       required HomeViewModel homeViewModel}) {
     return GestureDetector(
       onTap: () async {

@@ -17,14 +17,13 @@ UserModel? userData;
 
 bool subscriptionStatus() {
   if ((userData?.isTrialValid == null && userData?.subscription == null) ||
-      (userData?.isTrialValid == false && userData?.subscription != null
-      // &&
-      // userData!.subscription!.expiryDate.isBefore(DateTime.now())
-      )) {
+      (userData?.isTrialValid == false &&
+          userData?.subscription != null &&
+          userData!.subscription!.expiryDate.isBefore(DateTime.now()))) {
     debugPrint("subscription INVALID");
     return false;
   } else {
     debugPrint("subscription VALID");
-    return false;
+    return true;
   }
 }

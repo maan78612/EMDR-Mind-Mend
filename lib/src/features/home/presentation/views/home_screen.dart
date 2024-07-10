@@ -39,8 +39,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   Utils.showSnackBar(message, snackType,
                       CustomNavigation().navigatorKey.currentState!.context));
       if (!subscriptionStatus()) {
-        CustomNavigation().push(
-            SubscriptionScreen(homeViewModelProvider: homeViewModelProvider));
+        subscriptionNavigation();
       }
     });
     super.initState();
@@ -181,9 +180,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               if (subscriptionStatus()) {
                 _showAlertDialog(false);
               } else {
-                CustomNavigation().push(SubscriptionScreen(
-                    homeViewModelProvider: homeViewModelProvider));
-                ;
+                subscriptionNavigation();
               }
             },
             icon: Image.asset(
@@ -212,6 +209,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
       ],
     );
+  }
+
+  subscriptionNavigation() {
+    CustomNavigation().push(SubscriptionScreen(
+      homeViewModelProvider: homeViewModelProvider,
+
+    ));
   }
 
   Future<void> _showAlertDialog(bool isEye) {

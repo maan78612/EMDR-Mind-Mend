@@ -1,5 +1,3 @@
-import 'package:emdr_mindmend/src/features/home/domain/models/subscription.dart';
-
 class UserModel {
   String refreshToken;
   String accessToken;
@@ -7,7 +5,7 @@ class UserModel {
   String name;
   int userId;
   String? image;
-  SubscriptionModel? subscription;
+  Subscription? subscription;
   bool? isTrialValid;
 
   UserModel({
@@ -29,7 +27,7 @@ class UserModel {
         userId: json["user_id"],
         image: json["image"],
         subscription: json["subscription"] != null
-            ? SubscriptionModel.fromJson(json["subscription"])
+            ? Subscription.fromJson(json["subscription"])
             : null,
         isTrialValid: json["isTrialValid"],
       );
@@ -46,4 +44,44 @@ class UserModel {
       };
 }
 
+class Subscription {
+  int? id;
+  String subscription;
+  bool isActive;
+  DateTime paymentDate;
+  DateTime expiryDate;
+  String amount;
+  int subscriptionMapId;
 
+  Subscription({
+    required this.id,
+    required this.subscription,
+    required this.isActive,
+    required this.paymentDate,
+    required this.expiryDate,
+    required this.amount,
+    required this.subscriptionMapId,
+  });
+
+  factory Subscription.fromJson(Map<String, dynamic> json) => Subscription(
+        id: json["id"],
+        subscription: json["subscription"],
+        isActive: json["is_active"],
+        paymentDate: DateTime.parse(json["payment_date"]),
+        expiryDate: DateTime.parse(json["expiry_date"]),
+        amount: json["amount"],
+        subscriptionMapId: json["subscription_map_id"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "subscription": subscription,
+        "is_active": isActive,
+        "payment_date":
+            "${paymentDate.year.toString().padLeft(4, '0')}-${paymentDate.month.toString().padLeft(2, '0')}-${paymentDate.day.toString().padLeft(2, '0')}",
+        "expiry_date":
+            "${expiryDate.year.toString().padLeft(4, '0')}-${expiryDate.month.toString().padLeft(2, '0')}-${expiryDate.day.toString().padLeft(2, '0')}",
+        "amount": amount,
+        "subscription_map_id": subscriptionMapId,
+      };
+}

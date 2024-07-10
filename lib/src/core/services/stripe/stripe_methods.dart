@@ -6,7 +6,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 
 class PaymentService {
   Future<bool> makePayment(
-      {required String amount, String currency = "USD"}) async {
+      {required double amount, String currency = "USD"}) async {
     try {
       /// Create Payment Intent
       Map<String, dynamic> paymentIntent =
@@ -28,7 +28,7 @@ class PaymentService {
     }
   }
 
-  Future<dynamic> _createPaymentIntent(String amount, String currency) async {
+  Future<dynamic> _createPaymentIntent(double amount, String currency) async {
     try {
       final body = {
         'amount': calculateAmount(amount),
@@ -62,7 +62,7 @@ class PaymentService {
     }
   }
 
-  int calculateAmount(String amount) {
-    return (int.parse(amount)) * 100;
+  int calculateAmount(double amount) {
+    return (amount * 100).toInt();
   }
 }

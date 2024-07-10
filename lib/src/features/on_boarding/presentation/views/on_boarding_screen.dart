@@ -135,7 +135,7 @@ class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
                     style: PoppinsStyles.regular.copyWith(fontSize: 24.sp),
                   ),
                   TextSpan(
-                    text: " mind",
+                    text: "mind",
                     style: PoppinsStyles.bold.copyWith(fontSize: 24.sp),
                   ),
                 ]

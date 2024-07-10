@@ -24,14 +24,19 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace = "com.example.emdr_mindmend"
+    namespace = "com.sc.mindmend"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
 
     defaultConfig {
         applicationId "com.sc.mindmend"
