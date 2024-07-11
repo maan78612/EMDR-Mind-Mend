@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
@@ -76,6 +78,17 @@ class LoginViewModel with ChangeNotifier {
       CustomNavigation().pushReplacement(const HomeScreen());
     } catch (e) {
       showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  Future<void> googleLogin() async {
+    try {
+      setLoading(true);
+      await _authRepository.googleLogin();
+    } on Exception catch (e) {
+      log("googleLogin error = $e");
     } finally {
       setLoading(false);
     }

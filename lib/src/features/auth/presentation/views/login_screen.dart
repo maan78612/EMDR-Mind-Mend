@@ -99,14 +99,13 @@ class LoginScreen extends ConsumerWidget {
                         required SnackBarType snackType,
                         required String message,
                       }) =>
-                              Utils.showSnackBar(
-                                  message, snackType, context));
+                              Utils.showSnackBar(message, snackType, context));
                     },
                   ),
                   40.verticalSpace,
-                  // separator(),
-                  // 30.verticalSpace,
-                  // socialLoginButtons(),
+                  separator(),
+                  30.verticalSpace,
+                  socialLoginButtons(loginViewModel),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 40.sp),
                     child: RichText(
@@ -144,12 +143,14 @@ class LoginScreen extends ConsumerWidget {
     );
   }
 
-  Widget socialLoginButtons() {
+  Widget socialLoginButtons(LoginViewModel loginViewModel) {
     return Row(
       children: [
         Expanded(
           child: CommonInkWell(
-            onTap: () {},
+            onTap: () {
+              loginViewModel.googleLogin();
+            },
             child: Container(
               height: inputFieldHeight,
               decoration: BoxDecoration(

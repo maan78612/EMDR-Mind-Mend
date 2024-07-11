@@ -1,4 +1,4 @@
-package com.sc.mindmend
+package com.hr.mindmend
 
 
 import io.flutter.embedding.android.FlutterFragmentActivity
