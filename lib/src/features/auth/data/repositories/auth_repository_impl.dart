@@ -58,6 +58,7 @@ class AuthRepositoryImpl implements AuthRepository {
       final GoogleSignInAccount? googleAccount = await googleSignIn.signIn();
 
       debugPrint(googleAccount?.email);
+      debugPrint(googleAccount?.id);
     } on Exception catch (e) {
       throw Exception(e.toString());
     }

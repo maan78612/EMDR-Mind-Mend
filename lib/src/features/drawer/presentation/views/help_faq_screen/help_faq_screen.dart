@@ -29,6 +29,8 @@ class HelpFaqPage extends StatelessWidget {
     ),
   ];
 
+  HelpFaqPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
