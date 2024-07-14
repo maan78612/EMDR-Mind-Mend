@@ -88,11 +88,11 @@ class ProfileViewModel with ChangeNotifier {
         files.add(MapEntry('image', profileImage!));
       }
 
-      final body = {"username": nameCon.controller.text};
+      final body = {"name": nameCon.controller.text};
       final response =
           await _drawerRepository.editProfile(body: body, files: files);
 
-      userData?.name = response.data.username;
+      userData?.name = response.data.name;
       userData?.image = response.data.image;
 
       notifyListeners();

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:emdr_mindmend/src/features/drawer/domain/models/update_profile_response.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 abstract class DrawerRepository {
   Future<UpdateProfileResponseModel> editProfile(
@@ -10,4 +11,5 @@ abstract class DrawerRepository {
   Future<void> contactUs({required Map<String, dynamic> body});
 
   Future<void> logout({required Map<String, dynamic> body});
+  Future<GoogleSignInAccount?> googleLogout();
 }

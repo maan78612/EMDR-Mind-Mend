@@ -4,6 +4,7 @@ import 'package:emdr_mindmend/src/core/constants/api_urls.dart';
 import 'package:emdr_mindmend/src/core/services/network/api_data_source.dart';
 import 'package:emdr_mindmend/src/features/drawer/domain/models/update_profile_response.dart';
 import 'package:emdr_mindmend/src/features/drawer/domain/repositories/drawer_repository.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class DrawerRepositoryImpl implements DrawerRepository {
   @override
@@ -35,6 +36,21 @@ class DrawerRepositoryImpl implements DrawerRepository {
       await NetworkApi.instance.post(url: ApiUrls.logout, body: body);
     } catch (e) {
       rethrow;
+    }
+  }
+
+  @override
+  Future<GoogleSignInAccount?> googleLogout() async {
+    try {
+      GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
+
+
+
+      final GoogleSignInAccount? googleAccount = await googleSignIn.signOut();
+
+      return googleAccount;
+    } on Exception catch (e) {
+      throw Exception(e.toString());
     }
   }
 }

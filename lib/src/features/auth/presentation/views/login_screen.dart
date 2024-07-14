@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:emdr_mindmend/src/core/commons/custom_button.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_input_field.dart';
@@ -105,7 +107,7 @@ class LoginScreen extends ConsumerWidget {
                   40.verticalSpace,
                   separator(),
                   30.verticalSpace,
-                  socialLoginButtons(loginViewModel),
+                  socialLoginButtons(loginViewModel, context),
                   Padding(
                     padding: EdgeInsets.symmetric(vertical: 40.sp),
                     child: RichText(
@@ -143,13 +145,19 @@ class LoginScreen extends ConsumerWidget {
     );
   }
 
-  Widget socialLoginButtons(LoginViewModel loginViewModel) {
+  Widget socialLoginButtons(
+      LoginViewModel loginViewModel, BuildContext context) {
     return Row(
       children: [
         Expanded(
           child: CommonInkWell(
             onTap: () {
-              loginViewModel.googleLogin();
+              loginViewModel.googleLogin(
+                  showSnackBarMsg: ({
+                required SnackBarType snackType,
+                required String message,
+              }) =>
+                      Utils.showSnackBar(message, snackType, context));
             },
             child: Container(
               height: inputFieldHeight,
@@ -163,20 +171,28 @@ class LoginScreen extends ConsumerWidget {
           ),
         ),
         15.horizontalSpace,
-        Expanded(
-          child: CommonInkWell(
-            onTap: () {},
-            child: Container(
-              height: inputFieldHeight,
-              decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.borderColor),
-                  borderRadius: BorderRadius.all(Radius.circular(10.r))),
-              child: Image.asset(
-                AppImages.apple,
+        if (Platform.isIOS)
+          Expanded(
+            child: CommonInkWell(
+              onTap: () {
+                loginViewModel.appleLogin(
+                    showSnackBarMsg: ({
+                  required SnackBarType snackType,
+                  required String message,
+                }) =>
+                        Utils.showSnackBar(message, snackType, context));
+              },
+              child: Container(
+                height: inputFieldHeight,
+                decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.borderColor),
+                    borderRadius: BorderRadius.all(Radius.circular(10.r))),
+                child: Image.asset(
+                  AppImages.apple,
+                ),
               ),
             ),
-          ),
-        )
+          )
       ],
     );
   }

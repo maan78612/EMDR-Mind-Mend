@@ -4,8 +4,8 @@ import 'package:emdr_mindmend/src/core/constants/api_urls.dart';
 import 'package:emdr_mindmend/src/core/services/network/api_data_source.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/repositories/auth_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
   @override
@@ -38,7 +38,7 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> googleLogin() async {
+  Future<GoogleSignInAccount?> googleLogin() async {
     try {
       GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
 
@@ -57,10 +57,51 @@ class AuthRepositoryImpl implements AuthRepository {
 
       final GoogleSignInAccount? googleAccount = await googleSignIn.signIn();
 
-      debugPrint(googleAccount?.email);
-      debugPrint(googleAccount?.id);
+      return googleAccount;
     } on Exception catch (e) {
       throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Future<AuthorizationCredentialAppleID> appleLogin() async {
+    try {
+      final credential = await SignInWithApple.getAppleIDCredential(
+        scopes: [
+          AppleIDAuthorizationScopes.email,
+          AppleIDAuthorizationScopes.fullName,
+        ],
+      );
+
+      return credential;
+    } on SignInWithAppleAuthorizationException catch (e) {
+      throw Exception(e.message);
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Future<UserModel> appleSocialLogin(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final value =
+          await NetworkApi.instance.post(url: ApiUrls.appleLogin, body: body);
+      return UserModel.fromJson(value["data"]);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<UserModel> googleSocialLogin(
+      {required Map<String, dynamic> body}) async {
+    try {
+      final value =
+          await NetworkApi.instance.post(url: ApiUrls.googleLogin, body: body);
+      return UserModel.fromJson(value["data"]);
+    } catch (e) {
+      rethrow;
     }
   }
 }

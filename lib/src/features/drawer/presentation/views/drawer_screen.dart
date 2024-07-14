@@ -130,21 +130,22 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
             ),
           ),
           14.horizontalSpace,
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                userData?.name ?? "",
-                style: PoppinsStyles.semiBold.copyWith(fontSize: 16.sp),
-              ),
-              6.verticalSpace,
-              Text(
-                userData?.email ?? "",
-                style: PoppinsStyles.light.copyWith(fontSize: 12.sp),
-              ),
-            ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  userData?.name ?? "",
+                  style: PoppinsStyles.semiBold.copyWith(fontSize: 16.sp),
+                ),
+                6.verticalSpace,
+                Text(
+                  userData?.email ?? "",
+                  style: PoppinsStyles.light.copyWith(fontSize: 12.sp),
+                ),
+              ],
+            ),
           ),
-          const Spacer(),
           closeIcon(),
         ],
       ),

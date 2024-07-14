@@ -83,12 +83,52 @@ class LoginViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> googleLogin() async {
+  Future<void> googleLogin(
+      {required Function({
+        required SnackBarType snackType,
+        required String message,
+      }) showSnackBarMsg}) async {
     try {
       setLoading(true);
-      await _authRepository.googleLogin();
+      final credentials = await _authRepository.googleLogin();
+
+      if (credentials != null) {
+        final body = {
+          "name": credentials.displayName,
+          "email": credentials.email
+        };
+        print(body);
+        userData = await _authRepository.googleSocialLogin(body: body);
+        CustomNavigation().pushReplacement(const HomeScreen());
+      }
     } on Exception catch (e) {
       log("googleLogin error = $e");
+      showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  Future<void> appleLogin(
+      {required Function({
+        required SnackBarType snackType,
+        required String message,
+      }) showSnackBarMsg}) async {
+    try {
+      setLoading(true);
+      final credentials = await _authRepository.appleLogin();
+
+      final body = {
+        if (credentials.givenName != null) "name": credentials.givenName,
+        "id": credentials.userIdentifier,
+        if (credentials.email != null) "email": credentials.email
+      };
+
+      userData = await _authRepository.appleSocialLogin(body: body);
+      CustomNavigation().pushReplacement(const HomeScreen());
+    } on Exception catch (e) {
+      log("appleLogin error = $e");
+      showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
     } finally {
       setLoading(false);
     }

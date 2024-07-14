@@ -33,21 +33,21 @@ class UpdateProfileResponseModel {
 }
 
 class Data {
-  String username;
+  String name;
   String? image;
 
   Data({
-    required this.username,
+    required this.name,
     required this.image,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-    username: json["username"],
+    name: json["name"],
     image: json["image"],
   );
 
   Map<String, dynamic> toJson() => {
-    "username": username,
+    "name": name,
     "image": image,
   };
 }
