@@ -33,6 +33,7 @@ class InfoScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final introViewModel = ref.watch(introViewModelProvider);
+    final settingViewModel = ref.watch(settingViewModelProvider);
     return Scaffold(
       backgroundColor: AppColors.whiteBg,
       body: CustomLoader(
@@ -46,6 +47,9 @@ class InfoScreen extends ConsumerWidget {
                   padding: EdgeInsets.only(top: 10.h),
                   child: CommonInkWell(
                     onTap: () {
+                      if (settingViewModel.isPlaying) {
+                        settingViewModel.stopSound();
+                      }
                       CustomNavigation().pop();
                     },
                     child: const Align(

@@ -1,13 +1,9 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/enums/color_ball.dart';
-import 'package:emdr_mindmend/src/features/drawer/data/repositories/drawer_repository_impl.dart';
-import 'package:emdr_mindmend/src/features/drawer/domain/repositories/drawer_repository.dart';
 import 'package:flutter/material.dart';
 
 class SettingViewModel with ChangeNotifier {
-  final DrawerRepository _drawerRepository = DrawerRepositoryImpl();
-
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;
@@ -34,10 +30,10 @@ class SettingViewModel with ChangeNotifier {
   AudioPlayer? audioPlayer;
 
   List<String> toneList = [
-    "sound/tone1.wav",
-    "sound/tone2.wav",
-    "sound/tone3.wav",
-    "sound/tone4.wav",
+    "sound/tone1.mp3",
+    "sound/tone2.mp3",
+    "sound/tone3.mp3",
+    "sound/tone4.mp3",
   ];
   int selectedToneIndex = 0;
 
