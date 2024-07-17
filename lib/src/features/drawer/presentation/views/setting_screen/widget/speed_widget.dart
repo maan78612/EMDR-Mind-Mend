@@ -36,7 +36,15 @@ class SpeedWidget extends ConsumerWidget {
               thumbColor: settingViewModel.getColor(settingViewModel.ballColor),
               activeColor:
                   settingViewModel.getColor(settingViewModel.ballColor),
-              onChanged: (value) {
+              onChangeEnd: (value) {
+                if (settingViewModel.isPlaying) {
+                  settingViewModel
+                      .stopSound(); // Stop the current sound and timer
+                  settingViewModel
+                      .playSound(); // Start playing sound with the updated speed
+                }
+              },
+              onChanged: (double value) {
                 slider == SettingSlider.auditory
                     ? settingViewModel.setAuditorySpeed(value)
                     : settingViewModel.setVisualSpeed(value);

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/enums/color_ball.dart';
@@ -27,7 +29,7 @@ class SettingViewModel with ChangeNotifier {
   }
 
   /// Set Tone index
-  AudioPlayer? audioPlayer;
+  AudioPlayer audioPlayer = AudioPlayer();
 
   List<String> toneList = [
     "sound/tone1.mp3",
@@ -38,46 +40,57 @@ class SettingViewModel with ChangeNotifier {
   int selectedToneIndex = 0;
 
   bool isPlaying = false;
+  Timer? timer;
 
   void selectTone(int audioSourceIndex) {
     if (selectedToneIndex != audioSourceIndex) {
       selectedToneIndex = audioSourceIndex;
       notifyListeners();
     }
-    playSound();
+    if (isPlaying) {
+      stopSound(); // Stop the current sound and timer
+      playSound(); // Start playing sound with the updated speed
+    } else {
+      playSound();
+    }
+  }
+
+  double auditorySpeed = 1;
+
+  void setAuditorySpeed(double speed) {
+    auditorySpeed = speed;
+    notifyListeners();
   }
 
   void playSound() async {
     isPlaying = true;
-    audioPlayer = AudioPlayer();
     notifyListeners();
-    while (isPlaying) {
-      await audioPlayer?.play(AssetSource(toneList[selectedToneIndex]));
-      await Future.delayed(Duration(milliseconds: 5000 ~/ (auditorySpeed * 5)));
-      notifyListeners();
-    }
+    // Calculate interval duration based on auditorySpeed
+    int interval = ((3000 - 1000) * (5 - auditorySpeed) / 4 + 1000).toInt();
+    print(interval);
+    timer = Timer.periodic(
+      Duration(milliseconds: interval),
+      (timer) {
+        audioPlayer.play(AssetSource(toneList[selectedToneIndex]));
+      },
+    );
   }
 
+  // Cancel the timer when the sound should stop
   void stopSound() {
     if (isPlaying) {
-      isPlaying = false; // Set the flag to false to stop playing
-      audioPlayer?.stop();
+      isPlaying = false;
+      timer?.cancel();
+      audioPlayer.stop();
     }
-
-    notifyListeners(); // Stop the audio player
+    notifyListeners();
   }
 
   /// Set Speed index
   double visualSpeed = 1;
-  double auditorySpeed = 1;
 
   void setVisualSpeed(double index) {
     visualSpeed = index;
-    notifyListeners();
-  }
-
-  void setAuditorySpeed(double index) {
-    auditorySpeed = index;
     notifyListeners();
   }
 

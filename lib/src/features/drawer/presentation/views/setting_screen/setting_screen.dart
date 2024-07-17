@@ -35,7 +35,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
           onBack: () {
             CustomNavigation().pop();
             settingViewModel.stopSound();
-            settingViewModel.audioPlayer?.dispose();
+
           },
         ),
         body: Padding(
