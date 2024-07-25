@@ -24,7 +24,8 @@ class OnBoardingViewModel with ChangeNotifier {
     if (currentIndex < onBoarding.length-1) {
       currentIndex = currentIndex + 1;
     } else {
-      CustomNavigation().pushReplacement(LoginScreen());
+      currentIndex = 0;
+      CustomNavigation().push(LoginScreen());
     }
     notifyListeners();
   }

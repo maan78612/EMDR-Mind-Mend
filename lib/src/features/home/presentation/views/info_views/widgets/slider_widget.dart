@@ -21,30 +21,39 @@ class SliderWidget extends ConsumerWidget {
     final introViewModel = ref.watch(introViewModelProvider);
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 400),
-      child: Row(
+      child: Column(
         children: [
+          Row(
+            children: [
+              Text(
+                "1",
+                style: PoppinsStyles.semiBold.copyWith(fontSize: 13.sp),
+              ),
+              Expanded(
+                child: Slider(
+                  value: sliderValue,
+                  min: 1,
+                  max: 10,
+                  inactiveColor: const Color(0xffE7E9F3),
+                  divisions: 9,
+                  label: "$sliderValue",
+                  thumbColor: AppColors.primaryColor,
+                  activeColor: AppColors.primaryColor,
+                  onChanged: (value) {
+                    introViewModel.changeSlider(sliderNum, value);
+                  },
+                ),
+              ),
+              Text(
+                "10",
+                style: PoppinsStyles.semiBold.copyWith(fontSize: 13.sp),
+              ),
+            ],
+          ),
           Text(
-            "1",
-            style: PoppinsStyles.semiBold.copyWith(fontSize: 13.sp),
-          ),
-          Expanded(
-            child: Slider(
-              value: sliderValue,
-              min: 1,
-              max: 10,
-              inactiveColor: const Color(0xffE7E9F3),
-              divisions: 9,
-              thumbColor: AppColors.primaryColor,
-              activeColor: AppColors.primaryColor,
-              onChanged: (value) {
-                introViewModel.changeSlider(sliderNum, value);
-              },
-            ),
-          ),
-          Text(
-            "10",
-            style: PoppinsStyles.semiBold.copyWith(fontSize: 13.sp),
-          ),
+            "$sliderValue/10",
+            style: PoppinsStyles.semiBold.copyWith(fontSize: 14.sp),
+          )
         ],
       ),
     );

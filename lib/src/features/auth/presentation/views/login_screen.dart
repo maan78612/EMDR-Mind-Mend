@@ -230,7 +230,7 @@ class LoginScreen extends ConsumerWidget {
       padding: EdgeInsets.only(top: 30.h, bottom: 50.h),
       child: CommonInkWell(
         onTap: () {
-          // CustomNavigation().pop();
+          CustomNavigation().pop();
         },
         child: const Align(
             alignment: Alignment.topLeft,

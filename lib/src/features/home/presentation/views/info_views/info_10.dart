@@ -18,10 +18,11 @@ class Intro10 extends ConsumerWidget {
     return ListView(
       children: [
         const IntroHeading(heading: 'Revaluation'),
-        const IntroDescription(
+        const UpdatedIntroDescription(
           isBullet: true,
-          description:
-              "As you bring up those thoughts and feelings- how disturbing does it feel to you?",
+          descriptions: [
+            "As you bring up those thoughts and feelings- how disturbing does it feel to you?"
+          ],
         ),
         30.verticalSpace,
         SliderWidget(

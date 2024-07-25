@@ -17,17 +17,17 @@ class Intro9 extends ConsumerWidget {
     return ListView(
       children: [
         const IntroHeading(heading: 'Revaluation'),
-        const IntroDescription(
-            description:
-                "Having gone through the desensitisation process- give it a few moments. "),
+        const UpdatedIntroDescription(descriptions: [
+          "Having gone through the desensitisation process- give it a few moments. "
+        ]),
         30.verticalSpace,
-        const IntroDescription(
-            description:
-                "Start off again with imagining the scenario or situation that caused you distress; "),
+        const UpdatedIntroDescription(descriptions: [
+          "Start off again with imagining the scenario or situation that caused you distress; "
+        ]),
         30.verticalSpace,
-        const IntroDescription(
-            description:
-                "How many moments did you feel? (mark this from 1-10 below)"),
+        const UpdatedIntroDescription(descriptions: [
+          "How many moments did you feel? (mark this from 1-10 below)"
+        ]),
         30.verticalSpace,
         SliderWidget(
           sliderValue: introViewModel.revaluationOne,

@@ -16,13 +16,13 @@ class OnBoardingRepositoryImpl implements OnBoardingRepository {
       OnBoardingModel(
           title: 'What is EMDR?',
           description:
-              'Old, upsetting memories can sometimes get stuck in our brains, locked away with the original images, sounds, thoughts, and feelings. These memories can keep getting triggered repeatedly, preventing us from learning and healing. Meanwhile, another part of our brain holds most of the information we need to resolve these issues, but the two parts can\'t connect.That\'s where EMDR (Eye Movement Desensitization and Reprocessing) comes in. Once EMDR begins, it helps to link these parts of the brain. New information can emerge, allowing you to resolve old problems. This process is similar to what might happen naturally during REM sleep or dreams, where eye movements help process unconscious material.',
+              'Old, upsetting memories can sometimes get stuck in our brains, locked away with the original images, sounds, thoughts, and feelings. These memories can keep getting triggered repeatedly, preventing us from learning and healing. Meanwhile, another part of our brain holds most of the information we need to resolve these issues, but the two parts can\'t connect. That\'s where EMDR (Eye Movement Desensitization and Reprocessing) comes in. Once EMDR begins, it helps to link these parts of the brain. New information can emerge, allowing you to resolve old problems. This process is similar to what might happen naturally during REM sleep or dreams, where eye movements help process unconscious material.',
           img: AppImages.logo,
           imgHeight: 110.h),
       OnBoardingModel(
           title: 'How EMDR Helps',
           description:
-              'EMDR helps by:\n• Reducing the emotional intensity of traumatic memories.\n• Enhancing emotional regulation.\n• Improving overall mental health and resilience. Experience relief from anxiety, depression, and PTSD symptoms with regular sessions.',
+              'EMDR helps by:\n• Reducing the emotional intensity of traumatic memories.\n• Enhancing emotional regulation.\n• Improving overall mental health and resilience.\n• Experience relief from anxiety, depression, and PTSD symptoms with regular sessions.',
           img: AppImages.onBoarding2,
           imgHeight: 272.h),
       OnBoardingModel(
@@ -34,7 +34,7 @@ class OnBoardingRepositoryImpl implements OnBoardingRepository {
       OnBoardingModel(
           title: 'Personalised Sessions',
           description:
-              'Our app tailors each session to your needs:Select the focus of your session (e.g., anxiety, specific traumatic events).Adjust session length based on your schedule.Receive personalised tips and exercises.We would recommend that you do a guided session before using the app',
+              'Our app tailors each session to your needs. Select the focus of your session (e.g. anxiety, specific traumatic events), adjust session length based on your schedule. Receive personalised tips and exercises. We would recommend that you do a guided session before using the app',
           img: AppImages.onBoarding4,
           imgHeight: 276.h),
       OnBoardingModel(

@@ -19,9 +19,9 @@ class Intro7 extends ConsumerWidget {
     return ListView(
       children: [
         const IntroHeading(heading: 'General emotion'),
-        const IntroDescription(
-          description:
-              "As you bring up those thoughts and feelings- what emotions do you feel?",
+        const UpdatedIntroDescription(
+          descriptions:
+              ["As you bring up those thoughts and feelings- what emotions do you feel?"],
         ),
         30.verticalSpace,
         Column(

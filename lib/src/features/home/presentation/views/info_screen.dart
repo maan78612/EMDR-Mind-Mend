@@ -92,7 +92,12 @@ class InfoScreen extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       CommonInkWell(
-                        onTap: () => introViewModel.decrementIndex(),
+                        onTap: () {
+                          if (introViewModel.introIndex == 7) {
+                            settingViewModel.stopSound();
+                          }
+                          introViewModel.decrementIndex();
+                        },
                         child: Container(
                           width: 62.sp,
                           height: 62.sp,
@@ -106,6 +111,9 @@ class InfoScreen extends ConsumerWidget {
                       ),
                       CommonInkWell(
                         onTap: () {
+                          if (introViewModel.introIndex == 7) {
+                            settingViewModel.stopSound();
+                          }
                           bool isFinished =
                               introViewModel.incrementIndex(context);
                           if (isFinished) {

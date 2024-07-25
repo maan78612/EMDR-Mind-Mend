@@ -37,10 +37,10 @@ class IntroViewModel with ChangeNotifier {
     }
   }
 
-  double imageValue = 1;
-  double generalEmotion = 1;
-  double revaluationOne = 5;
-  double revaluationTwo = 7;
+  double imageValue = 5;
+  double generalEmotion = 5;
+  double revaluationOne = 1;
+  double revaluationTwo = 1;
 
   void changeSlider(int num, double value) {
     if (num == 1) {
@@ -66,7 +66,7 @@ class IntroViewModel with ChangeNotifier {
     {7: "Anger"},
     {8: "Guilty"}, // Assuming this is an empty string with an associated number
   ];
-  List<int> addedEmotions = [2, 3];
+  List<int> addedEmotions = [];
 
   void addEmotion(int emotion) {
     if (addedEmotions.contains(emotion)) {

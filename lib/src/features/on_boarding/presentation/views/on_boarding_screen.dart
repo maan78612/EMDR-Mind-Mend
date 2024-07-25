@@ -45,7 +45,7 @@ class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               CommonInkWell(
-                onTap: () => CustomNavigation().pushReplacement(LoginScreen()),
+                onTap: () => CustomNavigation().push(LoginScreen()),
                 child: Padding(
                   padding:
                       EdgeInsets.only(left: 10.sp, top: 10.sp, bottom: 10.sp),

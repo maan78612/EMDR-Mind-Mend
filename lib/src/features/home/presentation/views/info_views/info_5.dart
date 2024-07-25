@@ -17,14 +17,15 @@ class Intro5 extends ConsumerWidget {
     return ListView(
       children: [
         const IntroHeading(heading: 'Image'),
-        const IntroDescription(
-            description:
-                "To start off with imagine a scenario or situation that causes distress; you are not going to mentally view this-  play this in your mind like you are watching it back in third person- This method helps you put some space between yourself and the painful experience. as you are going through this - it could be images, thoughts, feelings, or sensations."),
+        const UpdatedIntroDescription(descriptions: [
+          "To start off with, imagine a scenario or situation that causes distress; you are not going to mentally view this-  play this in your mind like you are watching it back in third person- This method helps you put some space between yourself and the painful experience. as you are going through this - it could be images, thoughts, feelings, or sensations."
+        ]),
         20.verticalSpace,
-        const IntroDescription(
+        const UpdatedIntroDescription(
           isBullet: true,
-          description:
-              "As you are going through images and feeling in your head- how many moments did you feel? (mark this from 1-10 below)",
+          descriptions: [
+            "As you are going through images and feeling in your head- how many moments did you feel? (mark this from 1-10 below)"
+          ],
         ),
         20.verticalSpace,
         SliderWidget(

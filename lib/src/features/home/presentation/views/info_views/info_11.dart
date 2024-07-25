@@ -16,23 +16,24 @@ class Intro11 extends ConsumerWidget {
     return ListView(
       children: [
         const IntroHeading(heading: 'End'),
-        const IntroDescription(
-            description: "According to the information you have given; "),
+        const UpdatedIntroDescription(
+            descriptions: ["According to the information you have given; "]),
         30.verticalSpace,
-        IntroDescription(
-          description:
-              "Your distress level before desensitisation therapy was ",
-          boldDescriptionEnd: "${introViewModel.generalEmotion.toInt()}/10",
+        UpdatedIntroDescription(
+          descriptions: [
+            "Your distress level before desensitisation therapy was ",
+            {'text': '${introViewModel.generalEmotion.toInt()}/10'},
+          ],
         ),
         30.verticalSpace,
-        IntroDescription(
-          description: "Your distress level after desensitisation therapy was ",
-          boldDescriptionEnd: "${introViewModel.revaluationOne.toInt()}/10",
-        ),
+        UpdatedIntroDescription(descriptions: [
+          "Your distress level after desensitisation therapy was ",
+          {'text': '${introViewModel.revaluationOne.toInt()}/10'},
+        ]),
         60.verticalSpace,
-        const IntroDescription(
-            description:
-                "This App has been developed for you to use as required until any disturbance is gone or reduced. "),
+        const UpdatedIntroDescription(descriptions: [
+          "This App has been developed for you to use as required until any disturbance is gone or reduced. "
+        ]),
       ],
     );
   }

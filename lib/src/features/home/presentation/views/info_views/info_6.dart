@@ -18,10 +18,10 @@ class Intro6 extends ConsumerWidget {
     return ListView(
       children: [
         const IntroHeading(heading: 'General emotion'),
-        const IntroDescription(
+        const UpdatedIntroDescription(
           isBullet: true,
-          description:
-              "As you are going through images and feeling in your head- how many moments did you feel? (mark this from 1-10 below)",
+          descriptions:
+              ["As you are going through images and feeling in your head- how many moments did you feel? (mark this from 1-10 below)"],
         ),
         70.verticalSpace,
         SliderWidget(

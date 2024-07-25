@@ -48,13 +48,13 @@ class Intro8 extends ConsumerWidget {
   Widget auditory(SettingViewModel settingViewModel) {
     return Column(
       children: [
-        const IntroDescription(
-            description:
-                "Bilateral visual stimulation is ideal for processing most traumatic memories, while bilateral auditory stimulation is prefred if you have a severe visual impairment."),
+        const UpdatedIntroDescription(descriptions: [
+          "Bilateral visual stimulation is ideal for processing most traumatic memories, while bilateral auditory stimulation is prefred if you have a severe visual impairment."
+        ]),
         30.verticalSpace,
-        const IntroDescription(
-            description:
-                "We strongly recommend that you use headphones or earphones for auditory stimulation. As you listen, please focus on the moment of the event that generated the emotion. Let the thoughts run through your mind, without judging their relevance"),
+        const UpdatedIntroDescription(descriptions: [
+          "We strongly recommend that you use headphones or earphones for auditory stimulation. As you listen, please focus on the moment of the event that generated the emotion. Let the thoughts run through your mind, without judging their relevance"
+        ]),
         40.verticalSpace,
         settingViewModel.isPlaying
             ? stopButton(
@@ -70,8 +70,8 @@ class Intro8 extends ConsumerWidget {
   Widget visual(SettingViewModel settingViewModel) {
     return Column(
       children: [
-        const IntroDescription(
-            description: "This is where we use the desensitisation "),
+        const UpdatedIntroDescription(
+            descriptions: ["This is where we use the desensitisation "]),
         40.verticalSpace,
         playButton(
             settingViewModel: settingViewModel,

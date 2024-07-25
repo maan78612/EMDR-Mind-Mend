@@ -59,7 +59,7 @@ class HelpFaqPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.whiteBg,
-      appBar: const DrawerAppBar(title: "Help & FAQ"),
+      appBar: const DrawerAppBar(title: "Help & FAQs"),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
         child: ListView.builder(
