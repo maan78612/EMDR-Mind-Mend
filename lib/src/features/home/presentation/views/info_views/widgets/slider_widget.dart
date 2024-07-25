@@ -50,10 +50,23 @@ class SliderWidget extends ConsumerWidget {
               ),
             ],
           ),
-          Text(
-            "$sliderValue/10",
-            style: PoppinsStyles.semiBold.copyWith(fontSize: 14.sp),
-          )
+          RichText(
+              textAlign: TextAlign.start,
+              text: TextSpan(
+                children: [
+                  TextSpan(
+                    text: "${sliderValue.toInt()}",
+                    style: PoppinsStyles.bold
+                        .copyWith(fontSize: 16.sp, color: AppColors.greyColor),
+                  ),
+                  TextSpan(
+                    text: "/10",
+                    style: PoppinsStyles.regular
+                        .copyWith(fontSize: 16.sp, color: AppColors.greyColor),
+                  ),
+                ],
+              )),
+          20.verticalSpace,
         ],
       ),
     );

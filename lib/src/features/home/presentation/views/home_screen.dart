@@ -6,12 +6,9 @@ import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
-import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
-import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/drawer_screen.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/home_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/views/info_screen.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/subscription.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -30,7 +27,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    ///TODO: temporarily disable subscription part
+    /* WidgetsBinding.instance.addPostFrameCallback((_) async {
       await ref.read(homeViewModelProvider).getSubscriptionList(
               showSnackBarMsg: ({
             required SnackBarType snackType,
@@ -41,7 +39,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       if (!subscriptionStatus()) {
         subscriptionNavigation();
       }
-    });
+    });*/
     super.initState();
   }
 
@@ -177,11 +175,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             title: 'Start',
             bgColor: AppColors.primaryColor,
             onPressed: () {
-              if (subscriptionStatus()) {
+              /// when subscription feature enable remove _showAlertDialog(false);
+              _showAlertDialog(false);
+
+              ///TODO: temporarily disable subscription part
+              /*  if (subscriptionStatus()) {
                 _showAlertDialog(false);
               } else {
                 subscriptionNavigation();
-              }
+              }*/
             },
             icon: Image.asset(
               AppImages.startIcon,
@@ -211,12 +213,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  subscriptionNavigation() {
-    CustomNavigation().push(SubscriptionScreen(
-      homeViewModelProvider: homeViewModelProvider,
-
-    ));
-  }
+  ///TODO: temporarily disable subscription part
+  // subscriptionNavigation() {
+  //   CustomNavigation().push(SubscriptionScreen(
+  //     homeViewModelProvider: homeViewModelProvider,
+  //
+  //   ));
+  // }
 
   Future<void> _showAlertDialog(bool isEye) {
     return showDialog(

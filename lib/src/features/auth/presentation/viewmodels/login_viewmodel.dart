@@ -119,9 +119,9 @@ class LoginViewModel with ChangeNotifier {
       final credentials = await _authRepository.appleLogin();
 
       final body = {
-        if (credentials.givenName != null) "name": credentials.givenName,
+        "name": credentials.givenName ?? "",
         "id": credentials.userIdentifier,
-        if (credentials.email != null) "email": credentials.email
+        "email": credentials.email ?? ""
       };
 
       userData = await _authRepository.appleSocialLogin(body: body);

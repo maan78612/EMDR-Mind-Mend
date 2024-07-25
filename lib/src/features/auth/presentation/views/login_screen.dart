@@ -15,6 +15,7 @@ import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/viewmodels/login_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/views/forget_password.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/views/sign_up_screen.dart';
+import 'package:emdr_mindmend/src/features/on_boarding/presentation/views/on_boarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -164,8 +165,13 @@ class LoginScreen extends ConsumerWidget {
               decoration: BoxDecoration(
                   border: Border.all(color: AppColors.borderColor),
                   borderRadius: BorderRadius.all(Radius.circular(10.r))),
-              child: Image.asset(
-                AppImages.google,
+              child: Center(
+                child: Image.asset(
+                  AppImages.google,
+                  height: 27.sp,
+                  width: 27.sp,
+                  fit: BoxFit.contain,
+                ),
               ),
             ),
           ),
@@ -187,8 +193,13 @@ class LoginScreen extends ConsumerWidget {
                 decoration: BoxDecoration(
                     border: Border.all(color: AppColors.borderColor),
                     borderRadius: BorderRadius.all(Radius.circular(10.r))),
-                child: Image.asset(
-                  AppImages.apple,
+                child: Center(
+                  child: Image.asset(
+                    AppImages.apple,
+                    height: 27.sp,
+                    width: 27.sp,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             ),
@@ -230,7 +241,8 @@ class LoginScreen extends ConsumerWidget {
       padding: EdgeInsets.only(top: 30.h, bottom: 50.h),
       child: CommonInkWell(
         onTap: () {
-          CustomNavigation().pop();
+          CustomNavigation()
+              .pushAndRemoveUntil(const OnBoardingScreen(), animate: false);
         },
         child: const Align(
             alignment: Alignment.topLeft,
