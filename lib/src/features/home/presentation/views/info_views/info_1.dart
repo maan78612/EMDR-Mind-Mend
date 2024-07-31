@@ -22,7 +22,7 @@ class Intro1 extends StatelessWidget {
         40.verticalSpace,
         const IntroTitle(title: "Purpose of the App"),
         const UpdatedIntroDescription(isBullet: true, descriptions: [
-          "Our app aims to prevent the long-term suffering that can follow a traumatic event. By reducing the intense emotions linked to painful memories, it helps desensitize you to these traumas. This process, known as desensitisation, is achieved through bilateral alternating stimulation."
+          "Our app aims to prevent the long-term suffering that can follow a traumatic event. By reducing the intense emotions linked to painful memories, it helps desensitise you to these traumas. This process, known as desensitisation, is achieved through bilateral alternating stimulation."
         ]),
         40.verticalSpace,
         const IntroTitle(title: "EMDR Therapy"),
