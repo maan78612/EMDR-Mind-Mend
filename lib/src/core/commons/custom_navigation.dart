@@ -14,8 +14,8 @@ class CustomNavigation {
 
   GlobalKey<NavigatorState> get navigatorKey => _navigatorKey;
 
-  dynamic push(Widget page, {bool animate = true}) async {
-    await Navigator.of(_navigatorKey.currentContext!).push(
+  Future<dynamic> push(Widget page, {bool animate = true}) async {
+    return await Navigator.of(_navigatorKey.currentContext!).push(
       RoutingAnimation(
         child: page,
         animate: animate,
@@ -23,8 +23,8 @@ class CustomNavigation {
     );
   }
 
-  void pushReplacement(Widget page, {bool animate = true}) {
-    Navigator.of(_navigatorKey.currentContext!).pushReplacement(
+  Future<dynamic> pushReplacement(Widget page, {bool animate = true}) async {
+    return await Navigator.of(_navigatorKey.currentContext!).pushReplacement(
       RoutingAnimation(
         child: page,
         animate: animate,
@@ -32,20 +32,20 @@ class CustomNavigation {
     );
   }
 
-  void pushAndRemoveUntil(Widget page, {bool animate = true}) {
-    Navigator.of(_navigatorKey.currentContext!).pushAndRemoveUntil(
+  Future<dynamic> pushAndRemoveUntil(Widget page, {bool animate = true}) async {
+    return await Navigator.of(_navigatorKey.currentContext!).pushAndRemoveUntil(
       RoutingAnimation(child: page, animate: animate),
-      (Route<dynamic> route) => false,
+          (Route<dynamic> route) => false,
     );
   }
 
   void pop<T extends Object>([T? result]) {
-    Navigator.of(_navigatorKey.currentContext!).pop<T>(result);
+    return Navigator.of(_navigatorKey.currentContext!).pop<T>(result);
   }
 
   void popUntil(Widget page) {
     Navigator.of(_navigatorKey.currentContext!).popUntil(
-        (route) => route.settings.name == page.runtimeType.toString());
+            (route) => route.settings.name == page.runtimeType.toString());
   }
 }
 
@@ -59,9 +59,9 @@ class RoutingAnimation extends PageRouteBuilder {
     required this.animate,
     required this.child,
   }) : super(
-          transitionDuration: const Duration(milliseconds: routingDuration),
-          pageBuilder: (context, animation, secondaryAnimation) => child,
-        );
+    transitionDuration: const Duration(milliseconds: routingDuration),
+    pageBuilder: (context, animation, secondaryAnimation) => child,
+  );
 
   @override
   Widget buildTransitions(BuildContext context, Animation<double> animation,
