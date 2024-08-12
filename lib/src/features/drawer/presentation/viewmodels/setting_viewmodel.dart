@@ -55,7 +55,7 @@ class SettingViewModel with ChangeNotifier {
     }
   }
 
-  double auditorySpeed = 1;
+  double auditorySpeed = 4;
 
   void setAuditorySpeed(double speed) {
     auditorySpeed = speed;
@@ -67,7 +67,7 @@ class SettingViewModel with ChangeNotifier {
     notifyListeners();
     // Calculate interval duration based on auditorySpeed
     int interval = ((3000 - 1000) * (5 - auditorySpeed) / 4 + 1000).toInt();
-    print(interval);
+
     timer = Timer.periodic(
       Duration(milliseconds: interval),
       (timer) {

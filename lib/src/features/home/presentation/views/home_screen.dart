@@ -1,6 +1,9 @@
+import 'dart:ui';
+
 import 'package:emdr_mindmend/src/core/commons/custom_button.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
+import 'package:emdr_mindmend/src/core/commons/dialog_widget.dart';
 import 'package:emdr_mindmend/src/core/commons/loader.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
@@ -24,6 +27,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final homeViewModelProvider = ChangeNotifierProvider<HomeViewModel>((ref) {
     return HomeViewModel();
   });
+
+
 
   @override
   void initState() {
@@ -56,7 +61,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             padding: EdgeInsets.symmetric(horizontal: hMargin),
             child: ListView(
               children: [
-                profileButton(),
+                profileButton(homeViewModel),
                 logo(),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 24.sp),
@@ -65,7 +70,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Text("Helping with PTSD and other\ntrauma-related conditions",
                     style: PoppinsStyles.bold.copyWith(fontSize: 18.sp)),
                 10.verticalSpace,
-                Text("Based on and emdr protocal",
+                Text("Based on  emdr protocol",
                     style: PoppinsStyles.light.copyWith(fontSize: 14.sp)),
                 infoWidget(
                   img: AppImages.startIcon,
@@ -141,7 +146,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget profileButton() {
+  Widget profileButton(HomeViewModel homeViewModel) {
     return Align(
       alignment: Alignment.topRight,
       child: CommonInkWell(
@@ -176,7 +181,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             bgColor: AppColors.primaryColor,
             onPressed: () {
               /// when subscription feature enable remove _showAlertDialog(false);
-              _showAlertDialog(false);
+              _showIntroDialog(false);
 
               ///TODO: temporarily disable subscription part
               /*  if (subscriptionStatus()) {
@@ -199,7 +204,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           child: CustomButton(
             bgColor: AppColors.primaryColor,
             onPressed: () {
-              _showAlertDialog(true);
+              _showIntroDialog(true);
             },
             icon: Image.asset(
               AppImages.eye,
@@ -221,40 +226,46 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   //   ));
   // }
 
-  Future<void> _showAlertDialog(bool isEye) {
+  Future<void> _showIntroDialog(bool isEye) {
     return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            backgroundColor: const Color(0xff1E1E1E).withOpacity(0.75),
-            alignment: Alignment.center,
-            title: Text(
-              "Warning",
-              textAlign: TextAlign.center,
-              style: PoppinsStyles.semiBold
-                  .copyWith(fontSize: 17.sp, color: AppColors.whiteColor),
-            ),
-            content: Text(
+      context: context,
+      builder: (BuildContext context) {
+        return CustomAlertDialog(
+          title: "Warning",
+          description:
               "This application is not intended to substitute professional healthcare. We strongly advise that the initial use is conducted with the guidance of a trained psychologist. If you have any uncertainties, please consult a doctor or psychologist.",
-              style: PoppinsStyles.light.copyWith(
-                  fontSize: 13.sp, color: AppColors.whiteColor, height: 1.2.sp),
-            ),
-            actions: [
-              CommonInkWell(
-                onTap: () => CustomNavigation()
-                    .pushReplacement(InfoScreen(isEye: isEye)),
-                child: Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text("OK",
-                        textAlign: TextAlign.center,
-                        style: PoppinsStyles.semiBold.copyWith(
-                            fontSize: 17.sp, color: AppColors.whiteColor)),
-                  ),
-                ),
-              )
-            ],
-          );
-        });
+          onTap: () =>
+              CustomNavigation().pushReplacement(InfoScreen(isEye: isEye)),
+          btnTitle: 'OK',
+        );
+      },
+    );
+  }
+
+  Widget _showSettingDialog() {
+    return CustomAlertDialog(
+      title: "Settings",
+      description: "Change the sound, tone, colour and speed here",
+      onTap: () {},
+      btnTitle: 'Next',
+    );
+  }
+
+  Widget _startDialog() {
+    return CustomAlertDialog(
+      title: "Start",
+      description: "Start the protocol here",
+      onTap: () {},
+      btnTitle: 'Next',
+    );
+  }
+
+  Widget _eyeDialog() {
+    return CustomAlertDialog(
+      title: "Stimulation",
+      description: "Jump straight to audio / visual",
+      onTap: () {},
+      btnTitle: 'Next',
+    );
   }
 }

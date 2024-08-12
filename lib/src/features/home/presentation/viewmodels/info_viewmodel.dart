@@ -19,7 +19,7 @@ class IntroViewModel with ChangeNotifier {
   int introIndex = 0;
 
   bool incrementIndex(BuildContext context) {
-    if (introIndex < 10) {
+    if (introIndex < 11) {
       introIndex = introIndex + 1;
       notifyListeners();
       return false;

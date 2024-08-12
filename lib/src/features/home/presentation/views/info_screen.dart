@@ -17,6 +17,7 @@ import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/in
 import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/info_7.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/info_8.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/info_9.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/info_views/welcome_infro.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -66,6 +67,7 @@ class InfoScreen extends ConsumerWidget {
                         child: IndexedStack(
                           index: introViewModel.introIndex,
                           children: [
+                            const WelcomeIntro(),
                             const Intro1(),
                             const Intro2(),
                             const Intro3(),
@@ -108,6 +110,24 @@ class InfoScreen extends ConsumerWidget {
                           child: Icon(Icons.arrow_back,
                               color: AppColors.whiteColor, size: 24.sp),
                         ),
+                      ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: List.generate(12, (index) {
+                          return Container(
+                            width: 10.sp,
+                            height: introViewModel.introIndex == index
+                                ? 14.sp
+                                : 4.sp,
+                            margin: EdgeInsets.only(right: 4.sp),
+                            decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(56.sp)),
+                              color: AppColors.primaryColor.withOpacity(
+                                  introViewModel.introIndex == index ? 1 : 0.4),
+                            ),
+                          );
+                        }),
                       ),
                       CommonInkWell(
                         onTap: () {

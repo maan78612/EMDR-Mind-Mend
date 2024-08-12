@@ -111,4 +111,11 @@ class HomeViewModel with ChangeNotifier {
 
     notifyListeners();
   }
+
+  int tutorialIndex = 0;
+
+  void setTutorial(int index) {
+    tutorialIndex = index;
+    notifyListeners();
+  }
 }
