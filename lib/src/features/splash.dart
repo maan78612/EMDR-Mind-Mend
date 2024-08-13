@@ -2,6 +2,7 @@ import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
+import 'package:emdr_mindmend/src/features/home/presentation/views/home_screen.dart';
 import 'package:emdr_mindmend/src/features/on_boarding/presentation/views/on_boarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -69,7 +70,9 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
     _controller.addListener(() {
       if (_controller.status == AnimationStatus.completed) {
-        CustomNavigation().pushReplacement(const OnBoardingScreen());
+        /// temporary
+        CustomNavigation().pushReplacement(const HomeScreen());
+        // CustomNavigation().pushReplacement(const OnBoardingScreen());
       }
     });
   }
