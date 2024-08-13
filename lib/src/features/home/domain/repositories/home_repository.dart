@@ -8,4 +8,8 @@ abstract class HomeRepository {
   Future<List<GetSubscriptionModel>> getSubscription();
 
   Future<dynamic> setSubscription({required Map<String, dynamic> body});
+
+  Future<void> setTutorialShowedOnce();
+
+  Future<bool> getTutorialShowedOnce();
 }

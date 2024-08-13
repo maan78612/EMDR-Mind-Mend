@@ -34,6 +34,7 @@ class CustomAlertDialog extends StatelessWidget {
       ),
       content: Text(
         description,
+        textAlign: TextAlign.center,
         style: PoppinsStyles.light.copyWith(
             fontSize: 12.sp, color: AppColors.whiteColor, height: 1.2.sp),
       ),

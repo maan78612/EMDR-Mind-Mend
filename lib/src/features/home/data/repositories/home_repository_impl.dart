@@ -1,4 +1,5 @@
 import 'package:emdr_mindmend/src/core/constants/api_urls.dart';
+import 'package:emdr_mindmend/src/core/services/local/preferences.dart';
 import 'package:emdr_mindmend/src/core/services/network/api_data_source.dart';
 import 'package:emdr_mindmend/src/features/home/domain/models/subscription.dart';
 import 'package:emdr_mindmend/src/features/home/domain/repositories/home_repository.dart';
@@ -43,5 +44,18 @@ class HomeRepositoryImpl implements HomeRepository {
     } catch (e) {
       rethrow;
     }
+  }
+
+  @override
+  Future<void> setTutorialShowedOnce() async {
+    final prefs = await SPreferences().prefs;
+    await prefs.setBool('tutorial', true);
+  }
+
+  @override
+  Future<bool> getTutorialShowedOnce() async {
+    final prefs = await SPreferences().prefs;
+    final result = prefs.getBool('tutorial');
+    return result ?? false;
   }
 }

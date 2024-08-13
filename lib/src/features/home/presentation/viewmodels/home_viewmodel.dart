@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
+import 'package:emdr_mindmend/src/core/commons/dialog_widget.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
 import 'package:emdr_mindmend/src/core/services/stripe/stripe_methods.dart';
@@ -10,6 +11,7 @@ import 'package:emdr_mindmend/src/features/home/domain/models/subscription.dart'
 import 'package:emdr_mindmend/src/features/home/domain/repositories/home_repository.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class HomeViewModel with ChangeNotifier {
   final HomeRepository _homeRepository = HomeRepositoryImpl();
@@ -112,10 +114,107 @@ class HomeViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  int tutorialIndex = 0;
+  ///*------------------------------------------------------*///
+  ///*--------------------- Set tutorial Coach-------------------*///
+  ///*-----------------------------------------------------*///
 
-  void setTutorial(int index) {
-    tutorialIndex = index;
-    notifyListeners();
+  List<TargetFocus> targets = [];
+  late TutorialCoachMark tutorialCoachMark;
+
+  final GlobalKey profileButtonKey = GlobalKey();
+  final GlobalKey startButtonKey = GlobalKey();
+  final GlobalKey eyeButtonKey = GlobalKey();
+
+  /// Check if tutorial  coach showed once app install
+  Future<void> showTutorialCoachFirstTime(BuildContext context) async {
+    final isInfoShowed = await _homeRepository.getTutorialShowedOnce();
+    if (!isInfoShowed) {
+      initializeCoachMarks(context);
+
+      /// once tutorial coach showed make bool true in shared preference
+    }
+  }
+
+  void initializeCoachMarks(BuildContext context) {
+    targets = [
+      TargetFocus(
+        keyTarget: profileButtonKey,
+        contents: [
+          TargetContent(
+            padding: EdgeInsets.zero,
+            align: ContentAlign.bottom,
+            child: _showSettingDialog(),
+          ),
+        ],
+      ),
+      TargetFocus(
+        keyTarget: startButtonKey,
+        contents: [
+          TargetContent(
+            padding: EdgeInsets.zero,
+            align: ContentAlign.top,
+            child: _startDialog(),
+          ),
+        ],
+      ),
+      TargetFocus(
+        keyTarget: eyeButtonKey,
+        contents: [
+          TargetContent(
+            padding: EdgeInsets.zero,
+            align: ContentAlign.top,
+            child: _eyeDialog(),
+          ),
+        ],
+      ),
+    ];
+
+    tutorialCoachMark = TutorialCoachMark(
+      targets: targets,
+      colorShadow: Colors.black,
+      paddingFocus: 0,
+      hideSkip: true,
+      onFinish: () {
+        // Handle finish
+      },
+    );
+
+    tutorialCoachMark.show(context: context);
+  }
+
+  Widget _showSettingDialog() {
+    return CustomAlertDialog(
+      title: "Settings",
+      description: "Change the sound, tone, colour and speed here",
+      onTap: () {
+        tutorialCoachMark.next(); // Show the next dialog
+      },
+      btnTitle: 'Next',
+    );
+  }
+
+  Widget _startDialog() {
+    return CustomAlertDialog(
+      title: "Start",
+      description: "Start the protocol here",
+      onTap: () {
+        tutorialCoachMark.next(); // Show the next dialog
+      },
+      btnTitle: 'Next',
+    );
+  }
+
+  Widget _eyeDialog() {
+    return CustomAlertDialog(
+      title: "Stimulation",
+      description: "Jump straight to audio / visual",
+      onTap: () {
+        tutorialCoachMark.finish();
+        _homeRepository.setTutorialShowedOnce();
+
+        /// set tutorial showed = true
+      },
+      btnTitle: 'Done',
+    );
   }
 }
