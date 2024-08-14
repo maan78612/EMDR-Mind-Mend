@@ -117,7 +117,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             title: 'Start',
             bgColor: AppColors.primaryColor,
             onPressed: () {
-              _showIntroDialog(true);
+              _showIntroDialog(false);
             },
             icon: Image.asset(
               AppImages.startIcon,

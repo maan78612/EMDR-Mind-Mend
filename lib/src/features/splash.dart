@@ -63,16 +63,14 @@ class _SplashScreenState extends State<SplashScreen>
 
   void initFunc() {
     _controller = AnimationController(
-      duration: const Duration(milliseconds: 2000),
-      vsync: this,
-    );
+        duration: const Duration(milliseconds: 2000), vsync: this);
     _animation = Tween<double>(begin: 0, end: 1).animate(_controller);
     _controller.forward();
     _controller.addListener(() {
       if (_controller.status == AnimationStatus.completed) {
         /// temporary
-        CustomNavigation().pushReplacement(const HomeScreen());
-        // CustomNavigation().pushReplacement(const OnBoardingScreen());
+        // CustomNavigation().pushReplacement(const HomeScreen());
+        CustomNavigation().pushReplacement(const OnBoardingScreen());
       }
     });
   }
