@@ -1,4 +1,3 @@
-import 'dart:ui';
 import 'package:emdr_mindmend/src/core/commons/custom_button.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
@@ -30,8 +29,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(homeViewModelProvider).showTutorialCoachFirstTime(context);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await Future.delayed(const Duration(milliseconds: 500));
+      await ref.read(homeViewModelProvider).showTutorialCoachFirstTime(context);
     });
   }
 
@@ -46,33 +46,39 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: SafeArea(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: hMargin),
-            child: Column(
+            child: Stack(
               children: [
+                Column(
+                  children: [
+                    20.verticalSpace,
+                    logo(),
+                    Padding(
+                      padding: EdgeInsets.symmetric(vertical: 24.sp),
+                      child: const Divider(color: AppColors.borderColor),
+                    ),
+                    Text(
+                        "Helping with PTSD and other\ntrauma-related conditions",
+                        style: PoppinsStyles.bold.copyWith(fontSize: 18.sp)),
+                    10.verticalSpace,
+                    Text("Based on emdr protocol",
+                        style: PoppinsStyles.light.copyWith(fontSize: 14.sp)),
+                    infoWidget(
+                      img: AppImages.startIcon,
+                      title: 'Step by Step',
+                      description: 'follow our guided process',
+                    ),
+                    infoWidget(
+                      img: AppImages.audio,
+                      title: 'Visual and auditory Stimulation\'s',
+                      description:
+                          'use the 2 most common stimulation\'s\n(visual and auditory) to aid your\ntreatment. You can skip to these if\ncomfortable to do so',
+                    ),
+                    60.verticalSpace,
+                    homeButtons(homeViewModel),
+                    30.verticalSpace,
+                  ],
+                ),
                 profileButton(homeViewModel),
-                logo(),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 24.sp),
-                  child: const Divider(color: AppColors.borderColor),
-                ),
-                Text("Helping with PTSD and other\ntrauma-related conditions",
-                    style: PoppinsStyles.bold.copyWith(fontSize: 18.sp)),
-                10.verticalSpace,
-                Text("Based on emdr protocol",
-                    style: PoppinsStyles.light.copyWith(fontSize: 14.sp)),
-                infoWidget(
-                  img: AppImages.startIcon,
-                  title: 'Step by Step',
-                  description: 'follow our guided process',
-                ),
-                infoWidget(
-                  img: AppImages.audio,
-                  title: 'Visual and auditory Stimulation\'s',
-                  description:
-                      'use the 2 most common stimulation\'s\n(visual and auditory) to aid your\ntreatment. You can skip to these if\ncomfortable to do so',
-                ),
-                60.verticalSpace,
-                homeButtons(homeViewModel),
-                30.verticalSpace,
               ],
             ),
           ),
@@ -82,9 +88,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   Widget profileButton(HomeViewModel homeViewModel) {
-    return Align(
+    return Positioned(
       key: homeViewModel.profileButtonKey,
-      alignment: Alignment.topRight,
+      right: 0,
       child: CommonInkWell(
         onTap: () {
           CustomNavigation().push(const DrawerScreen());
@@ -92,7 +98,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         child: Container(
           width: 40.sp,
           height: 40.sp,
-          margin: EdgeInsets.only(top: 10.h),
+          margin: EdgeInsets.all(10.sp),
           decoration: const BoxDecoration(
               color: AppColors.primaryColor, shape: BoxShape.circle),
           child: Center(

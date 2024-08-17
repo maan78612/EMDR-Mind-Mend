@@ -9,7 +9,7 @@ import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
 import 'package:emdr_mindmend/src/features/home/data/repositories/home_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/home/domain/models/subscription.dart';
 import 'package:emdr_mindmend/src/features/home/domain/repositories/home_repository.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
@@ -129,13 +129,14 @@ class HomeViewModel with ChangeNotifier {
   Future<void> showTutorialCoachFirstTime(BuildContext context) async {
     final isInfoShowed = await _homeRepository.getTutorialShowedOnce();
     if (!isInfoShowed) {
-      initializeCoachMarks(context);
+      initializeCoachMarks();
+      tutorialCoachMark.show(context: context);
 
       /// once tutorial coach showed make bool true in shared preference
     }
   }
 
-  void initializeCoachMarks(BuildContext context) {
+  void initializeCoachMarks() {
     targets = [
       TargetFocus(
         keyTarget: profileButtonKey,
@@ -178,8 +179,6 @@ class HomeViewModel with ChangeNotifier {
         // Handle finish
       },
     );
-
-    tutorialCoachMark.show(context: context);
   }
 
   Widget _showSettingDialog() {
