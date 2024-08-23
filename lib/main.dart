@@ -1,5 +1,5 @@
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
-import 'package:emdr_mindmend/src/features/splash.dart';
+import 'package:emdr_mindmend/src/features/splash/presentation/views/splash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';

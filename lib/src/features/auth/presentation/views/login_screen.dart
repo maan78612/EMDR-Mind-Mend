@@ -16,19 +16,44 @@ import 'package:emdr_mindmend/src/features/auth/presentation/viewmodels/login_vi
 import 'package:emdr_mindmend/src/features/auth/presentation/views/forget_password.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/views/sign_up_screen.dart';
 import 'package:emdr_mindmend/src/features/on_boarding/presentation/views/on_boarding_screen.dart';
+import 'package:emdr_mindmend/src/features/splash/domain/models/credential_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class LoginScreen extends ConsumerWidget {
+class LoginScreen extends ConsumerStatefulWidget {
+  final CredentialsModel? credentialsModel;
+
+  const LoginScreen({super.key, this.credentialsModel});
+
+  @override
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final loginViewModelProvider = ChangeNotifierProvider<LoginViewModel>((ref) {
     return LoginViewModel();
   });
 
-  LoginScreen({super.key});
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      if (widget.credentialsModel != null) {
+        ref.read(loginViewModelProvider).autoLogin(
+            showSnackBarMsg: ({
+              required SnackBarType snackType,
+              required String message,
+            }) =>
+                Utils.showSnackBar(message, snackType, context),
+            credentials: widget.credentialsModel!);
+      }
+    });
+
+    super.initState();
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final loginViewModel = ref.watch(loginViewModelProvider);
 
     return CustomLoader(

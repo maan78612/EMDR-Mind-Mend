@@ -1,6 +1,7 @@
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/core/services/local/preferences.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/views/login_screen.dart';
 import 'package:emdr_mindmend/src/features/drawer/data/repositories/drawer_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/drawer/domain/repositories/drawer_repository.dart';
@@ -30,10 +31,11 @@ class DrawerViewModel with ChangeNotifier {
 
       final body = {"refresh_token": userData?.refreshToken};
       await _drawerRepository.logout(body: body);
+      await SPreferences().clearCredentials();
       await _drawerRepository.googleLogout();
 
       userData = null;
-      CustomNavigation().pushAndRemoveUntil(LoginScreen());
+      CustomNavigation().pushAndRemoveUntil(const LoginScreen());
     } catch (e) {
       showSnackBarMsg(
         message: e.toString(),

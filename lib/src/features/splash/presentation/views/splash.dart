@@ -1,23 +1,27 @@
-import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/home_screen.dart';
-import 'package:emdr_mindmend/src/features/on_boarding/presentation/views/on_boarding_screen.dart';
+import 'package:emdr_mindmend/src/features/splash/presentation/viewmodels/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class SplashScreen extends StatefulWidget {
+class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  ConsumerState<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen>
+class _SplashScreenState extends ConsumerState<SplashScreen>
     with TickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
+
+  final splashViewModelProvider =
+      ChangeNotifierProvider<SplashViewModel>((ref) {
+    return SplashViewModel();
+  });
 
   @override
   void initState() {
@@ -68,9 +72,7 @@ class _SplashScreenState extends State<SplashScreen>
     _controller.forward();
     _controller.addListener(() {
       if (_controller.status == AnimationStatus.completed) {
-        /// temporary
-        // CustomNavigation().pushReplacement(const HomeScreen());
-        CustomNavigation().pushReplacement(const OnBoardingScreen());
+        ref.read(splashViewModelProvider).checkAutoLogin();
       }
     });
   }

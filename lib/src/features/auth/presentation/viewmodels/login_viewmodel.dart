@@ -3,10 +3,13 @@ import 'dart:developer';
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
+import 'package:emdr_mindmend/src/core/enums/login_type.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/core/services/local/preferences.dart';
 import 'package:emdr_mindmend/src/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/repositories/auth_repository.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/views/home_screen.dart';
+import 'package:emdr_mindmend/src/features/splash/domain/models/credential_model.dart';
 import 'package:flutter/material.dart';
 
 class LoginViewModel with ChangeNotifier {
@@ -75,6 +78,12 @@ class LoginViewModel with ChangeNotifier {
         "password": passwordCon.controller.text,
       };
       userData = await _authRepository.login(body: body);
+      // Store credentials
+      final credentialsModel = CredentialsModel(
+          loginType: LoginType.normal,
+          email: emailCon.controller.text,
+          password: passwordCon.controller.text);
+      await SPreferences().saveCredentials(credentialsModel);
       CustomNavigation().pushReplacement(const HomeScreen());
     } catch (e) {
       showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
@@ -97,8 +106,13 @@ class LoginViewModel with ChangeNotifier {
           "name": credentials.displayName,
           "email": credentials.email
         };
-        print(body);
+
         userData = await _authRepository.googleSocialLogin(body: body);
+        final credentialsModel = CredentialsModel(
+            loginType: LoginType.google,
+            name: credentials.displayName,
+            email: credentials.email);
+        await SPreferences().saveCredentials(credentialsModel);
         CustomNavigation().pushReplacement(const HomeScreen());
       }
     } on Exception catch (e) {
@@ -125,9 +139,54 @@ class LoginViewModel with ChangeNotifier {
       };
 
       userData = await _authRepository.appleSocialLogin(body: body);
+
+      final credentialsModel = CredentialsModel(
+          loginType: LoginType.apple, id: credentials.userIdentifier);
+      await SPreferences().saveCredentials(credentialsModel);
       CustomNavigation().pushReplacement(const HomeScreen());
     } on Exception catch (e) {
       log("appleLogin error = $e");
+      showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  Future<void> autoLogin(
+      {required Function({
+        required SnackBarType snackType,
+        required String message,
+      }) showSnackBarMsg,
+      required CredentialsModel credentials}) async {
+    try {
+      setLoading(true);
+      switch (credentials.loginType) {
+        case LoginType.normal:
+          final body = {
+            "email": credentials.email,
+            "password": credentials.password,
+          };
+          userData = await _authRepository.login(body: body);
+          break;
+
+        case LoginType.google:
+          final body = {"name": credentials.name, "email": credentials.email};
+          userData = await _authRepository.googleSocialLogin(body: body);
+
+          break;
+
+        case LoginType.apple:
+          final body = {
+            "id": credentials.id,
+          };
+          userData = await _authRepository.appleSocialLogin(body: body);
+          break;
+      }
+
+      // After successful login, navigate to HomeScreen
+      CustomNavigation().pushReplacement(const HomeScreen());
+    } catch (e) {
+      log("autoLogin error = $e");
       showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
     } finally {
       setLoading(false);
