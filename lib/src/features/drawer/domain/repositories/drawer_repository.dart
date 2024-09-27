@@ -11,5 +11,6 @@ abstract class DrawerRepository {
   Future<void> contactUs({required Map<String, dynamic> body});
 
   Future<void> logout({required Map<String, dynamic> body});
+  Future<void> deleteUser({required String userId});
   Future<GoogleSignInAccount?> googleLogout();
 }

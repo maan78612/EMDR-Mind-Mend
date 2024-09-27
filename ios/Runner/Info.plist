@@ -9,6 +9,8 @@
     <string>To scan cards</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>This app needs access to your photo library in order to select photos.</string>
+    <key>NSUserTrackingUsageDescription</key>
+    <string>This identifier will be used to fetch information before and after EMDR therapy.</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>

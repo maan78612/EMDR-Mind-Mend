@@ -45,4 +45,26 @@ class DrawerViewModel with ChangeNotifier {
       setLoading(false);
     }
   }
+
+  Future<void> deleteUser(
+      {required Function({
+        required SnackBarType snackType,
+        required String message,
+      }) showSnackBarMsg}) async {
+    try {
+      CustomNavigation().pop();
+      setLoading(true);
+
+      await _drawerRepository.deleteUser(userId: userData!.userId.toString());
+      userData = null;
+      CustomNavigation().pushAndRemoveUntil(const LoginScreen());
+    } catch (e) {
+      showSnackBarMsg(
+        message: e.toString(),
+        snackType: SnackBarType.error,
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
 }

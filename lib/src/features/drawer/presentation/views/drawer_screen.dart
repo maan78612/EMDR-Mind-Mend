@@ -1,3 +1,4 @@
+import 'package:emdr_mindmend/src/core/commons/custom_button.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/loader.dart';
@@ -81,13 +82,23 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                         CustomNavigation().push(HelpFaqPage());
                       }),
                   const Spacer(flex: 3),
+
+
                   drawerOption(
                       img: AppImages.logout,
                       title: "Log Out",
                       onTap: () {
                         _showLogoutDialog(context, drawerViewModel);
                       }),
-                  40.verticalSpace,
+                  80.verticalSpace,
+                  CustomButton(
+                    bgColor: AppColors.redColor,
+                    onPressed: () {
+                      _showDeleteDialog(context, drawerViewModel);
+                    },
+                    title: 'Delete Permanently',
+                  ),
+                  20.verticalSpace,
                 ],
               ),
             ),
@@ -226,6 +237,49 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                       .copyWith(fontSize: 14.sp, color: AppColors.redColor)),
               onPressed: () {
                 drawerViewModel.logout(
+                  showSnackBarMsg: ({
+                    required SnackBarType snackType,
+                    required String message,
+                  }) =>
+                      Utils.showSnackBar(message, snackType, context),
+                );
+                // Dismiss the dialog
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showDeleteDialog(
+      BuildContext context, DrawerViewModel drawerViewModel) {
+    showDialog(
+      context: context,
+      builder: (BuildContext ctx) {
+        return AlertDialog(
+          backgroundColor: AppColors.whiteColor,
+          title: Text(
+            'Delete Permanently',
+            style: PoppinsStyles.semiBold.copyWith(fontSize: 16.sp),
+          ),
+          content: Text('Are you sure you want to delete your account?',
+              style: PoppinsStyles.regular
+                  .copyWith(fontSize: 12.sp, color: AppColors.greyColor)),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel',
+                  style: PoppinsStyles.medium.copyWith(fontSize: 14.sp)),
+              onPressed: () {
+                CustomNavigation().pop(); // Dismiss the dialog
+              },
+            ),
+            TextButton(
+              child: Text('delete',
+                  style: PoppinsStyles.medium
+                      .copyWith(fontSize: 14.sp, color: AppColors.redColor)),
+              onPressed: () {
+                drawerViewModel.deleteUser(
                   showSnackBarMsg: ({
                     required SnackBarType snackType,
                     required String message,

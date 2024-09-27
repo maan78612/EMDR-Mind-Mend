@@ -30,8 +30,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final homeViewModel = ref.read(homeViewModelProvider);
       await Future.delayed(const Duration(milliseconds: 500));
-      await ref.read(homeViewModelProvider).showTutorialCoachFirstTime(context);
+      await homeViewModel.showTutorialCoachFirstTime(context);
+      await homeViewModel.requestTrackingPermission();
     });
   }
 

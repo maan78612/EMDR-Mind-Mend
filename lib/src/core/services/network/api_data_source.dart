@@ -211,6 +211,31 @@ class NetworkApi {
     }
   }
 
+  Future delete({
+    required String url,
+    Map<String, dynamic>? customHeader,
+    List<MapEntry<String, File>>? files,
+  }) async {
+    printFunc(
+        methodType: "Delete", url: url, apiHeader: customHeader ?? header);
+
+    try {
+      final response = await _dio.delete(
+        url,
+        options: Options(
+          headers: customHeader ?? header,
+          sendTimeout: const Duration(milliseconds: 22000), //_defaultTimeout,
+          receiveTimeout:
+              const Duration(milliseconds: 22000), //_defaultTimeout,
+        ),
+      );
+
+      return returnResponse(response);
+    } on DioException catch (e) {
+      throw DioExceptionError(_getDioExceptionErrorMessage(e));
+    }
+  }
+
   String _getDioExceptionErrorMessage(DioException exception) {
     if (kDebugMode) {
       log("Exception type : ${exception.type}, Response: ${exception.response?.data}");
@@ -227,7 +252,7 @@ class NetworkApi {
       case DioExceptionType.badCertificate:
         return "Invalid certificate";
       case DioExceptionType.badResponse:
-        return exception.response?.data['message'] ?? "Bad response";
+        return exception.response?.data['message'] ?? exception.response?.data['detail']?? "Bad response";
       case DioExceptionType.connectionError:
         return "Connection error";
       case DioExceptionType.unknown:

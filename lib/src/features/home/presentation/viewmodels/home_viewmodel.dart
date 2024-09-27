@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/dialog_widget.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
@@ -134,6 +135,18 @@ class HomeViewModel with ChangeNotifier {
 
       /// once tutorial coach showed make bool true in shared preference
     }
+  }
+
+  Future<void> requestTrackingPermission() async {
+    final status = await AppTrackingTransparency.trackingAuthorizationStatus;
+
+    // If permission has not been requested, request it
+    if (status == TrackingStatus.notDetermined) {
+      await AppTrackingTransparency.requestTrackingAuthorization();
+    }
+
+    // Log or handle the status (e.g., show a message if permission is denied)
+    debugPrint("Tracking status: $status");
   }
 
   void initializeCoachMarks() {

@@ -23,7 +23,7 @@ class DrawerRepositoryImpl implements DrawerRepository {
     try {
       final value = await NetworkApi.instance
           .put(url: ApiUrls.editProfile, body: body, files: files);
-      
+
       return UpdateProfileResponseModel.fromJson(value);
     } catch (e) {
       rethrow;
@@ -44,13 +44,20 @@ class DrawerRepositoryImpl implements DrawerRepository {
     try {
       GoogleSignIn googleSignIn = GoogleSignIn(scopes: ['email']);
 
-
-
       final GoogleSignInAccount? googleAccount = await googleSignIn.signOut();
 
       return googleAccount;
     } on Exception catch (e) {
       throw Exception(e.toString());
+    }
+  }
+
+  @override
+  Future<void> deleteUser({required String userId}) async {
+    try {
+      await NetworkApi.instance.delete(url: "${ApiUrls.deleteUser}$userId/");
+    } catch (e) {
+      rethrow;
     }
   }
 }
