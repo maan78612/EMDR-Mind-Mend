@@ -55,7 +55,7 @@ class DrawerRepositoryImpl implements DrawerRepository {
   @override
   Future<void> deleteUser({required String userId}) async {
     try {
-      await NetworkApi.instance.delete(url: "${ApiUrls.deleteUser}$userId/");
+      await NetworkApi.instance.delete(url: "${ApiUrls.deleteUser}$userId");
     } catch (e) {
       rethrow;
     }

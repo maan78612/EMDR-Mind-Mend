@@ -55,6 +55,10 @@ class DrawerViewModel with ChangeNotifier {
       CustomNavigation().pop();
       setLoading(true);
 
+      final body = {"refresh_token": userData?.refreshToken};
+      await _drawerRepository.logout(body: body);
+      await SPreferences().clearCredentials();
+      await _drawerRepository.googleLogout();
       await _drawerRepository.deleteUser(userId: userData!.userId.toString());
       userData = null;
       CustomNavigation().pushAndRemoveUntil(const LoginScreen());

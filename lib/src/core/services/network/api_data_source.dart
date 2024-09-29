@@ -269,6 +269,7 @@ class NetworkApi {
     switch (response.statusCode) {
       case 200:
       case 201:
+      case 204:
         dynamic jsonResponse = response.data;
         return jsonResponse;
       case 404:

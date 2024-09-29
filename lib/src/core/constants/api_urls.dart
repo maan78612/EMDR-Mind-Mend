@@ -12,5 +12,6 @@ class ApiUrls {
   static const setSubscription = "${baseUrl}subscriptions/create/";
   static const appleLogin = "${baseUrl}apple_login/";
   static const googleLogin = "${baseUrl}google_login/";
-  static const deleteUser = "https://myemdr.pythonanywhere.com/mindmend/signup/";
+
+  static const deleteUser = "${baseUrl}delete/?user_id=";
 }
