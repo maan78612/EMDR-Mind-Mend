@@ -11,6 +11,7 @@ import 'package:emdr_mindmend/src/features/auth/domain/repositories/auth_reposit
 import 'package:emdr_mindmend/src/features/home/presentation/views/home_screen.dart';
 import 'package:emdr_mindmend/src/features/splash/domain/models/credential_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class LoginViewModel with ChangeNotifier {
   final AuthRepository _authRepository = AuthRepositoryImpl();
@@ -69,7 +70,8 @@ class LoginViewModel with ChangeNotifier {
       {required Function({
         required SnackBarType snackType,
         required String message,
-      }) showSnackBarMsg}) async {
+      }) showSnackBarMsg,
+      required WidgetRef ref}) async {
     try {
       setLoading(true);
 
@@ -77,8 +79,9 @@ class LoginViewModel with ChangeNotifier {
         "email": emailCon.controller.text,
         "password": passwordCon.controller.text,
       };
-      userData = await _authRepository.login(body: body);
-      // Store credentials
+      final userData = await _authRepository.login(body: body);
+      ref.read(userModelProvider.notifier).setUser(userData);
+
       final credentialsModel = CredentialsModel(
           loginType: LoginType.normal,
           email: emailCon.controller.text,
@@ -96,7 +99,8 @@ class LoginViewModel with ChangeNotifier {
       {required Function({
         required SnackBarType snackType,
         required String message,
-      }) showSnackBarMsg}) async {
+      }) showSnackBarMsg,
+      required WidgetRef ref}) async {
     try {
       setLoading(true);
       final credentials = await _authRepository.googleLogin();
@@ -107,7 +111,8 @@ class LoginViewModel with ChangeNotifier {
           "email": credentials.email
         };
 
-        userData = await _authRepository.googleSocialLogin(body: body);
+        final userData = await _authRepository.googleSocialLogin(body: body);
+        ref.read(userModelProvider.notifier).setUser(userData);
         final credentialsModel = CredentialsModel(
             loginType: LoginType.google,
             name: credentials.displayName,
@@ -127,7 +132,7 @@ class LoginViewModel with ChangeNotifier {
       {required Function({
         required SnackBarType snackType,
         required String message,
-      }) showSnackBarMsg}) async {
+      }) showSnackBarMsg,required WidgetRef ref}) async {
     try {
       setLoading(true);
       final credentials = await _authRepository.appleLogin();
@@ -138,8 +143,8 @@ class LoginViewModel with ChangeNotifier {
         "email": credentials.email ?? ""
       };
 
-      userData = await _authRepository.appleSocialLogin(body: body);
-
+      final userData = await _authRepository.appleSocialLogin(body: body);
+      ref.read(userModelProvider.notifier).setUser(userData);
       final credentialsModel = CredentialsModel(
           loginType: LoginType.apple, id: credentials.userIdentifier);
       await SPreferences().saveCredentials(credentialsModel);
@@ -154,34 +159,17 @@ class LoginViewModel with ChangeNotifier {
 
   Future<void> autoLogin(
       {required Function({
-        required SnackBarType snackType,
-        required String message,
+      required SnackBarType snackType,
+      required String message,
       }) showSnackBarMsg,
-      required CredentialsModel credentials}) async {
+        required CredentialsModel credentials,
+        required WidgetRef ref}) async {
     try {
       setLoading(true);
-      switch (credentials.loginType) {
-        case LoginType.normal:
-          final body = {
-            "email": credentials.email,
-            "password": credentials.password,
-          };
-          userData = await _authRepository.login(body: body);
-          break;
+      final userData =
+      await _authRepository.autoLogin(credentials: credentials);
 
-        case LoginType.google:
-          final body = {"name": credentials.name, "email": credentials.email};
-          userData = await _authRepository.googleSocialLogin(body: body);
-
-          break;
-
-        case LoginType.apple:
-          final body = {
-            "id": credentials.id,
-          };
-          userData = await _authRepository.appleSocialLogin(body: body);
-          break;
-      }
+      ref.read(userModelProvider.notifier).setUser(userData);
 
       // After successful login, navigate to HomeScreen
       CustomNavigation().pushReplacement(const HomeScreen());

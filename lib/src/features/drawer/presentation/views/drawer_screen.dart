@@ -8,6 +8,7 @@ import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
 import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
+import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/drawer_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/contact_us.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/help_faq_screen/help_faq_screen.dart';
@@ -38,7 +39,7 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
   @override
   Widget build(BuildContext context) {
     final drawerViewModel = ref.watch(drawerViewModelProvider);
-
+    final userData = ref.watch(userModelProvider);
     return CustomLoader(
       isLoading: drawerViewModel.isLoading,
       child: Scaffold(
@@ -51,17 +52,13 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  header(),
+                  header(userData),
                   const Spacer(),
                   drawerOption(
                       img: AppImages.myProfile,
                       title: "My Profile",
                       onTap: () async {
-                        await CustomNavigation().push(ProfileScreen(
-                          apiCallback: (bool isSuccess) {
-                            setState(() {});
-                          },
-                        ));
+                        await CustomNavigation().push(ProfileScreen());
                       }),
                   drawerOption(
                       img: AppImages.settings,
@@ -82,8 +79,6 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                         CustomNavigation().push(HelpFaqPage());
                       }),
                   const Spacer(flex: 3),
-
-
                   drawerOption(
                       img: AppImages.logout,
                       title: "Log Out",
@@ -108,7 +103,7 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
     );
   }
 
-  Padding header() {
+  Padding header(UserModel userData) {
     return Padding(
       padding: EdgeInsets.only(top: 40.sp),
       child: Row(
@@ -120,7 +115,7 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
             child: Center(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10.0.r),
-                child: userData?.image == null
+                child: userData.image == null
                     ? Image.asset(
                         AppImages.profile,
                         color:
@@ -129,7 +124,7 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                       )
                     : Center(
                         child: Image.network(
-                          userData?.image ?? "",
+                          userData.image ?? "",
                           errorBuilder: (context, error, stackTrace) {
                             return const Icon(Icons.error,
                                 color: AppColors.redColor);
@@ -146,12 +141,12 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  userData?.name ?? "",
+                  userData.name,
                   style: PoppinsStyles.semiBold.copyWith(fontSize: 16.sp),
                 ),
                 6.verticalSpace,
                 Text(
-                  userData?.email ?? "",
+                  userData.email,
                   style: PoppinsStyles.light.copyWith(fontSize: 12.sp),
                 ),
               ],
@@ -241,7 +236,8 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                     required SnackBarType snackType,
                     required String message,
                   }) =>
-                      Utils.showSnackBar(message, snackType, context),
+                      SnackBarUtils.show(message, snackType),
+                  ref: ref,
                 );
                 // Dismiss the dialog
               },
@@ -284,7 +280,8 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                     required SnackBarType snackType,
                     required String message,
                   }) =>
-                      Utils.showSnackBar(message, snackType, context),
+                      SnackBarUtils.show(message, snackType),
+                  ref: ref,
                 );
                 // Dismiss the dialog
               },

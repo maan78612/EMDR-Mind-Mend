@@ -11,5 +11,5 @@ abstract class HomeRepository {
 
   Future<void> setTutorialShowedOnce();
 
-  Future<bool> getTutorialShowedOnce();
+  Future<bool> isTutorialAlreadyShown();
 }

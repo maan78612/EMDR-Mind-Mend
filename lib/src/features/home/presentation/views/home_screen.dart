@@ -31,9 +31,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final homeViewModel = ref.read(homeViewModelProvider);
-      await Future.delayed(const Duration(milliseconds: 500));
-      await homeViewModel.showTutorialCoachFirstTime(context);
-      await homeViewModel.requestTrackingPermission();
+      await homeViewModel.initMethod(context,ref.read(userModelProvider));
     });
   }
 
@@ -125,6 +123,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             title: 'Start',
             bgColor: AppColors.primaryColor,
             onPressed: () {
+              /// TODO : temporarily comment subscription part
+              /* ----------------------------------------------
+            if (homeViewModel.subscriptionStatus()) {
+                _showIntroDialog(false);
+              } else {
+                  CustomNavigation().push(SubscriptionScreen(
+                    homeViewModelProvider: homeViewModelProvider,
+                    ));
+              }
+            --------------------------------------------- */
               _showIntroDialog(false);
             },
             icon: Image.asset(

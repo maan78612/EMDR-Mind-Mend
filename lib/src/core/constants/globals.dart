@@ -13,17 +13,11 @@ final settingViewModelProvider =
   return SettingViewModel();
 });
 
-UserModel? userData;
+final userModelProvider =
+StateNotifierProvider<UserModelProvider, UserModel>((ref) {
+  return UserModelProvider();
+});
 
-bool subscriptionStatus() {
-  if ((userData?.isTrialValid == null && userData?.subscription == null) ||
-      (userData?.isTrialValid == false &&
-          userData?.subscription != null &&
-          userData!.subscription!.expiryDate.isBefore(DateTime.now()))) {
-    debugPrint("subscription INVALID");
-    return false;
-  } else {
-    debugPrint("subscription VALID");
-    return true;
-  }
-}
+String authenticationToken = "";
+
+

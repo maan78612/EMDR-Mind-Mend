@@ -53,7 +53,7 @@ class HomeRepositoryImpl implements HomeRepository {
   }
 
   @override
-  Future<bool> getTutorialShowedOnce() async {
+  Future<bool> isTutorialAlreadyShown() async {
     final prefs = await SPreferences().prefs;
     final result = prefs.getBool('tutorial');
     return result ?? false;

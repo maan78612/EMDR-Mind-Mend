@@ -10,6 +10,7 @@ import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/constants/text_field_validator.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
 import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
+import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/profile_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/widgets/drawer_widgets_app_bar.dart';
 import 'package:flutter/material.dart';
@@ -17,19 +18,33 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
-class ProfileScreen extends ConsumerWidget {
-  final Function(bool isSuccess) apiCallback;
+class ProfileScreen extends ConsumerStatefulWidget {
+  const ProfileScreen({super.key});
 
-  ProfileScreen({super.key, required this.apiCallback});
+  @override
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
 
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final profileViewModelProvider =
-      ChangeNotifierProvider<ProfileViewModel>((ref) {
+  ChangeNotifierProvider<ProfileViewModel>((ref) {
     return ProfileViewModel();
   });
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(profileViewModelProvider)
+          .initMethod(ref.read(userModelProvider));
+    });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final profileViewModel = ref.watch(profileViewModelProvider);
+    final userData = ref.watch(userModelProvider);
     return CustomLoader(
       isLoading: profileViewModel.isLoading,
       child: Scaffold(
@@ -42,9 +57,10 @@ class ProfileScreen extends ConsumerWidget {
               30.verticalSpace,
               profileViewModel.profileImage != null
                   ? imageAddedFromFile(profileViewModel)
-                  : userData?.image != null
-                      ? imageAddedFromNetwork(profileViewModel, context)
-                      : noImageAdded(context, profileViewModel),
+                  : userData.image != null
+                  ? imageAddedFromNetwork(
+                  profileViewModel, context, userData)
+                  : noImageAdded(context, profileViewModel),
               30.verticalSpace,
               CustomInputField(
                 prefixWidget: Image.asset(
@@ -76,15 +92,13 @@ class ProfileScreen extends ConsumerWidget {
               40.verticalSpace,
               CustomButton(
                 onPressed: () async {
-                  await profileViewModel.editProfile(showSnackBarMsg: ({
-                    required SnackBarType snackType,
-                    required String message,
-                  }) {
-                    Utils.showSnackBar(message, snackType, context);
-                    if (snackType == SnackBarType.success) {
-                      apiCallback(true);
-                    }
-                  });
+                  await profileViewModel.editProfile(
+                      showSnackBarMsg: ({
+                        required SnackBarType snackType,
+                        required String message,
+                      }) =>
+                          SnackBarUtils.show(message, snackType),
+                      ref: ref);
                 },
                 bgColor: AppColors.primaryColor,
                 title: 'Save',
@@ -113,7 +127,7 @@ class ProfileScreen extends ConsumerWidget {
                 backgroundColor: AppColors.whiteColor,
                 radius: 15,
                 child:
-                    Icon(Icons.delete, size: 15.sp, color: AppColors.redColor),
+                Icon(Icons.delete, size: 15.sp, color: AppColors.redColor),
               ),
             ),
           )
@@ -122,15 +136,15 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget imageAddedFromNetwork(
-      ProfileViewModel profileViewModel, BuildContext context) {
+  Widget imageAddedFromNetwork(ProfileViewModel profileViewModel,
+      BuildContext context, UserModel userData) {
     return Center(
       child: Stack(
         children: [
           CircleAvatar(
             radius: 75,
             backgroundImage: NetworkImage(
-              userData!.image!,
+              userData.image!,
             ),
           ),
           Positioned(

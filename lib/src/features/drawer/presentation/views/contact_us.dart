@@ -75,8 +75,8 @@ class ContactUsPage extends ConsumerWidget {
                       required SnackBarType snackType,
                       required String message,
                     }) =>
-                            Utils.showSnackBar(
-                                message, snackType, context));
+                            SnackBarUtils.show(
+                                message, snackType));
                   },
                 ),
               ],

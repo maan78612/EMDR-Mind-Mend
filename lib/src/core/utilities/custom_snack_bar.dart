@@ -1,26 +1,27 @@
-
 import 'package:another_flushbar/flushbar.dart';
+import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class Utils {
-  static void showSnackBar(
-      String msg, SnackBarType type, BuildContext context) {
-    Flushbar(
-      title: type.name.toUpperCase(),
+class SnackBarUtils {
+  static Future<void> show(String msg, SnackBarType type,
+      {int? seconds}) async {
+    await Flushbar(
+      title: getErrorMsg(type),
       titleColor: Colors.white,
       message: msg,
+      messageSize: 14.sp,
       flushbarPosition: FlushbarPosition.TOP,
       flushbarStyle: FlushbarStyle.FLOATING,
       reverseAnimationCurve: Curves.decelerate,
       forwardAnimationCurve: Curves.elasticOut,
       backgroundColor: getTypeColor(type),
       isDismissible: false,
-      duration: const Duration(seconds: 2),
+      duration: Duration(seconds: seconds ?? 4),
       icon: getIcon(type),
-    ).show(context);
+    ).show(CustomNavigation().navigatorKey.currentContext!);
   }
 
   static Color getTypeColor(SnackBarType type) {
@@ -32,7 +33,7 @@ class Utils {
       case SnackBarType.info:
         return AppColors.primaryColor;
       default:
-        return Colors.yellowAccent;
+        return const Color(0xFFFFCC00);
     }
   }
 
@@ -44,11 +45,13 @@ class Utils {
           color: AppColors.whiteColor,
           shape: BoxShape.circle,
         ),
-        padding: EdgeInsets.all(4.sp),
-        child: Icon(
-          size: 12.sp,
-          getTypeIcon(type),
-          color: getTypeColor(type),
+        padding: EdgeInsets.all(6.sp),
+        child: Center(
+          child: Icon(
+            size: 18.sp,
+            getTypeIcon(type),
+            color: getTypeColor(type),
+          ),
         ),
       ),
     );
@@ -67,4 +70,16 @@ class Utils {
     }
   }
 
+  static String getErrorMsg(SnackBarType type) {
+    switch (type) {
+      case SnackBarType.error:
+        return "Error";
+      case SnackBarType.success:
+        return "Success";
+      case SnackBarType.info:
+        return "Info";
+      default:
+        return "Warning";
+    }
+  }
 }

@@ -4,20 +4,20 @@ import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
 import 'package:emdr_mindmend/src/features/drawer/data/repositories/drawer_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/drawer/domain/repositories/drawer_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
 
 class ProfileViewModel with ChangeNotifier {
   final DrawerRepository _drawerRepository = DrawerRepositoryImpl();
 
   CustomTextController emailCon = CustomTextController(
-      controller: TextEditingController(text: userData?.email),
-      focusNode: FocusNode());
+      controller: TextEditingController(), focusNode: FocusNode());
   CustomTextController nameCon = CustomTextController(
-      controller: TextEditingController(text: userData?.name),
-      focusNode: FocusNode());
+      controller: TextEditingController(), focusNode: FocusNode());
 
   File? profileImage;
   final ImagePicker _picker = ImagePicker();
@@ -33,6 +33,11 @@ class ProfileViewModel with ChangeNotifier {
   void setLoading(bool loading) {
     _isLoading = loading;
     notifyListeners();
+  }
+
+  void initMethod(UserModel userData) {
+    emailCon.controller.text = userData.email;
+    nameCon.controller.text = userData.name;
   }
 
   Future<void> imageOptionClick(ImageSource source) async {
@@ -78,9 +83,10 @@ class ProfileViewModel with ChangeNotifier {
 
   Future<void> editProfile(
       {required Function({
-        required SnackBarType snackType,
-        required String message,
-      }) showSnackBarMsg}) async {
+      required SnackBarType snackType,
+      required String message,
+      }) showSnackBarMsg,
+        required WidgetRef ref}) async {
     List<MapEntry<String, File>> files = [];
     try {
       setLoading(true);
@@ -90,10 +96,12 @@ class ProfileViewModel with ChangeNotifier {
 
       final body = {"name": nameCon.controller.text};
       final response =
-          await _drawerRepository.editProfile(body: body, files: files);
+      await _drawerRepository.editProfile(body: body, files: files);
 
-      userData?.name = response.data.name;
-      userData?.image = response.data.image;
+      ref.read(userModelProvider.notifier).updateName(response.data.name);
+      ref
+          .read(userModelProvider.notifier)
+          .updateProfileImage(response.data.image);
 
       notifyListeners();
 

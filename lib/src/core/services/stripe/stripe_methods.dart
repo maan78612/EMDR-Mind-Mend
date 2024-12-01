@@ -5,8 +5,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 
 class PaymentService {
-  Future<bool> makePayment(
-      {required double amount, String currency = "USD"}) async {
+  Future<bool> makePayment({
+    required double amount,
+    String currency = "USD",
+    required String userName
+  }) async {
     try {
       /// Create Payment Intent
       Map<String, dynamic> paymentIntent =
@@ -17,7 +20,7 @@ class PaymentService {
         paymentSheetParameters: SetupPaymentSheetParameters(
           paymentIntentClientSecret: paymentIntent['client_secret'],
           style: ThemeMode.light,
-          merchantDisplayName: userData?.name,
+          merchantDisplayName: userName,
         ),
       );
 

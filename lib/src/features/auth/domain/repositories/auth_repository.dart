@@ -1,4 +1,5 @@
 import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
+import 'package:emdr_mindmend/src/features/splash/domain/models/credential_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -16,4 +17,6 @@ abstract class AuthRepository {
 
   Future<UserModel> appleSocialLogin({required Map<String, dynamic> body});
   Future<UserModel> googleSocialLogin({required Map<String, dynamic> body});
+
+  Future<UserModel> autoLogin({required CredentialsModel credentials});
 }

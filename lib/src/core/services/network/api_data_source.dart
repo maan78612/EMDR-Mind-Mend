@@ -12,9 +12,8 @@ class NetworkApi {
 
   static Map<String, dynamic> get header {
     return {
-      "Authorization": userData?.accessToken != null
-          ? "Bearer ${userData!.accessToken}"
-          : null
+      "Authorization":
+          authenticationToken.isNotEmpty ? "Bearer $authenticationToken" : null
     };
   }
 
@@ -252,7 +251,9 @@ class NetworkApi {
       case DioExceptionType.badCertificate:
         return "Invalid certificate";
       case DioExceptionType.badResponse:
-        return exception.response?.data['message'] ?? exception.response?.data['detail']?? "Bad response";
+        return exception.response?.data['message'] ??
+            exception.response?.data['detail'] ??
+            "Bad response";
       case DioExceptionType.connectionError:
         return "Connection error";
       case DioExceptionType.unknown:

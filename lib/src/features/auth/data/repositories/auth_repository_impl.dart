@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:emdr_mindmend/src/core/constants/api_urls.dart';
+import 'package:emdr_mindmend/src/core/enums/login_type.dart';
 import 'package:emdr_mindmend/src/core/services/network/api_data_source.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/repositories/auth_repository.dart';
+import 'package:emdr_mindmend/src/features/splash/domain/models/credential_model.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
@@ -100,6 +102,32 @@ class AuthRepositoryImpl implements AuthRepository {
       final value =
           await NetworkApi.instance.post(url: ApiUrls.googleLogin, body: body);
       return UserModel.fromJson(value["data"]);
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  @override
+  Future<UserModel> autoLogin({required CredentialsModel credentials}) async {
+    try {
+      switch (credentials.loginType) {
+        case LoginType.normal:
+          final body = {
+            "email": credentials.email,
+            "password": credentials.password,
+          };
+          return await login(body: body);
+
+        case LoginType.google:
+          final body = {"name": credentials.name, "email": credentials.email};
+          return await googleSocialLogin(body: body);
+
+        case LoginType.apple:
+          final body = {
+            "id": credentials.id,
+          };
+          return await appleSocialLogin(body: body);
+      }
     } catch (e) {
       rethrow;
     }

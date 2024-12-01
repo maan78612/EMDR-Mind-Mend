@@ -1,11 +1,8 @@
 import 'dart:developer';
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
-import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/dialog_widget.dart';
-import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
-import 'package:emdr_mindmend/src/core/services/stripe/stripe_methods.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
 import 'package:emdr_mindmend/src/features/home/data/repositories/home_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/home/domain/models/subscription.dart';
@@ -16,6 +13,7 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 class HomeViewModel with ChangeNotifier {
   final HomeRepository _homeRepository = HomeRepositoryImpl();
+  List<GetSubscriptionModel> subscriptionList = [];
 
   bool _isLoading = false;
 
@@ -26,22 +24,36 @@ class HomeViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  bool _isBtnEnable = false;
+  Future<void> initMethod(BuildContext context, UserModel userData) async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    final isTutorialAlreadyShown =
+    await _homeRepository.isTutorialAlreadyShown();
+    if (!isTutorialAlreadyShown) {
+      await showTutorialCoach(context);
+    } else {
+      /// TODO : temporarily comment subscription part
+      /* ----------------------------------------------
 
-  bool get isBtnEnable => _isBtnEnable;
+      if (!subscriptionStatus(userData)) {
+        await getSubscriptionList(
+            showSnackBarMsg: ({
+          required SnackBarType snackType,
+          required String message,
+        }) =>
+                SnackBarUtils.show(message, snackType));
+        CustomNavigation()
+            .push(SubscriptionScreen(subscriptionList: subscriptionList));
+      }
 
-  bool _isFreeTrailBtnEnable = false;
-
-  bool get isFreeTrailBtnEnable => _isFreeTrailBtnEnable;
-
-  List<GetSubscriptionModel> subscriptionList = [];
-
-  GetSubscriptionModel? selectedSubscription;
+       --------------------------------------------- */
+    }
+    await requestTrackingPermission();
+  }
 
   Future<void> getSubscriptionList(
       {required Function({
-        required SnackBarType snackType,
-        required String message,
+      required SnackBarType snackType,
+      required String message,
       }) showSnackBarMsg}) async {
     try {
       setLoading(true);
@@ -54,65 +66,21 @@ class HomeViewModel with ChangeNotifier {
     }
   }
 
-  Future<void> setSubscription(
-      {required Function({
-        required SnackBarType snackType,
-        required String message,
-      }) showSnackBarMsg}) async {
-    try {
-      setLoading(true);
-      if (selectedSubscription?.id != "1") {
-        debugPrint(selectedSubscription?.amount.toString());
-        await PaymentService()
-            .makePayment(amount: ((selectedSubscription?.amount ?? 0.0)));
-      }
+  bool subscriptionStatus(UserModel userData) {
+    final isTrialValid = userData.isTrialValid ?? false;
+    final subscription = userData.subscription;
+    final isSubscriptionExpired =
+        subscription?.expiryDate.isBefore(DateTime.now()) ?? true;
 
-      final body = {"subscription_id": selectedSubscription?.id};
-      final data = await _homeRepository.setSubscription(body: body);
+    debugPrint("isTrialValid = $isTrialValid");
+    debugPrint("subscription = $subscription");
+    debugPrint("isSubscriptionExpired = $isSubscriptionExpired");
 
-      userData?.subscription = Subscription.fromJson(data['subscription']);
-      userData?.isTrialValid = data['isTrialValid'];
+    final isValid =
+        isTrialValid || (subscription != null && !isSubscriptionExpired);
 
-      notifyListeners();
-      CustomNavigation().pop();
-
-      showSnackBarMsg(
-          message: selectedSubscription?.id != "1"
-              ? "Subscribed successfully"
-              : "Free trail started",
-          snackType: SnackBarType.success);
-    } catch (e) {
-      log(e.toString());
-      showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  void selectSubscription(GetSubscriptionModel selectedSubscription) {
-    if (selectedSubscription != this.selectedSubscription) {
-      this.selectedSubscription = selectedSubscription;
-    } else {
-      this.selectedSubscription = null;
-    }
-    setEnableBtn();
-  }
-
-  void setEnableBtn() {
-    if (selectedSubscription != null) {
-      if (selectedSubscription?.id == "1") {
-        _isFreeTrailBtnEnable = true;
-        _isBtnEnable = false;
-      } else {
-        _isBtnEnable = true;
-        _isFreeTrailBtnEnable = false;
-      }
-    } else {
-      _isBtnEnable = false;
-      _isFreeTrailBtnEnable = false;
-    }
-
-    notifyListeners();
+    debugPrint("subscription ${isValid ? 'VALID' : 'INVALID'}");
+    return isValid;
   }
 
   ///*------------------------------------------------------*///
@@ -127,14 +95,9 @@ class HomeViewModel with ChangeNotifier {
   final GlobalKey eyeButtonKey = GlobalKey();
 
   /// Check if tutorial  coach showed once app install
-  Future<void> showTutorialCoachFirstTime(BuildContext context) async {
-    final isInfoShowed = await _homeRepository.getTutorialShowedOnce();
-    if (!isInfoShowed) {
-      initializeCoachMarks();
-      tutorialCoachMark.show(context: context);
-
-      /// once tutorial coach showed make bool true in shared preference
-    }
+  Future<void> showTutorialCoach(BuildContext context) async {
+    initializeCoachMarks();
+    tutorialCoachMark.show(context: context);
   }
 
   Future<void> requestTrackingPermission() async {

@@ -44,8 +44,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               required SnackBarType snackType,
               required String message,
             }) =>
-                Utils.showSnackBar(message, snackType, context),
-            credentials: widget.credentialsModel!);
+                SnackBarUtils.show(message, snackType),
+            credentials: widget.credentialsModel!,
+            ref: ref);
       }
     });
 
@@ -124,10 +125,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     onPressed: () {
                       loginViewModel.login(
                           showSnackBarMsg: ({
-                        required SnackBarType snackType,
-                        required String message,
-                      }) =>
-                              Utils.showSnackBar(message, snackType, context));
+                            required SnackBarType snackType,
+                            required String message,
+                          }) =>
+                              SnackBarUtils.show(message, snackType),
+                          ref: ref);
                     },
                   ),
                   40.verticalSpace,
@@ -180,10 +182,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             onTap: () {
               loginViewModel.googleLogin(
                   showSnackBarMsg: ({
-                required SnackBarType snackType,
-                required String message,
-              }) =>
-                      Utils.showSnackBar(message, snackType, context));
+                    required SnackBarType snackType,
+                    required String message,
+                  }) =>
+                      SnackBarUtils.show(message, snackType),
+                  ref: ref);
             },
             child: Container(
               height: inputFieldHeight,
@@ -208,10 +211,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               onTap: () {
                 loginViewModel.appleLogin(
                     showSnackBarMsg: ({
-                  required SnackBarType snackType,
-                  required String message,
-                }) =>
-                        Utils.showSnackBar(message, snackType, context));
+                      required SnackBarType snackType,
+                      required String message,
+                    }) =>
+                        SnackBarUtils.show(message, snackType),
+                    ref: ref);
               },
               child: Container(
                 height: inputFieldHeight,
