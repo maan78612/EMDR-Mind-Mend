@@ -9,7 +9,7 @@ import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/drawer_screen.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/home_viewmodel.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/info_screen.dart';
+import 'package:emdr_mindmend/src/features/therapy/presentation/views/therapy_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -173,7 +173,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           description:
               "This application is not intended to substitute professional healthcare. We strongly advise that the initial use is conducted with the guidance of a trained psychologist. If you have any uncertainties, please consult a doctor or psychologist.",
           onTap: () =>
-              CustomNavigation().pushReplacement(InfoScreen(isEye: isEye)),
+              CustomNavigation().pushReplacement(TherapyScreen(isEye: isEye)),
           btnTitle: 'OK',
         );
       },

@@ -16,12 +16,16 @@ class AppImages {
   static const String startIcon = "assets/images/start_icon.png";
   static const String myProfile = "assets/images/my_profile.png";
   static const String contactUs = "assets/images/contact_us.png";
-  static const String settings = "assets/images/settings.png";
   static const String faq = "assets/images/faq.png";
   static const String logout = "assets/images/logout.png";
   static const String left = "assets/images/left.png";
   static const String right = "assets/images/right.png";
   static const String loader = "assets/images/loader.png";
+  static const String home = "assets/images/home.png";
+  static const String setting = "assets/images/setting.png";
+  static const String info = "assets/images/info.png";
+  static const String dashboardMainIconSelected = "assets/images/dashboard_main_icon_selected.png";
+  static const String dashboardMainIconUnselected = "assets/images/dashboard_main_icon_unselected.png";
 
 
   static const String profilePic = "assets/images/profile_pic.jpg";

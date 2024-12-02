@@ -8,7 +8,7 @@ import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
 import 'package:emdr_mindmend/src/core/services/local/preferences.dart';
 import 'package:emdr_mindmend/src/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/repositories/auth_repository.dart';
-import 'package:emdr_mindmend/src/features/home/presentation/views/home_screen.dart';
+import 'package:emdr_mindmend/src/features/dashboard/presentation/views/dashboard_screen/dashboard_screen.dart';
 import 'package:emdr_mindmend/src/features/splash/domain/models/credential_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -87,7 +87,7 @@ class LoginViewModel with ChangeNotifier {
           email: emailCon.controller.text,
           password: passwordCon.controller.text);
       await SPreferences().saveCredentials(credentialsModel);
-      CustomNavigation().pushReplacement(const HomeScreen());
+      CustomNavigation().pushReplacement(const DashBoardScreen());
     } catch (e) {
       showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
     } finally {
@@ -118,7 +118,7 @@ class LoginViewModel with ChangeNotifier {
             name: credentials.displayName,
             email: credentials.email);
         await SPreferences().saveCredentials(credentialsModel);
-        CustomNavigation().pushReplacement(const HomeScreen());
+        CustomNavigation().pushReplacement(const DashBoardScreen());
       }
     } on Exception catch (e) {
       log("googleLogin error = $e");
@@ -132,7 +132,8 @@ class LoginViewModel with ChangeNotifier {
       {required Function({
         required SnackBarType snackType,
         required String message,
-      }) showSnackBarMsg,required WidgetRef ref}) async {
+      }) showSnackBarMsg,
+      required WidgetRef ref}) async {
     try {
       setLoading(true);
       final credentials = await _authRepository.appleLogin();
@@ -148,7 +149,7 @@ class LoginViewModel with ChangeNotifier {
       final credentialsModel = CredentialsModel(
           loginType: LoginType.apple, id: credentials.userIdentifier);
       await SPreferences().saveCredentials(credentialsModel);
-      CustomNavigation().pushReplacement(const HomeScreen());
+      CustomNavigation().pushReplacement(const DashBoardScreen());
     } on Exception catch (e) {
       log("appleLogin error = $e");
       showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);
@@ -159,20 +160,20 @@ class LoginViewModel with ChangeNotifier {
 
   Future<void> autoLogin(
       {required Function({
-      required SnackBarType snackType,
-      required String message,
+        required SnackBarType snackType,
+        required String message,
       }) showSnackBarMsg,
-        required CredentialsModel credentials,
-        required WidgetRef ref}) async {
+      required CredentialsModel credentials,
+      required WidgetRef ref}) async {
     try {
       setLoading(true);
       final userData =
-      await _authRepository.autoLogin(credentials: credentials);
+          await _authRepository.autoLogin(credentials: credentials);
 
       ref.read(userModelProvider.notifier).setUser(userData);
 
-      // After successful login, navigate to HomeScreen
-      CustomNavigation().pushReplacement(const HomeScreen());
+      // After successful login, navigate to DashBoardScreen
+      CustomNavigation().pushReplacement(const DashBoardScreen());
     } catch (e) {
       log("autoLogin error = $e");
       showSnackBarMsg(message: e.toString(), snackType: SnackBarType.error);

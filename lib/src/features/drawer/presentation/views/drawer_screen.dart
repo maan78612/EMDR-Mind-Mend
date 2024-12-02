@@ -61,7 +61,7 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                         await CustomNavigation().push(ProfileScreen());
                       }),
                   drawerOption(
-                      img: AppImages.settings,
+                      img: AppImages.setting,
                       title: "Settings",
                       onTap: () {
                         CustomNavigation().push(const SettingScreen());

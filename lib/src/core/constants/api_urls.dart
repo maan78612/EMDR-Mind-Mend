@@ -6,7 +6,6 @@ class ApiUrls {
   static const logout = "${baseUrl}logout/";
   static const editProfile = "${baseUrl}profile/update/";
   static const contactUs = "${baseUrl}contact-us/";
-  static const getScore = "${baseUrl}score-records/";
   static const saveScore = "${baseUrl}user_therapy_info/";
   static const getSubscription = "${baseUrl}subscriptions/";
   static const setSubscription = "${baseUrl}subscriptions/create/";

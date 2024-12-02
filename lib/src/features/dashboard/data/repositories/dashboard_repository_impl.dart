@@ -1,19 +1,11 @@
 import 'package:emdr_mindmend/src/core/constants/api_urls.dart';
-import 'package:emdr_mindmend/src/core/services/local/preferences.dart';
 import 'package:emdr_mindmend/src/core/services/network/api_data_source.dart';
+import 'package:emdr_mindmend/src/features/dashboard/domain/repositories/dashboard_repository.dart';
 import 'package:emdr_mindmend/src/features/home/domain/models/subscription.dart';
-import 'package:emdr_mindmend/src/features/home/domain/repositories/home_repository.dart';
 
-class HomeRepositoryImpl implements HomeRepository {
+class DashBoardRepositoryImpl implements DashBoardRepository {
 
-  @override
-  Future<void> sendScore({required Map<String, dynamic> body}) async {
-    try {
-      await NetworkApi.instance.post(url: ApiUrls.saveScore, body: body);
-    } catch (e) {
-      rethrow;
-    }
-  }
+
 
   @override
   Future<List<GetSubscriptionModel>> getSubscription() async {
@@ -38,16 +30,5 @@ class HomeRepositoryImpl implements HomeRepository {
     }
   }
 
-  @override
-  Future<void> setTutorialShowedOnce() async {
-    final prefs = await SPreferences().prefs;
-    await prefs.setBool('tutorial', true);
-  }
 
-  @override
-  Future<bool> isTutorialAlreadyShown() async {
-    final prefs = await SPreferences().prefs;
-    final result = prefs.getBool('tutorial');
-    return result ?? false;
-  }
 }

@@ -26,9 +26,9 @@ class UserModel {
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         refreshToken: json["refresh_token"],
         accessToken: json["access_token"],
-        email: json["user_email"],
+        email: json["email"],
         name: json["name"],
-        userId: json["id"],
+        userId: json["user_id"],
         image: json["image"],
         subscription: json["subscription"] != null
             ? Subscription.fromJson(json["subscription"])
@@ -39,9 +39,9 @@ class UserModel {
   Map<String, dynamic> toJson() => {
         "refresh_token": refreshToken,
         "access_token": accessToken,
-        "user_email": email,
+        "email": email,
         "name": name,
-        "id": userId,
+        "user_id": userId,
         "image": image,
         "subscription": subscription?.toJson(),
         "isTrialValid": isTrialValid,
