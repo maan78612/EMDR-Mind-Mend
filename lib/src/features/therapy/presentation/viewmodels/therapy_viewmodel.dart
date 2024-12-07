@@ -23,10 +23,13 @@ class TherapyViewModel with ChangeNotifier {
   // Therapy progress state
   int introIndex = 0;
 
+  /// Get the total number of screens based on the `isShort` flag.
+  int getTotalScreens(bool isShort) => isShort ? 4 : 10;
 
-
-  bool incrementIndex(bool isEye) {
-    if (introIndex < (isEye ? 3 : 9)) {
+  /// Increment the index, returning `true` if the last screen is reached.
+  bool incrementIndex(bool isShort) {
+    final totalScreens = getTotalScreens(isShort);
+    if (introIndex < totalScreens - 1) {
       introIndex++;
       notifyListeners();
       return false;
@@ -34,6 +37,7 @@ class TherapyViewModel with ChangeNotifier {
     return true;
   }
 
+  /// Decrement the index, popping the navigation stack if at the start.
   void decrementIndex() {
     if (introIndex > 0) {
       introIndex--;
@@ -100,8 +104,8 @@ class TherapyViewModel with ChangeNotifier {
 
   Future<void> setScore({
     required Function({
-      required SnackBarType snackType,
-      required String message,
+    required SnackBarType snackType,
+    required String message,
     }) showSnackBarMsg,
   }) async {
     try {
@@ -114,16 +118,28 @@ class TherapyViewModel with ChangeNotifier {
         "selected_emotions": addedEmotions.toList(),
       };
       await _homeRepository.sendScore(body: body);
-      CustomNavigation().pop();
+      _resetFields();
       showSnackBarMsg(
-          message: "Therapy info saved successfully",
-          snackType: SnackBarType.success);
+        message: "Therapy info saved successfully",
+        snackType: SnackBarType.success,
+      );
     } catch (e) {
       showSnackBarMsg(
-          message: "Error saving therapy info: ${e.toString()}",
-          snackType: SnackBarType.error);
+        message: "Error saving therapy info: ${e.toString()}",
+        snackType: SnackBarType.error,
+      );
     } finally {
       setLoading(false);
     }
+  }
+
+  void _resetFields() {
+    addedEmotions.clear();
+    imageValue = 5;
+    generalEmotion = 5;
+    revaluationOne = 1;
+    revaluationTwo = 1;
+    introIndex = 0;
+    notifyListeners();
   }
 }

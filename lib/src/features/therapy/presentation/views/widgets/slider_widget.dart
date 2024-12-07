@@ -1,5 +1,6 @@
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/viewmodels/therapy_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,6 +20,7 @@ class SliderWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final therapyViewModel = ref.watch(therapyViewModelProvider);
+    final colorMode = ref.watch(colorModeProvider);
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 400),
       child: Column(
@@ -27,7 +29,9 @@ class SliderWidget extends ConsumerWidget {
             children: [
               Text(
                 "1",
-                style: PoppinsStyles.semiBold.copyWith(fontSize: 13.sp),
+                style: PoppinsStyles.semiBold(
+                    color:
+                    AppColorHelper.getPrimaryTextColor(colorMode)).copyWith(fontSize: 13.sp),
               ),
               Expanded(
                 child: Slider(
@@ -46,7 +50,9 @@ class SliderWidget extends ConsumerWidget {
               ),
               Text(
                 "10",
-                style: PoppinsStyles.semiBold.copyWith(fontSize: 13.sp),
+                style: PoppinsStyles.bold(
+                        color: AppColorHelper.getPrimaryTextColor(colorMode))
+                    .copyWith(fontSize: 13.sp),
               ),
             ],
           ),
@@ -56,13 +62,17 @@ class SliderWidget extends ConsumerWidget {
                 children: [
                   TextSpan(
                     text: "${sliderValue.toInt()}",
-                    style: PoppinsStyles.bold
-                        .copyWith(fontSize: 16.sp, color: AppColors.greyColor),
+                    style: PoppinsStyles.bold(
+                            color:
+                                AppColorHelper.getTertiaryTextColor(colorMode))
+                        .copyWith(fontSize: 16.sp),
                   ),
                   TextSpan(
                     text: "/10",
-                    style: PoppinsStyles.regular
-                        .copyWith(fontSize: 16.sp, color: AppColors.greyColor),
+                    style: PoppinsStyles.regular(
+                            color:
+                                AppColorHelper.getTertiaryTextColor(colorMode))
+                        .copyWith(fontSize: 16.sp),
                   ),
                 ],
               )),

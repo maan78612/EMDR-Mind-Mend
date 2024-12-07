@@ -1,20 +1,20 @@
 part of 'package:emdr_mindmend/src/features/dashboard/presentation/views/dashboard_screen/dashboard_screen.dart';
 
-class _CustomBottomNavigationBar extends StatelessWidget {
+class _CustomBottomNavigationBar extends ConsumerWidget {
   final int selectedIndex;
   final ValueChanged<int> onItemSelected;
 
   const _CustomBottomNavigationBar({
-    Key? key,
     required this.selectedIndex,
     required this.onItemSelected,
-  }) : super(key: key);
+  });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
+    final colorMode = ref.watch(colorModeProvider);
     return CurvedNavigationBar(
-      backgroundColor: AppColors.scaffoldColor,
-      color: AppColors.primaryDarkColor,
+      backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
+      color: AppColors.darkCardColor,
       animationDuration: const Duration(milliseconds: 300),
       items: _buildNavigationBarItems(),
       onTap:
@@ -60,7 +60,8 @@ class _CustomBottomNavigationBar extends StatelessWidget {
         height: 30,
         color: isDashboardIcon
             ? null
-            : (isSelected ? Colors.white : const Color(0xff68937E)),
+            : (isSelected ? Colors.white :
+        const Color(0xff68937E)),
         fit: BoxFit.contain,
       ),
     );

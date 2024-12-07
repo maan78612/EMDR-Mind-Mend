@@ -1,6 +1,7 @@
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/enums/setting_slider.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,16 +14,21 @@ class SpeedWidget extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settingViewModel = ref.watch(settingViewModelProvider);
+    final colorMode = ref.watch(colorModeProvider);
     return ConstrainedBox(
       constraints: const BoxConstraints(maxWidth: 400),
       child: Row(
         children: [
           Text("Speed",
-              style: PoppinsStyles.semiBold.copyWith(fontSize: 22.sp)),
+              style: PoppinsStyles.semiBold(
+                  color:
+                  AppColorHelper.getPrimaryTextColor(colorMode)).copyWith(fontSize: 22.sp)),
           SizedBox(width: 10.w),
           Text(
             "1",
-            style: PoppinsStyles.semiBold.copyWith(fontSize: 13.sp),
+            style: PoppinsStyles.semiBold(
+                color:
+                AppColorHelper.getPrimaryTextColor(colorMode)).copyWith(fontSize: 13.sp),
           ),
           Expanded(
             child: Slider(
@@ -53,7 +59,9 @@ class SpeedWidget extends ConsumerWidget {
           ),
           Text(
             "5",
-            style: PoppinsStyles.semiBold.copyWith(fontSize: 13.sp),
+            style: PoppinsStyles.semiBold(
+                color:
+                AppColorHelper.getPrimaryTextColor(colorMode)).copyWith(fontSize: 13.sp),
           ),
         ],
       ),

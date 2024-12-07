@@ -2,10 +2,12 @@ import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class DrawerAppBar extends StatelessWidget implements PreferredSizeWidget {
+class DrawerAppBar extends ConsumerWidget implements PreferredSizeWidget {
   @override
   final Size preferredSize;
   final String title;
@@ -17,28 +19,31 @@ class DrawerAppBar extends StatelessWidget implements PreferredSizeWidget {
       : preferredSize = const Size.fromHeight(kToolbarHeight + 10.0);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colorMode = ref.watch(colorModeProvider);
     return AppBar(
       centerTitle: true,
       surfaceTintColor: Colors.transparent,
-      backgroundColor: bgColor ?? AppColors.whiteBg,
+      backgroundColor: bgColor ?? AppColorHelper.getScaffoldColor(colorMode),
       leading: CommonInkWell(
         onTap: onBack ??
             () {
               CustomNavigation().pop();
             },
-        child: const Icon(
+        child: Icon(
           Icons.arrow_back_ios,
-          color: AppColors.blackColor,
+          color: AppColorHelper.getIconColor(colorMode),
         ),
       ),
       title: Text(
         title,
-        style: PoppinsStyles.medium.copyWith(fontSize: 18.sp),
+        style: PoppinsStyles.medium(
+            color:
+            AppColorHelper.getPrimaryTextColor(colorMode)).copyWith(fontSize: 18.sp),
       ),
-      bottom: const PreferredSize(
-        preferredSize: Size.fromHeight(2),
-        child: Divider(color: AppColors.borderColor),
+      bottom:  PreferredSize(
+        preferredSize: const Size.fromHeight(2),
+        child: Divider(color: AppColorHelper.dividerColor(colorMode)),
       ),
     );
   }

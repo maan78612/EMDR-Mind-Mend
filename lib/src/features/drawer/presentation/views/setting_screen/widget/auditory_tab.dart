@@ -2,7 +2,9 @@ import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
+import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
 import 'package:emdr_mindmend/src/core/enums/setting_slider.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/setting_screen/widget/speed_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/setting_viewmodel.dart'; // Make sure to update the import path
@@ -15,11 +17,12 @@ class AuditoryTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settingViewModel = ref.watch(settingViewModelProvider);
+    final colorMode = ref.watch(colorModeProvider);
     return Column(
       children: [
-        toneWidget(settingViewModel),
+        toneWidget(settingViewModel, colorMode),
         25.verticalSpace,
-        const Divider(color: AppColors.borderColor),
+        Divider(color: AppColorHelper.dividerColor(colorMode)),
         25.verticalSpace,
         const SpeedWidget(slider: SettingSlider.auditory),
         if (settingViewModel.isPlaying)
@@ -44,12 +47,15 @@ class AuditoryTab extends ConsumerWidget {
     );
   }
 
-  Widget toneWidget(SettingViewModel settingViewModel) {
+  Widget toneWidget(SettingViewModel settingViewModel, ColorMode colorMode) {
     return Padding(
       padding: EdgeInsets.only(top: 30.sp),
       child: Row(
         children: [
-          Text("Tone", style: PoppinsStyles.semiBold.copyWith(fontSize: 22.sp)),
+          Text("Tone",
+              style: PoppinsStyles.semiBold(
+                      color: AppColorHelper.getPrimaryTextColor(colorMode))
+                  .copyWith(fontSize: 22.sp)),
           20.horizontalSpace,
           Row(
             children: List.generate(settingViewModel.toneList.length, (index) {
@@ -75,9 +81,11 @@ class AuditoryTab extends ConsumerWidget {
                     child: Text(
                       "${index + 1}",
                       style: settingViewModel.selectedToneIndex == index
-                          ? PoppinsStyles.semiBold.copyWith(
-                              fontSize: 15.sp, color: AppColors.whiteColor)
-                          : PoppinsStyles.medium.copyWith(fontSize: 15.sp),
+                          ? PoppinsStyles.semiBold(color: AppColors.whiteColor)
+                              .copyWith(fontSize: 15.sp)
+                          : PoppinsStyles.medium(
+                                  color: AppColors.lightSecondaryTextColor)
+                              .copyWith(fontSize: 15.sp),
                     ),
                   ),
                 ),

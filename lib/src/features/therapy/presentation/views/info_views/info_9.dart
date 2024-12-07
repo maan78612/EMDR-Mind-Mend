@@ -1,4 +1,5 @@
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/viewmodels/therapy_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/views/widgets/info_description.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/views/widgets/info_heading.dart';
@@ -15,6 +16,7 @@ class Info9 extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final therapyViewModel = ref.watch(therapyViewModelProvider);
+    final colorMode = ref.watch(colorModeProvider);
     return ListView(
       children: [
         const infoHeading(heading: 'Revaluation'),
@@ -53,13 +55,17 @@ class Info9 extends ConsumerWidget {
           children: [
             Text(
               "(no disturbance/neutral)",
-              style: PoppinsStyles.light
-                  .copyWith(fontSize: 10.sp, color: const Color(0xff424242)),
+              style: PoppinsStyles.light(
+                  color:
+                  AppColorHelper.getTertiaryTextColor(colorMode))
+                  .copyWith(fontSize: 10.sp),
             ),
             Text(
               "(highest disturbance)",
-              style: PoppinsStyles.light
-                  .copyWith(fontSize: 10.sp, color: const Color(0xff424242)),
+              style: PoppinsStyles.light(
+                  color:
+                  AppColorHelper.getTertiaryTextColor(colorMode))
+                  .copyWith(fontSize: 10.sp),
             )
           ],
         )

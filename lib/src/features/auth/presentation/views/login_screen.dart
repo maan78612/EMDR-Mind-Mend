@@ -10,7 +10,9 @@ import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/constants/text_field_validator.dart';
+import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/viewmodels/login_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/views/forget_password.dart';
@@ -56,11 +58,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final loginViewModel = ref.watch(loginViewModelProvider);
-
+    final colorMode = ref.watch(colorModeProvider);
     return CustomLoader(
       isLoading: loginViewModel.isLoading,
       child: Scaffold(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
         resizeToAvoidBottomInset: true,
         body: SafeArea(
           child: Padding(
@@ -72,12 +74,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   closeIcon(),
                   Text(
                     "Welcome Back!",
-                    style: PoppinsStyles.bold.copyWith(fontSize: 22.sp),
+                    style: PoppinsStyles.bold(
+                            color:
+                                AppColorHelper.getPrimaryTextColor(colorMode))
+                        .copyWith(fontSize: 22.sp),
                   ),
                   10.verticalSpace,
                   Text(
                     "Please enter your account here",
-                    style: PoppinsStyles.regular
+                    style: PoppinsStyles.regular(
+                            color:
+                                AppColorHelper.getPrimaryTextColor(colorMode))
                         .copyWith(fontSize: 14.sp, color: AppColors.greyColor),
                   ),
                   35.verticalSpace,
@@ -92,6 +99,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           value: value,
                           validator: TextFieldValidator.validateEmail);
                     },
+                    colorMode: colorMode,
                   ),
                   CustomInputField(
                     prefixWidget: Image.asset(AppImages.password),
@@ -105,17 +113,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           validator: TextFieldValidator.validatePassword);
                     },
                     obscure: true,
+                    colorMode: colorMode,
                   ),
                   21.verticalSpace,
                   CommonInkWell(
                     onTap: () {
                       CustomNavigation().push(ForgetPasswordScreen());
                     },
-                    child: Text(
-                      "Forgot Password?",
-                      style: PoppinsStyles.medium.copyWith(
-                          fontSize: 15.sp, color: AppColors.primaryColor),
-                    ),
+                    child: Text("Forgot Password?",
+                        style:
+                            PoppinsStyles.medium(color: AppColors.primaryColor)
+                                .copyWith(
+                          fontSize: 15.sp,
+                        )),
                   ),
                   21.verticalSpace,
                   CustomButton(
@@ -133,7 +143,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     },
                   ),
                   40.verticalSpace,
-                  separator(),
+                  separator(colorMode),
                   30.verticalSpace,
                   socialLoginButtons(loginViewModel, context),
                   Padding(
@@ -144,8 +154,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         children: [
                           TextSpan(
                             text: "Don’t have an account? ",
-                            style:
-                                PoppinsStyles.regular.copyWith(fontSize: 16.sp),
+                            style: PoppinsStyles.regular(
+                                    color: AppColorHelper.getPrimaryTextColor(
+                                        colorMode))
+                                .copyWith(fontSize: 16.sp),
                           ),
                           WidgetSpan(
                             child: CommonInkWell(
@@ -155,9 +167,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 },
                                 child: Text(
                                   " Sign Up",
-                                  style: PoppinsStyles.bold.copyWith(
-                                      fontSize: 16.sp,
-                                      color: AppColors.primaryColor),
+                                  style: PoppinsStyles.bold(
+                                          color: AppColorHelper
+                                              .getPrimaryTextColor(colorMode))
+                                      .copyWith(
+                                          fontSize: 16.sp,
+                                          color: AppColors.primaryColor),
                                 )),
                           ),
                         ],
@@ -237,27 +252,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     );
   }
 
-  Widget separator() {
+  Widget separator(ColorMode colorMode) {
     return Row(
       children: [
-        const Expanded(
+         Expanded(
           child: Divider(
             endIndent: 30,
             indent: 10,
-            color: AppColors.borderColor,
+            color: AppColorHelper.dividerColor(colorMode),
             height: 1,
           ),
         ),
         Text(
           'OR',
-          style: PoppinsStyles.medium
-              .copyWith(fontSize: 15.sp, color: const Color(0xff6B7280)),
+          style: PoppinsStyles.medium(color: const Color(0xff6B7280)).copyWith(
+            fontSize: 15.sp,
+          ),
         ),
-        const Expanded(
+         Expanded(
           child: Divider(
             endIndent: 10,
             indent: 30,
-            color: AppColors.borderColor,
+            color: AppColorHelper.dividerColor(colorMode),
             height: 1,
           ),
         ),
@@ -275,7 +291,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         },
         child: const Align(
             alignment: Alignment.topLeft,
-            child: Icon(Icons.close, color: AppColors.blackColor)),
+            child: Icon(Icons.close, color: AppColors.lightPrimaryTextColor)),
       ),
     );
   }

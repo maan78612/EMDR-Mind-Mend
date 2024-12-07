@@ -1,19 +1,22 @@
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/help_faq_screen/widgets/faq_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class FaqTile extends StatefulWidget {
+class FaqTile extends ConsumerStatefulWidget {
   final FaqItem faqItem;
 
   const FaqTile({super.key, required this.faqItem});
 
   @override
-  State<FaqTile> createState() => _FaqTileState();
+  ConsumerState<FaqTile> createState() => _FaqTileState();
 }
 
-class _FaqTileState extends State<FaqTile> with SingleTickerProviderStateMixin {
+class _FaqTileState extends ConsumerState<FaqTile>
+    with SingleTickerProviderStateMixin {
   bool isExpanded = false;
   late AnimationController _controller;
   late Animation<double> _expandAnimation;
@@ -50,11 +53,12 @@ class _FaqTileState extends State<FaqTile> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
+    final colorMode = ref.watch(colorModeProvider);
     return GestureDetector(
       onTap: _toggleExpand,
       child: Card(
         margin: EdgeInsets.symmetric(vertical: 16.h),
-        color: AppColors.whiteColor,
+        color: AppColorHelper.cardColor(colorMode),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.r),
         ),
@@ -69,7 +73,10 @@ class _FaqTileState extends State<FaqTile> with SingleTickerProviderStateMixin {
                   Expanded(
                     child: Text(
                       widget.faqItem.question,
-                      style: PoppinsStyles.medium.copyWith(fontSize: 16.sp),
+                      style: PoppinsStyles.medium(
+                              color:
+                                  AppColorHelper.getPrimaryTextColor(colorMode))
+                          .copyWith(fontSize: 16.sp),
                     ),
                   ),
                   RotationTransition(
@@ -87,8 +94,10 @@ class _FaqTileState extends State<FaqTile> with SingleTickerProviderStateMixin {
                   padding: EdgeInsets.all(10.sp),
                   child: Text(
                     widget.faqItem.answer,
-                    style: PoppinsStyles.regular
-                        .copyWith(fontSize: 14.sp, height: 1.2.sp,color: AppColors.greyColor),
+                    style: PoppinsStyles.regular(
+                            color:
+                                AppColorHelper.getSecondaryTextColor(colorMode))
+                        .copyWith(fontSize: 14.sp, height: 1.2.sp),
                   ),
                 ),
               ),

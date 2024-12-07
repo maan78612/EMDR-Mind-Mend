@@ -7,6 +7,8 @@ import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
+import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/drawer_screen.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/home_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/views/therapy_screen.dart';
@@ -31,16 +33,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       final homeViewModel = ref.read(homeViewModelProvider);
-      await homeViewModel.initMethod(context,ref.read(userModelProvider));
+      await homeViewModel.initMethod(context, ref.read(userModelProvider));
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final homeViewModel = ref.watch(homeViewModelProvider);
-
+    final colorMode = ref.watch(colorModeProvider);
     return Scaffold(
-      backgroundColor: AppColors.whiteBg,
+      backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
       body: CustomLoader(
         isLoading: homeViewModel.isLoading,
         child: SafeArea(
@@ -54,21 +56,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     logo(),
                     Padding(
                       padding: EdgeInsets.symmetric(vertical: 24.sp),
-                      child: const Divider(color: AppColors.borderColor),
+                      child:  Divider(
+                          color: AppColorHelper.dividerColor(colorMode)),
                     ),
                     Text(
                         "Helping with PTSD and other\ntrauma-related conditions",
-                        style: PoppinsStyles.bold.copyWith(fontSize: 18.sp)),
+                        style: PoppinsStyles.bold(
+                                color: AppColorHelper.getPrimaryTextColor(
+                                    colorMode))
+                            .copyWith(fontSize: 18.sp)),
                     10.verticalSpace,
                     Text("Based on emdr protocol",
-                        style: PoppinsStyles.light.copyWith(fontSize: 14.sp)),
+                        style: PoppinsStyles.light(
+                                color: AppColorHelper.getPrimaryTextColor(
+                                    colorMode))
+                            .copyWith(fontSize: 14.sp)),
                     infoWidget(
                       img: AppImages.startIcon,
+                      colorMode: colorMode,
                       title: 'Step by Step',
                       description: 'follow our guided process',
                     ),
                     infoWidget(
                       img: AppImages.audio,
+                      colorMode: colorMode,
                       title: 'Visual and auditory Stimulation\'s',
                       description:
                           'use the 2 most common stimulation\'s\n(visual and auditory) to aid your\ntreatment. You can skip to these if\ncomfortable to do so',
@@ -173,7 +184,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           description:
               "This application is not intended to substitute professional healthcare. We strongly advise that the initial use is conducted with the guidance of a trained psychologist. If you have any uncertainties, please consult a doctor or psychologist.",
           onTap: () =>
-              CustomNavigation().pushReplacement(TherapyScreen(isEye: isEye)),
+              CustomNavigation().pushReplacement(TherapyScreen(isShort: isEye)),
           btnTitle: 'OK',
         );
       },
@@ -183,7 +194,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   Widget infoWidget(
       {required String img,
       required String title,
-      required String description}) {
+      required String description,
+      required ColorMode colorMode}) {
     return Padding(
       padding: EdgeInsets.only(top: 30.sp),
       child: Row(
@@ -209,10 +221,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(title,
-                    style: PoppinsStyles.semiBold.copyWith(fontSize: 16.sp)),
+                    style: PoppinsStyles.semiBold(
+                            color:
+                                AppColorHelper.getPrimaryTextColor(colorMode))
+                        .copyWith(fontSize: 16.sp)),
                 8.verticalSpace,
                 Text(description,
-                    style: PoppinsStyles.light
+                    style: PoppinsStyles.light(
+                            color:
+                                AppColorHelper.getPrimaryTextColor(colorMode))
                         .copyWith(fontSize: 12.sp, height: 1.2.sp)),
               ],
             ),

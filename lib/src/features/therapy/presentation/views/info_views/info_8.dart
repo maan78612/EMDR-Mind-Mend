@@ -3,6 +3,8 @@ import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
+import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/setting_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/viewmodels/therapy_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/views/info_views/pendulum_animation_screen.dart';
@@ -21,6 +23,7 @@ class Info8 extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final therapyViewModel = ref.watch(therapyViewModelProvider);
     final settingViewModel = ref.watch(settingViewModelProvider);
+    final colorMode = ref.watch(colorModeProvider);
     return ListView(
       children: [
         const infoHeading(heading: 'Desensitisation'),
@@ -29,23 +32,24 @@ class Info8 extends ConsumerWidget {
               color: const Color(0xfff1f1f3),
               borderRadius: BorderRadius.all(Radius.circular(20.r))),
           child: Row(
-              children: List.generate(therapyViewModel.desensitisationList.length,
-                  (index) {
+              children: List.generate(
+                  therapyViewModel.desensitisationList.length, (index) {
             return settingOptionWidget(
                 title: therapyViewModel.desensitisationList[index],
                 therapyViewModel: therapyViewModel,
-                settingViewModel: settingViewModel);
+                settingViewModel: settingViewModel,
+                colorMode: colorMode);
           })),
         ),
         40.verticalSpace,
         therapyViewModel.selectedDesensitisation == "Auditory"
-            ? auditory(settingViewModel)
+            ? auditory(settingViewModel, colorMode)
             : visual(settingViewModel),
       ],
     );
   }
 
-  Widget auditory(SettingViewModel settingViewModel) {
+  Widget auditory(SettingViewModel settingViewModel, ColorMode colorMode) {
     return Column(
       children: [
         const InfoDescriptionWidget(descriptions: [
@@ -59,7 +63,8 @@ class Info8 extends ConsumerWidget {
         settingViewModel.isPlaying
             ? stopButton(
                 settingViewModel: settingViewModel,
-                stopFunc: () => settingViewModel.stopSound())
+                stopFunc: () => settingViewModel.stopSound(),
+                colorMode: colorMode)
             : playButton(
                 settingViewModel: settingViewModel,
                 playFunc: () => settingViewModel.playSound()),
@@ -82,7 +87,8 @@ class Info8 extends ConsumerWidget {
 
   Widget stopButton(
       {required SettingViewModel settingViewModel,
-      required Function stopFunc}) {
+      required Function stopFunc,
+      required ColorMode colorMode}) {
     return CommonInkWell(
       onTap: () => stopFunc(),
       child: Center(
@@ -99,7 +105,8 @@ class Info8 extends ConsumerWidget {
               const Icon(Icons.stop_circle, color: AppColors.redColor),
               Text(
                 "Stop",
-                style: PoppinsStyles.bold
+                style: PoppinsStyles.bold(
+                        color: AppColorHelper.getPrimaryTextColor(colorMode))
                     .copyWith(fontSize: 16, color: AppColors.redColor),
               ),
             ],
@@ -127,8 +134,8 @@ class Info8 extends ConsumerWidget {
             const Icon(Icons.play_arrow, color: AppColors.primaryColor),
             Text(
               "Play",
-              style: PoppinsStyles.bold
-                  .copyWith(fontSize: 16, color: AppColors.primaryColor),
+              style: PoppinsStyles.bold(color: AppColors.primaryColor)
+                  .copyWith(fontSize: 16),
             ),
           ],
         ),
@@ -139,7 +146,8 @@ class Info8 extends ConsumerWidget {
   Widget settingOptionWidget(
       {required String title,
       required TherapyViewModel therapyViewModel,
-      required SettingViewModel settingViewModel}) {
+      required SettingViewModel settingViewModel,
+      required ColorMode colorMode}) {
     return Expanded(
       child: CommonInkWell(
         onTap: () {
@@ -154,17 +162,17 @@ class Info8 extends ConsumerWidget {
           margin: EdgeInsets.all(4.sp),
           decoration: title == therapyViewModel.selectedDesensitisation
               ? BoxDecoration(
-                  color: AppColors.whiteColor,
+                  color: AppColorHelper.getScaffoldColor(colorMode),
                   borderRadius: BorderRadius.all(Radius.circular(30.r)))
               : const BoxDecoration(),
           child: Text(
             title,
             textAlign: TextAlign.center,
             style: title == therapyViewModel.selectedDesensitisation
-                ? PoppinsStyles.semiBold
-                    .copyWith(fontSize: 14.sp, color: AppColors.primaryColor)
-                : PoppinsStyles.regular
-                    .copyWith(fontSize: 14.sp, color: AppColors.greyColor),
+                ? PoppinsStyles.semiBold(color: AppColors.primaryColor)
+                    .copyWith(fontSize: 14.sp)
+                : PoppinsStyles.regular(color: AppColors.greyColor)
+                    .copyWith(fontSize: 14.sp),
           ),
         ),
       ),

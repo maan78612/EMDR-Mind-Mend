@@ -26,6 +26,13 @@ class AppImages {
   static const String info = "assets/images/info.png";
   static const String dashboardMainIconSelected = "assets/images/dashboard_main_icon_selected.png";
   static const String dashboardMainIconUnselected = "assets/images/dashboard_main_icon_unselected.png";
+  static const String avgTime = "assets/images/avg_time.png";
+  static const String beforeAfter = "assets/images/before_after.png";
+  static const String dayStreak = "assets/images/day_streak.png";
+  static const String graph = "assets/images/graph.png";
+  static const String streak = "assets/images/streak.png";
+  static const String time = "assets/images/time.png";
+  static const String totalTime = "assets/images/total_time.png";
 
 
   static const String profilePic = "assets/images/profile_pic.jpg";

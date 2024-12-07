@@ -2,18 +2,20 @@ import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
+import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/setting_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingTabButtons extends ConsumerWidget {
-
   const SettingTabButtons({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settingViewModel = ref.watch(settingViewModelProvider);
+    final colorMode = ref.watch(colorModeProvider);
 
     return Container(
       decoration: BoxDecoration(
@@ -25,7 +27,8 @@ class SettingTabButtons extends ConsumerWidget {
         return settingOptionWidget(
             index: index,
             title: settingViewModel.settingOptions[index],
-            settingViewModel: settingViewModel);
+            settingViewModel: settingViewModel,
+            colorMode: colorMode);
       })),
     );
   }
@@ -33,7 +36,8 @@ class SettingTabButtons extends ConsumerWidget {
   Widget settingOptionWidget(
       {required int index,
       required String title,
-      required SettingViewModel settingViewModel}) {
+      required SettingViewModel settingViewModel,
+      required ColorMode colorMode}) {
     return Expanded(
       child: CommonInkWell(
         onTap: () {
@@ -51,10 +55,13 @@ class SettingTabButtons extends ConsumerWidget {
             title,
             textAlign: TextAlign.center,
             style: settingViewModel.settingPageIndex == index
-                ? PoppinsStyles.semiBold
-                    .copyWith(fontSize: 14.sp, color: AppColors.primaryColor)
-                : PoppinsStyles.regular
-                    .copyWith(fontSize: 14.sp, color: AppColors.greyColor),
+                ? PoppinsStyles.semiBold(color: AppColors.primaryColor)
+                    .copyWith(
+                    fontSize: 14.sp,
+                  )
+                : PoppinsStyles.regular(
+                        color: AppColors.greyColor)
+                    .copyWith(fontSize: 14.sp),
           ),
         ),
       ),

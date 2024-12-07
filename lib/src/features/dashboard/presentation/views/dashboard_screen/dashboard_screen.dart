@@ -1,6 +1,11 @@
 // dashboard_screen.dart
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/views/drawer_screen.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/views/profile_screen/profile_screen.dart';
+import 'package:emdr_mindmend/src/features/therapy/presentation/views/therapy_screen.dart';
+import 'package:emdr_mindmend/src/features/user_stats/presentation/views/user_stats_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:emdr_mindmend/src/core/commons/loader.dart';
@@ -23,12 +28,12 @@ class _DashBoardScreen extends ConsumerState<DashBoardScreen> {
   @override
   Widget build(BuildContext context) {
     final dashBoardViewModel = ref.watch(_dashBoardViewModelProvider);
-
+    final colorMode = ref.watch(colorModeProvider);
     return CustomLoader(
       isLoading: dashBoardViewModel.isLoading,
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
         body: _getPage(dashBoardViewModel),
         bottomNavigationBar: _CustomBottomNavigationBar(
           selectedIndex: dashBoardViewModel.selectedIndex,
@@ -42,16 +47,18 @@ class _DashBoardScreen extends ConsumerState<DashBoardScreen> {
 
   Widget _getPage(DashBoardViewModel dashBoardViewModel) {
     switch (dashBoardViewModel.selectedIndex) {
+      case 0:
+        return UserStatsScreen();
       case 1:
-        return Container();
+        return TherapyScreen(isShort: false);
       case 2:
-        return Container();
+        return TherapyScreen(isShort: true);
       case 3:
-        return Container();
+        return const DrawerScreen();
       case 4:
-        return Container();
+        return const ProfileScreen();
       default:
-        return Container();
+        return UserStatsScreen();
     }
   }
 }

@@ -1,13 +1,10 @@
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-
-
-
-
-
-class InfoDescriptionWidget<T> extends StatelessWidget {
+class InfoDescriptionWidget<T> extends ConsumerWidget {
   final List<T> descriptions;
   final bool isBullet;
 
@@ -18,7 +15,8 @@ class InfoDescriptionWidget<T> extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colorMode = ref.watch(colorModeProvider);
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -40,16 +38,21 @@ class InfoDescriptionWidget<T> extends StatelessWidget {
                 if (description is String) {
                   return TextSpan(
                     text: description,
-                    style: PoppinsStyles.light.copyWith(
+                    style: PoppinsStyles.light(
+                            color:
+                                AppColorHelper.getTertiaryTextColor(colorMode))
+                        .copyWith(
                       fontSize: 14.sp,
-                      color: const Color(0xff424242),
                       height: 1.2.sp,
                     ),
                   );
                 } else if (description is Map<String, dynamic>) {
                   return TextSpan(
                     text: description['text'],
-                    style: PoppinsStyles.semiBold.copyWith(
+                    style: PoppinsStyles.semiBold(
+                            color:
+                                AppColorHelper.getPrimaryTextColor(colorMode))
+                        .copyWith(
                       fontSize: 14.sp,
                       height: 1.2.sp,
                     ),

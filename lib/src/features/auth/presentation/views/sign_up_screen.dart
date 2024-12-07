@@ -9,6 +9,7 @@ import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/constants/text_field_validator.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/viewmodels/signup_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/views/login_screen.dart';
@@ -26,11 +27,11 @@ class SignUpScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final signupViewModel = ref.watch(signupViewModelProvider);
-
+    final colorMode = ref.watch(colorModeProvider);
     return CustomLoader(
       isLoading: signupViewModel.isLoading,
       child: Scaffold(
-        backgroundColor: AppColors.whiteColor,
+        backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
         resizeToAvoidBottomInset: true,
         body: SafeArea(
           child: Padding(
@@ -42,18 +43,23 @@ class SignUpScreen extends ConsumerWidget {
                   closeIcon(),
                   Text(
                     "Create Account!",
-                    style: PoppinsStyles.bold.copyWith(fontSize: 22.sp),
+                    style: PoppinsStyles.bold(
+                            color:
+                                AppColorHelper.getPrimaryTextColor(colorMode))
+                        .copyWith(fontSize: 22.sp),
                   ),
                   10.verticalSpace,
                   Text(
                     "Please enter your account here",
-                    style: PoppinsStyles.regular
+                    style: PoppinsStyles.regular(
+                            color:
+                                AppColorHelper.getPrimaryTextColor(colorMode))
                         .copyWith(fontSize: 14.sp, color: AppColors.greyColor),
                   ),
                   35.verticalSpace,
                   CustomInputField(
                     prefixWidget: Image.asset(AppImages.person,
-                        color: AppColors.blackColor,
+                        color: AppColorHelper.getIconColor(colorMode),
                         width: 16.sp,
                         height: 16.sp,
                         fit: BoxFit.contain),
@@ -66,8 +72,10 @@ class SignUpScreen extends ConsumerWidget {
                           value: value,
                           validator: TextFieldValidator.validatePersonName);
                     },
+                    colorMode: colorMode,
                   ),
                   CustomInputField(
+                    colorMode: colorMode,
                     prefixWidget: Image.asset(AppImages.email),
                     hint: "Email",
                     controller: signupViewModel.emailCon,
@@ -80,6 +88,7 @@ class SignUpScreen extends ConsumerWidget {
                     },
                   ),
                   CustomInputField(
+                    colorMode: colorMode,
                     prefixWidget: Image.asset(AppImages.password),
                     hint: "Password",
                     controller: signupViewModel.passwordCon,
@@ -93,6 +102,7 @@ class SignUpScreen extends ConsumerWidget {
                     obscure: true,
                   ),
                   CustomInputField(
+                    colorMode: colorMode,
                     prefixWidget: Image.asset(AppImages.password),
                     hint: "Confirm Password",
                     textInputAction: TextInputAction.done,
@@ -116,8 +126,7 @@ class SignUpScreen extends ConsumerWidget {
                           required SnackBarType snackType,
                           required String message,
                         }) =>
-                            SnackBarUtils.show(
-                                message, snackType),
+                            SnackBarUtils.show(message, snackType),
                       );
                     },
                   ),
@@ -129,20 +138,24 @@ class SignUpScreen extends ConsumerWidget {
                         children: [
                           TextSpan(
                             text: "Already have an account? ",
-                            style:
-                                PoppinsStyles.regular.copyWith(fontSize: 16.sp),
+                            style: PoppinsStyles.regular(
+                                    color: AppColorHelper.getPrimaryTextColor(
+                                        colorMode))
+                                .copyWith(fontSize: 16.sp),
                           ),
                           WidgetSpan(
                             child: CommonInkWell(
                                 onTap: () {
                                   CustomNavigation()
-                                      .pushReplacement(LoginScreen());
+                                      .pushReplacement(const LoginScreen());
                                 },
                                 child: Text(
                                   " Sign in",
-                                  style: PoppinsStyles.bold.copyWith(
-                                      fontSize: 16.sp,
-                                      color: AppColors.primaryColor),
+                                  style: PoppinsStyles.bold(
+                                          color: AppColors.primaryColor)
+                                      .copyWith(
+                                    fontSize: 16.sp,
+                                  ),
                                 )),
                           ),
                         ],
@@ -167,7 +180,7 @@ class SignUpScreen extends ConsumerWidget {
         },
         child: const Align(
             alignment: Alignment.topLeft,
-            child: Icon(Icons.close, color: AppColors.blackColor)),
+            child: Icon(Icons.close, color: AppColors.lightPrimaryTextColor)),
       ),
     );
   }

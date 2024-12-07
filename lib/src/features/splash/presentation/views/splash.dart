@@ -49,11 +49,15 @@ class _SplashScreenState extends ConsumerState<SplashScreen>
                   children: [
                     TextSpan(
                       text: "mind",
-                      style: PoppinsStyles.medium.copyWith(fontSize: 30.sp),
+                      style: PoppinsStyles.medium(
+                              color: AppColors.darkPrimaryTextColor)
+                          .copyWith(fontSize: 30.sp),
                     ),
                     TextSpan(
                       text: "mend",
-                      style: PoppinsStyles.extraBold.copyWith(fontSize: 30.sp),
+                      style: PoppinsStyles.extraBold(
+                              color: AppColors.darkPrimaryTextColor)
+                          .copyWith(fontSize: 30.sp),
                     ),
                   ],
                 ),

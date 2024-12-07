@@ -1,11 +1,15 @@
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/help_faq_screen/widgets/faq_item.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/help_faq_screen/widgets/faq_tile.dart';
-import 'package:emdr_mindmend/src/features/drawer/presentation/widgets/drawer_widgets_app_bar.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:emdr_mindmend/src/core/constants/colors.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/views/widgets/drawer_widgets_app_bar.dart';
 
-class HelpFaqPage extends StatelessWidget {
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+
+class HelpFaqPage extends ConsumerWidget {
+  HelpFaqPage({super.key});
+
   final List<FaqItem> faqItems = [
     FaqItem(
       question: "What is EMDR therapy and how does it work",
@@ -53,12 +57,11 @@ class HelpFaqPage extends StatelessWidget {
             "The frequency of use should be determined by your therapist. Typically, sessions are conducted once or twice a week, but your therapist will provide specific recommendations based on your individual needs."),
   ];
 
-  HelpFaqPage({super.key});
-
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final colorMode = ref.watch(colorModeProvider);
     return Scaffold(
-      backgroundColor: AppColors.whiteBg,
+      backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
       appBar: const DrawerAppBar(title: "Help & FAQs"),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),

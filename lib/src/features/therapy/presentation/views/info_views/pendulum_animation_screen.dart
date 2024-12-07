@@ -70,9 +70,9 @@ class _PendulumAnimationState extends ConsumerState<PendulumAnimation>
             CustomNavigation().pop();
           },
           child: Icon(Icons.arrow_back_ios,
-              color: settingViewModel.bgColor == AppColors.blackColor
+              color: settingViewModel.bgColor == AppColors.lightPrimaryTextColor
                   ? AppColors.whiteColor
-                  : AppColors.blackColor),
+                  : AppColors.lightPrimaryTextColor),
         ),
       ),
       body: Stack(
@@ -143,8 +143,8 @@ class _PendulumAnimationState extends ConsumerState<PendulumAnimation>
                   Expanded(
                       child: Text(
                     "Please turn the device to landscape mode",
-                    style: PoppinsStyles.bold
-                        .copyWith(color: AppColors.redColor, fontSize: 16.sp),
+                    style: PoppinsStyles.bold(color: AppColors.redColor,)
+                        .copyWith( fontSize: 16.sp),
                   ))
                 ],
               ),

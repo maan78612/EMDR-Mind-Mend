@@ -5,7 +5,9 @@ import 'package:emdr_mindmend/src/core/commons/loader.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
+import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/home/domain/models/subscription.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/subscription_viewmodel.dart';
@@ -24,7 +26,7 @@ class SubscriptionScreen extends ConsumerStatefulWidget {
 
 class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
   final subscriptionViewModelProvider =
-  ChangeNotifierProvider<SubscriptionViewModel>((ref) {
+      ChangeNotifierProvider<SubscriptionViewModel>((ref) {
     return SubscriptionViewModel();
   });
 
@@ -41,21 +43,25 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
   @override
   Widget build(BuildContext context) {
     final subscriptionViewModel = ref.watch(subscriptionViewModelProvider);
+    final colorMode = ref.watch(colorModeProvider);
     return Scaffold(
-      backgroundColor: AppColors.whiteBg,
+      backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         surfaceTintColor: Colors.transparent,
         centerTitle: true,
         title: Text(
           "Upgrade Premium",
-          style: PoppinsStyles.medium.copyWith(fontSize: 18.sp),
+          style: PoppinsStyles.medium(
+                  color: AppColorHelper.getPrimaryTextColor(colorMode))
+              .copyWith(fontSize: 18.sp),
         ),
         leading: CommonInkWell(
           onTap: () {
             CustomNavigation().pop();
           },
-          child: const Icon(Icons.close, color: AppColors.blackColor),
+          child: Icon(Icons.close,
+              color: AppColorHelper.getIconColor(colorMode)),
         ),
       ),
       body: CustomLoader(
@@ -67,17 +73,20 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               20.verticalSpace,
               Text(
                 "Choose Member Plan",
-                style: PoppinsStyles.bold.copyWith(fontSize: 20.sp),
+                style: PoppinsStyles.bold(
+                        color: AppColorHelper.getPrimaryTextColor(colorMode))
+                    .copyWith(fontSize: 20.sp),
               ),
               30.verticalSpace,
               Column(
                 children: List.generate(
                     subscriptionViewModel.subscriptionList.length, (index) {
                   final subscriptionData =
-                  subscriptionViewModel.subscriptionList[index];
+                      subscriptionViewModel.subscriptionList[index];
                   return subscriptionTile(
                       subscription: subscriptionData,
-                      subscriptionViewModel: subscriptionViewModel);
+                      subscriptionViewModel: subscriptionViewModel,
+                      colorMode: colorMode);
                 }),
               ),
               60.verticalSpace,
@@ -124,7 +133,8 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
 
   Widget subscriptionTile(
       {required GetSubscriptionModel subscription,
-        required SubscriptionViewModel subscriptionViewModel}) {
+      required SubscriptionViewModel subscriptionViewModel,
+      required ColorMode colorMode}) {
     return GestureDetector(
       onTap: () async {
         subscriptionViewModel.selectSubscription(subscription);
@@ -135,13 +145,13 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
         margin: EdgeInsets.symmetric(vertical: 10.sp),
         decoration: BoxDecoration(
             color: subscription.id ==
-                subscriptionViewModel.selectedSubscription?.id
+                    subscriptionViewModel.selectedSubscription?.id
                 ? AppColors.primaryColor.withOpacity(0.12)
-                : AppColors.whiteBg,
+                : AppColorHelper.getScaffoldColor(colorMode),
             borderRadius: BorderRadius.all(Radius.circular(10.r)),
             border: Border.all(
                 color: subscription.id ==
-                    subscriptionViewModel.selectedSubscription?.id
+                        subscriptionViewModel.selectedSubscription?.id
                     ? AppColors.primaryColor
                     : AppColors.borderColor)),
         child: Column(
@@ -152,23 +162,25 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
                 if (subscription.amount > 0) ...[
                   Text(
                     subscription.amount.toString(),
-                    style: PoppinsStyles.bold.copyWith(
-                        fontSize: 30.sp, color: AppColors.primaryColor),
+                    style: PoppinsStyles.bold(color: AppColors.primaryColor)
+                        .copyWith(fontSize: 30.sp),
                   ),
                   Text("  /",
-                      style: PoppinsStyles.semiBold.copyWith(
+                      style: PoppinsStyles.semiBold(
+                              color: subscription.amount <= 0
+                                  ? AppColors.primaryColor
+                                  : const Color(0xff999999))
+                          .copyWith(
                         fontSize: subscription.amount <= 0 ? 30 : 14.sp,
-                        color: subscription.amount <= 0
-                            ? AppColors.primaryColor
-                            : const Color(0xff999999),
                       )),
                 ],
                 Text(subscription.name,
-                    style: PoppinsStyles.semiBold.copyWith(
-                      fontSize: subscription.amount <= 0 ? 30 : 14.sp,
+                    style: PoppinsStyles.semiBold(
                       color: subscription.amount <= 0
                           ? AppColors.primaryColor
                           : const Color(0xff999999),
+                    ).copyWith(
+                      fontSize: subscription.amount <= 0 ? 30 : 14.sp,
                     ))
               ],
             ),
@@ -177,17 +189,19 @@ class _SubscriptionScreenState extends ConsumerState<SubscriptionScreen> {
               subscription.duration == "12 months"
                   ? "Yearly Plan"
                   : subscription.duration == "1 month"
-                  ? "Monthly Plan"
-                  : subscription.duration,
-              style: PoppinsStyles.semiBold.copyWith(fontSize: 14.sp),
+                      ? "Monthly Plan"
+                      : subscription.duration,
+              style: PoppinsStyles.semiBold(
+                      color: AppColorHelper.getPrimaryTextColor(colorMode))
+                  .copyWith(fontSize: 14.sp),
             ),
             10.verticalSpace,
             if (subscription.amount > 0)
               Text(
                 subscription.description,
-                style: PoppinsStyles.regular.copyWith(
+                style: PoppinsStyles.regular(color: const Color(0xff999999))
+                    .copyWith(
                   fontSize: 14.sp,
-                  color: const Color(0xff999999),
                 ),
               ),
           ],

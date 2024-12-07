@@ -18,6 +18,7 @@ class CustomButton extends StatelessWidget {
   final double loadingSize;
   final Color? borderColor;
 
+
   const CustomButton(
       {super.key,
       this.title,
@@ -68,7 +69,7 @@ class CustomButton extends StatelessWidget {
                     Text(title!,
                         textAlign: TextAlign.center,
                         style:
-                            PoppinsStyles.semiBold.copyWith(color: textColor)),
+                            PoppinsStyles.semiBold(color:  textColor)),
                 ],
               ),
       ),

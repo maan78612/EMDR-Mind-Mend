@@ -23,20 +23,21 @@ class CustomAlertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       titlePadding: EdgeInsets.symmetric(vertical: 6.sp),
-      contentPadding: EdgeInsets.symmetric(vertical: 4.sp,horizontal: 8.sp),
+      contentPadding: EdgeInsets.symmetric(vertical: 4.sp, horizontal: 8.sp),
       backgroundColor: const Color(0xff1E1E1E).withOpacity(0.75),
       alignment: Alignment.center,
       title: Text(
         title,
         textAlign: TextAlign.center,
-        style: PoppinsStyles.semiBold
-            .copyWith(fontSize: 15.sp, color: AppColors.whiteColor),
+        style: PoppinsStyles.semiBold(color: AppColors.whiteColor).copyWith(
+          fontSize: 15.sp,
+        ),
       ),
       content: Text(
         description,
         textAlign: TextAlign.center,
-        style: PoppinsStyles.light.copyWith(
-            fontSize: 12.sp, color: AppColors.whiteColor, height: 1.2.sp),
+        style: PoppinsStyles.light(color: AppColors.whiteColor)
+            .copyWith(fontSize: 12.sp, height: 1.2.sp),
       ),
       actions: [
         CommonInkWell(
@@ -46,8 +47,8 @@ class CustomAlertDialog extends StatelessWidget {
               padding: EdgeInsets.all(8.sp),
               child: Text(btnTitle,
                   textAlign: TextAlign.center,
-                  style: PoppinsStyles.semiBold
-                      .copyWith(fontSize: 15.sp, color: AppColors.whiteColor)),
+                  style: PoppinsStyles.semiBold(color: AppColors.whiteColor)
+                      .copyWith(fontSize: 15.sp)),
             ),
           ),
         ),

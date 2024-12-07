@@ -8,6 +8,8 @@ import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/constants/text_field_validator.dart';
+import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/viewmodels/forget_pass_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,9 +26,9 @@ class ForgetPasswordScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final forgetPassViewModel = ref.watch(forgetPassViewModelProvider);
-
+    final colorMode = ref.watch(colorModeProvider);
     return Scaffold(
-      backgroundColor: AppColors.whiteColor,
+      backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
       resizeToAvoidBottomInset: true,
       body: CustomLoader(
         isLoading: forgetPassViewModel.isLoading,
@@ -37,7 +39,7 @@ class ForgetPasswordScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  closeIcon(),
+                  closeIcon(colorMode),
                   Image.asset(
                     AppImages.logo,
                     width: 100.sp,
@@ -45,13 +47,19 @@ class ForgetPasswordScreen extends ConsumerWidget {
                   30.verticalSpace,
                   Text(
                     "Forget Password!",
-                    style: PoppinsStyles.bold.copyWith(fontSize: 22.sp),
+                    style: PoppinsStyles.bold(
+                            color: colorMode == ColorMode.light
+                                ? AppColors.lightPrimaryTextColor
+                                : AppColors.darkPrimaryTextColor)
+                        .copyWith(fontSize: 22.sp),
                   ),
                   10.verticalSpace,
                   Text(
                     "Please enter your email to get reset link",
-                    style: PoppinsStyles.regular
-                        .copyWith(fontSize: 14.sp, color: AppColors.greyColor),
+                    style: PoppinsStyles.regular(
+                            color:
+                                AppColorHelper.getTertiaryTextColor(colorMode))
+                        .copyWith(fontSize: 14.sp),
                   ),
                   35.verticalSpace,
                   CustomInputField(
@@ -65,6 +73,7 @@ class ForgetPasswordScreen extends ConsumerWidget {
                           value: value,
                           validator: TextFieldValidator.validateEmail);
                     },
+                    colorMode: colorMode,
                   ),
                   CustomButton(
                     title: 'Submit',
@@ -84,16 +93,17 @@ class ForgetPasswordScreen extends ConsumerWidget {
     );
   }
 
-  Widget closeIcon() {
+  Widget closeIcon(ColorMode colorMode) {
     return Padding(
       padding: EdgeInsets.only(top: 30.h, bottom: 50.h),
       child: CommonInkWell(
         onTap: () {
           CustomNavigation().pop();
         },
-        child: const Align(
+        child: Align(
             alignment: Alignment.topLeft,
-            child: Icon(Icons.close, color: AppColors.blackColor)),
+            child: Icon(Icons.close,
+                color: AppColorHelper.getIconColor(colorMode))),
       ),
     );
   }

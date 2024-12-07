@@ -3,6 +3,8 @@ import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
+import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/features/auth/presentation/views/login_screen.dart';
 import 'package:emdr_mindmend/src/features/on_boarding/domain/models/on_boarding.dart';
 import 'package:emdr_mindmend/src/features/on_boarding/presentation/viewmodels/on_boarding_viewmodel.dart';
@@ -35,7 +37,7 @@ class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
   @override
   Widget build(BuildContext context) {
     final onBoardingViewModel = ref.watch(onBoardingViewModelProvider);
-
+    final colorMode = ref.watch(colorModeProvider);
     return Scaffold(
       backgroundColor: AppColors.whiteBg,
       body: SafeArea(
@@ -45,13 +47,17 @@ class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               CommonInkWell(
-                onTap: () => CustomNavigation().pushReplacement(LoginScreen()),
+                onTap: () =>
+                    CustomNavigation().pushReplacement(const LoginScreen()),
                 child: Padding(
                   padding:
                       EdgeInsets.only(left: 10.sp, top: 10.sp, bottom: 10.sp),
                   child: Text(
                     "skip",
-                    style: PoppinsStyles.regular.copyWith(fontSize: 14.sp),
+                    style: PoppinsStyles.regular(
+                            color:
+                                AppColorHelper.getPrimaryTextColor(colorMode))
+                        .copyWith(fontSize: 14.sp),
                   ),
                 ),
               ),
@@ -61,7 +67,9 @@ class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
                   children: List.generate(
                       onBoardingViewModel.onBoarding.length,
                       (index) => onBoardingWidget(
-                          onBoardingViewModel.onBoarding[index], index)),
+                          onBoardingViewModel.onBoarding[index],
+                          index,
+                          colorMode)),
                 ),
               ),
               Row(
@@ -113,7 +121,8 @@ class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
     );
   }
 
-  Widget onBoardingWidget(OnBoardingModel onBoarding, int index) {
+  Widget onBoardingWidget(
+      OnBoardingModel onBoarding, int index, ColorMode colorMode) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -127,16 +136,24 @@ class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
               children: [
                 TextSpan(
                   text: onBoarding.title,
-                  style: PoppinsStyles.bold.copyWith(fontSize: 24.sp),
+                  style: PoppinsStyles.bold(
+                          color: AppColorHelper.getPrimaryTextColor(colorMode))
+                      .copyWith(fontSize: 24.sp),
                 ),
                 if (index == 0) ...[
                   TextSpan(
                     text: " mind",
-                    style: PoppinsStyles.regular.copyWith(fontSize: 24.sp),
+                    style: PoppinsStyles.regular(
+                            color:
+                                AppColorHelper.getPrimaryTextColor(colorMode))
+                        .copyWith(fontSize: 24.sp),
                   ),
                   TextSpan(
                     text: "mind",
-                    style: PoppinsStyles.bold.copyWith(fontSize: 24.sp),
+                    style: PoppinsStyles.bold(
+                            color:
+                                AppColorHelper.getPrimaryTextColor(colorMode))
+                        .copyWith(fontSize: 24.sp),
                   ),
                 ]
               ],
@@ -147,10 +164,8 @@ class _OnBoardingScreen extends ConsumerState<OnBoardingScreen> {
           child: Text(
             onBoarding.description,
             textAlign: TextAlign.center,
-            style: PoppinsStyles.regular.copyWith(
-                fontSize: 14.sp,
-                color: const Color(0xff999999),
-                height: 1.2.sp),
+            style: PoppinsStyles.regular(color: const Color(0xff999999))
+                .copyWith(fontSize: 14.sp, height: 1.2.sp),
           ),
         ),
       ],

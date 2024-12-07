@@ -111,7 +111,7 @@ class SettingViewModel with ChangeNotifier {
       case BallColor.yellow:
         return const Color(0xffFFDE0A);
       case BallColor.black:
-        return AppColors.blackColor;
+        return AppColors.lightPrimaryTextColor;
     }
   }
 
@@ -121,7 +121,7 @@ class SettingViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  List<Color> bgColorList = [AppColors.whiteColor, AppColors.blackColor];
+  List<Color> bgColorList = [AppColors.whiteColor, AppColors.lightPrimaryTextColor];
 
   Color bgColor = AppColors.whiteColor;
 

@@ -8,11 +8,13 @@ import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/constants/text_field_validator.dart';
+import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/profile_viewmodel.dart';
-import 'package:emdr_mindmend/src/features/drawer/presentation/widgets/drawer_widgets_app_bar.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/views/widgets/drawer_widgets_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -27,7 +29,7 @@ class ProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   final profileViewModelProvider =
-  ChangeNotifierProvider<ProfileViewModel>((ref) {
+      ChangeNotifierProvider<ProfileViewModel>((ref) {
     return ProfileViewModel();
   });
 
@@ -45,10 +47,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget build(BuildContext context) {
     final profileViewModel = ref.watch(profileViewModelProvider);
     final userData = ref.watch(userModelProvider);
+    final colorMode = ref.watch(colorModeProvider);
     return CustomLoader(
       isLoading: profileViewModel.isLoading,
       child: Scaffold(
-        backgroundColor: AppColors.whiteBg,
+        backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
         appBar: const DrawerAppBar(title: 'Profile'),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: hMargin),
@@ -56,16 +59,17 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             children: [
               30.verticalSpace,
               profileViewModel.profileImage != null
-                  ? imageAddedFromFile(profileViewModel)
+                  ? imageAddedFromFile(profileViewModel, colorMode)
                   : userData.image != null
-                  ? imageAddedFromNetwork(
-                  profileViewModel, context, userData)
-                  : noImageAdded(context, profileViewModel),
+                      ? imageAddedFromNetwork(
+                          profileViewModel, context, userData, colorMode)
+                      : noImageAdded(context, profileViewModel),
               30.verticalSpace,
               CustomInputField(
+                colorMode: colorMode,
                 prefixWidget: Image.asset(
                   AppImages.person,
-                  color: AppColors.blackColor,
+                  color: AppColorHelper.getIconColor(colorMode),
                   width: 16.sp,
                   height: 16.sp,
                   fit: BoxFit.contain,
@@ -82,12 +86,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ),
               10.verticalSpace,
               CustomInputField(
-                prefixWidget: Image.asset(AppImages.email),
+                prefixWidget: Image.asset(
+                  AppImages.email,
+                  color: AppColorHelper.getIconColor(colorMode),
+                ),
                 hint: "Email",
+                colorMode: colorMode,
                 enable: false,
                 controller: profileViewModel.emailCon,
-                textStyle: PoppinsStyles.regular
-                    .copyWith(fontSize: 15.sp, color: AppColors.greyColor),
+                textStyle: PoppinsStyles.regular(color: AppColors.greyColor)
+                    .copyWith(fontSize: 15.sp),
               ),
               40.verticalSpace,
               CustomButton(
@@ -110,7 +118,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     );
   }
 
-  Widget imageAddedFromFile(ProfileViewModel profileViewModel) {
+  Widget imageAddedFromFile(
+      ProfileViewModel profileViewModel, ColorMode colorMode) {
     return Center(
       child: Stack(
         children: [
@@ -124,10 +133,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             child: CommonInkWell(
               onTap: () => profileViewModel.deleteImage(),
               child: CircleAvatar(
-                backgroundColor: AppColors.whiteColor,
+                backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
                 radius: 15,
                 child:
-                Icon(Icons.delete, size: 15.sp, color: AppColors.redColor),
+                    Icon(Icons.delete, size: 15.sp, color: AppColors.redColor),
               ),
             ),
           )
@@ -137,7 +146,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }
 
   Widget imageAddedFromNetwork(ProfileViewModel profileViewModel,
-      BuildContext context, UserModel userData) {
+      BuildContext context, UserModel userData, ColorMode colorMode) {
     return Center(
       child: Stack(
         children: [
@@ -153,7 +162,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             child: CommonInkWell(
               onTap: () => _showImageOptions(context, profileViewModel),
               child: CircleAvatar(
-                backgroundColor: AppColors.whiteColor,
+                backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
                 radius: 15,
                 child: Icon(Icons.edit,
                     size: 15.sp, color: AppColors.primaryColor),
@@ -229,8 +238,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ListTile(
                 leading: const Icon(Icons.camera, color: AppColors.whiteColor),
                 title: Text('Camera',
-                    style: PoppinsStyles.regular
-                        .copyWith(color: AppColors.whiteColor)),
+                    style: PoppinsStyles.regular(color: AppColors.whiteColor)),
                 onTap: () async {
                   await profileViewModel.imageOptionClick(ImageSource.camera);
                   CustomNavigation().pop();
@@ -240,8 +248,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               ListTile(
                 leading: const Icon(Icons.image, color: AppColors.whiteColor),
                 title: Text('Gallery',
-                    style: PoppinsStyles.regular
-                        .copyWith(color: AppColors.whiteColor)),
+                    style: PoppinsStyles.regular(color: AppColors.whiteColor)),
                 onTap: () async {
                   await profileViewModel.imageOptionClick(ImageSource.gallery);
                   CustomNavigation().pop();

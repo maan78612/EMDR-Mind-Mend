@@ -4,6 +4,7 @@ import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/enums/color_ball.dart';
 import 'package:emdr_mindmend/src/core/enums/setting_slider.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/setting_screen/widget/speed_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,6 +16,7 @@ class VisualTab extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final settingViewModel = ref.watch(settingViewModelProvider);
+    final colorMode = ref.watch(colorModeProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -69,16 +71,20 @@ class VisualTab extends ConsumerWidget {
         10.verticalSpace,
         Text(
           "Example",
-          style: PoppinsStyles.light.copyWith(fontSize: 14.sp),
+          style: PoppinsStyles.light(
+                  color: AppColorHelper.getPrimaryTextColor(colorMode))
+              .copyWith(fontSize: 14.sp),
         ),
         25.verticalSpace,
-        const Divider(color: AppColors.borderColor),
+         Divider(color:AppColorHelper.dividerColor(colorMode)),
         25.verticalSpace,
         Row(
           children: [
             Text(
               "Color",
-              style: PoppinsStyles.semiBold.copyWith(fontSize: 22.sp),
+              style: PoppinsStyles.semiBold(
+                      color: AppColorHelper.getPrimaryTextColor(colorMode))
+                  .copyWith(fontSize: 22.sp),
             ),
             Expanded(
               child: Row(
@@ -110,7 +116,9 @@ class VisualTab extends ConsumerWidget {
           children: [
             Text(
               "Background Color",
-              style: PoppinsStyles.semiBold.copyWith(fontSize: 22.sp),
+              style: PoppinsStyles.semiBold(
+                      color: AppColorHelper.getPrimaryTextColor(colorMode))
+                  .copyWith(fontSize: 22.sp),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

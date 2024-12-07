@@ -2,6 +2,8 @@ import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
+import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
+import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -36,6 +38,7 @@ class CustomInputField extends StatefulWidget {
   final TextStyle? hintStyle;
   final TextStyle? textStyle;
   final bool isFilled;
+  final ColorMode colorMode;
 
   const CustomInputField(
       {super.key,
@@ -51,7 +54,7 @@ class CustomInputField extends StatefulWidget {
       this.autoFocus = false,
       this.enable = true,
       this.textAlignCenter = false,
-      this.maxLines=1,
+      this.maxLines = 1,
       this.focusColor,
       this.onChange,
       this.inputFormatters,
@@ -66,6 +69,7 @@ class CustomInputField extends StatefulWidget {
       this.textStyle,
       this.isFilled = true,
       this.hintStyle,
+      required this.colorMode,
       this.onEditingComplete});
 
   @override
@@ -89,8 +93,9 @@ class _CustomInputField extends State<CustomInputField> {
       children: [
         if (widget.title != null) ...[
           Text(widget.title!,
-              style: PoppinsStyles.medium
-                  .copyWith(fontSize: 14.sp, color: AppColors.lightTextColor)),
+              style:
+                  PoppinsStyles.medium(color: AppColors.lightSecondaryTextColor)
+                      .copyWith(fontSize: 14.sp)),
           11.verticalSpace,
         ],
         TextFormField(
@@ -100,7 +105,6 @@ class _CustomInputField extends State<CustomInputField> {
           maxLength: widget.maxLength,
           cursorColor: AppColors.primaryColor,
           maxLines: widget.maxLines,
-
           minLines: 1,
           cursorHeight: 16.sp,
           onChanged: widget.onChange,
@@ -113,7 +117,9 @@ class _CustomInputField extends State<CustomInputField> {
           onTap: widget.onTap,
           textAlignVertical: TextAlignVertical.center,
           style: widget.textStyle ??
-              PoppinsStyles.regular.copyWith(fontSize: 15.sp),
+              PoppinsStyles.regular(
+                color: AppColorHelper.getPrimaryTextColor(widget.colorMode),
+              ).copyWith(fontSize: 15.sp),
           keyboardType: widget.keyboardType,
           inputFormatters: widget.inputFormatters,
           obscureText: obscure,
@@ -125,8 +131,8 @@ class _CustomInputField extends State<CustomInputField> {
           padding: EdgeInsets.all(6.sp),
           child: Text(
             widget.controller.error ?? "",
-            style: PoppinsStyles.regular
-                .copyWith(fontSize: 10.sp, color: AppColors.redColor),
+            style: PoppinsStyles.regular(color: AppColors.redColor)
+                .copyWith(fontSize: 10.sp),
           ),
         )
       ],
@@ -135,75 +141,71 @@ class _CustomInputField extends State<CustomInputField> {
 
   InputDecoration decorationComponent() {
     return InputDecoration(
-          focusColor: widget.focusColor ?? AppColors.primaryColor,
-          hintText: widget.hint,
-          counterText: "",
-
-          hintStyle: widget.hintStyle ??
-              PoppinsStyles.regular
-                  .copyWith(fontSize: 15.sp, color: AppColors.hintColor),
-          contentPadding: widget.contentPadding ??
-              EdgeInsets.symmetric(
-                  horizontal: 13.sp, vertical: ((50 - 16) / 2).sp),
-          filled: widget.isFilled,
-          fillColor: AppColors.whiteColor,
-          border: widget.isDecorationEnable ?? false
-              ? inputBorder
-              : InputBorder.none,
-          enabledBorder: widget.isDecorationEnable ?? false
-              ? inputBorder
-              : InputBorder.none,
-          errorBorder: widget.isDecorationEnable ?? false
-              ? inputBorder
-              : InputBorder.none,
-          focusedBorder: inputBorder.copyWith(
-              borderSide: BorderSide(
-            color: widget.controller.error == null
-                ? AppColors.focusedBorderColor
-                : AppColors.redColor,
-            width: widget.borderWidth,
-          )),
-          disabledBorder: widget.isDecorationEnable ?? false
-              ? inputBorder
-              : InputBorder.none,
-          prefixIconConstraints: BoxConstraints(maxHeight: 20.sp),
-          suffixIconConstraints: BoxConstraints(maxHeight: 20.sp),
-          prefixIcon: Padding(
-            padding: EdgeInsetsDirectional.symmetric(horizontal: 8.sp),
-            child: widget.prefixWidget,
-          ),
-          suffixIcon: (widget.suffixWidget != null && widget.obscure == false)
-              ? Padding(
-                  padding: EdgeInsetsDirectional.only(end: 10.sp),
-                  child: widget.suffixWidget,
+      focusColor: widget.focusColor ?? AppColors.primaryColor,
+      hintText: widget.hint,
+      counterText: "",
+      hintStyle: widget.hintStyle ??
+          PoppinsStyles.regular(color: AppColors.hintColor)
+              .copyWith(fontSize: 15.sp),
+      contentPadding: widget.contentPadding ??
+          EdgeInsets.symmetric(horizontal: 13.sp, vertical: ((50 - 16) / 2).sp),
+      filled: widget.isFilled,
+      fillColor: AppColorHelper.getScaffoldColor(widget.colorMode),
+      border:
+          widget.isDecorationEnable ?? false ? inputBorder : InputBorder.none,
+      enabledBorder:
+          widget.isDecorationEnable ?? false ? inputBorder : InputBorder.none,
+      errorBorder:
+          widget.isDecorationEnable ?? false ? inputBorder : InputBorder.none,
+      focusedBorder: inputBorder.copyWith(
+          borderSide: BorderSide(
+        color: widget.controller.error == null
+            ? AppColors.focusedBorderColor
+            : AppColors.redColor,
+        width: widget.borderWidth,
+      )),
+      disabledBorder:
+          widget.isDecorationEnable ?? false ? inputBorder : InputBorder.none,
+      prefixIconConstraints: BoxConstraints(maxHeight: 20.sp),
+      suffixIconConstraints: BoxConstraints(maxHeight: 20.sp),
+      prefixIcon: Padding(
+        padding: EdgeInsetsDirectional.symmetric(horizontal: 8.sp),
+        child: widget.prefixWidget,
+      ),
+      suffixIcon: (widget.suffixWidget != null && widget.obscure == false)
+          ? Padding(
+              padding: EdgeInsetsDirectional.only(end: 10.sp),
+              child: widget.suffixWidget,
+            )
+          : widget.obscure == true
+              ? CommonInkWell(
+                  onTap: () {
+                    setState(() {
+                      obscure = !obscure;
+                    });
+                  },
+                  child: Padding(
+                    padding: EdgeInsetsDirectional.only(end: 10.sp),
+                    child: Icon(
+                      size: 20,
+                      obscure
+                          ? Icons.visibility_outlined
+                          : Icons.visibility_off_outlined,
+                      color: AppColors.lightPrimaryTextColor.withOpacity(0.5),
+                    ),
+                  ),
                 )
-              : widget.obscure == true
-                  ? CommonInkWell(
-                      onTap: () {
-                        setState(() {
-                          obscure = !obscure;
-                        });
-                      },
-                      child: Padding(
-                        padding: EdgeInsetsDirectional.only(end: 10.sp),
-                        child: Icon(
-                          size: 20,
-                          obscure
-                              ? Icons.visibility_outlined
-                              : Icons.visibility_off_outlined,
-                          color: AppColors.blackColor.withOpacity(0.5),
-                        ),
-                      ),
-                    )
-                  : null,
-        );
+              : null,
+    );
   }
 
   InputBorder get inputBorder {
     return OutlineInputBorder(
       borderRadius: BorderRadius.circular(widget.borderRadius.r),
       borderSide: BorderSide(
-        color: AppColors.borderColor,
+        color: widget.colorMode == ColorMode.light
+            ? AppColors.borderColor
+            : AppColors.lightCardColor,
         width: widget.borderWidth,
       ),
     );
