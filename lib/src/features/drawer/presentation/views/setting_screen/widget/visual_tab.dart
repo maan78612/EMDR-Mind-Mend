@@ -23,6 +23,13 @@ class VisualTab extends ConsumerWidget {
         30.verticalSpace,
         const SpeedWidget(slider: SettingSlider.visual),
         30.verticalSpace,
+        Text(
+          "Example",
+          style: PoppinsStyles.light(
+              color: AppColorHelper.getPrimaryTextColor(colorMode))
+              .copyWith(fontSize: 14.sp),
+        ),
+        10.verticalSpace,
         Container(
           padding: EdgeInsets.symmetric(horizontal: 10.sp, vertical: 8.sp),
           decoration: BoxDecoration(
@@ -68,13 +75,8 @@ class VisualTab extends ConsumerWidget {
             ],
           ),
         ),
-        10.verticalSpace,
-        Text(
-          "Example",
-          style: PoppinsStyles.light(
-                  color: AppColorHelper.getPrimaryTextColor(colorMode))
-              .copyWith(fontSize: 14.sp),
-        ),
+
+
         25.verticalSpace,
          Divider(color:AppColorHelper.dividerColor(colorMode)),
         25.verticalSpace,

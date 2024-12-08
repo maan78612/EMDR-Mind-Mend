@@ -10,12 +10,12 @@ import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
 import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
-import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/drawer_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/contact_us.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/help_faq_screen/help_faq_screen.dart';
-import 'package:emdr_mindmend/src/features/drawer/presentation/views/profile_screen/profile_screen.dart';
-import 'package:emdr_mindmend/src/features/drawer/presentation/views/setting_screen/setting_screen.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/views/profile_screen/edit_profile_screen.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/views/widgets/drawer_widgets_app_bar.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/views/widgets/profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,6 +35,8 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
     return DrawerViewModel();
   });
 
+  final radius = 75.sp;
+
   @override
   void initState() {
     super.initState();
@@ -43,69 +45,37 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
   @override
   Widget build(BuildContext context) {
     final drawerViewModel = ref.watch(drawerViewModelProvider);
-    final userData = ref.watch(userModelProvider);
+
     final colorMode = ref.watch(colorModeProvider);
     return CustomLoader(
       isLoading: drawerViewModel.isLoading,
       child: Scaffold(
         backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
-        body: CustomLoader(
-          isLoading: drawerViewModel.isLoading,
-          child: SafeArea(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: hMargin),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  header(userData, colorMode),
-                  const Spacer(),
-                  _ThemeSwitcher(),
-                  drawerOption(
-                      img: AppImages.myProfile,
-                      title: "My Profile",
-                      onTap: () async {
-                        await CustomNavigation().push(ProfileScreen());
-                      },
-                      colorMode: colorMode),
-                  drawerOption(
-                      img: AppImages.setting,
-                      title: "Settings",
-                      onTap: () {
-                        CustomNavigation().push(const SettingScreen());
-                      },
-                      colorMode: colorMode),
-                  drawerOption(
-                      img: AppImages.contactUs,
-                      title: "Contact Us",
-                      onTap: () {
-                        CustomNavigation().push(ContactUsPage());
-                      },
-                      colorMode: colorMode),
-                  drawerOption(
-                      img: AppImages.faq,
-                      title: "Helps & FAQs",
-                      onTap: () {
-                        CustomNavigation().push(HelpFaqPage());
-                      }, colorMode: colorMode),
-                  const Spacer(flex: 3),
-                  drawerOption(
-                      img: AppImages.logout,
-                      title: "Log Out",
-                      onTap: () {
-                        _showLogoutDialog(context, drawerViewModel, colorMode);
-                      },
-                      colorMode: colorMode),
-                  80.verticalSpace,
-                  CustomButton(
-                    bgColor: AppColors.redColor,
-                    onPressed: () {
-                      _showDeleteDialog(context, drawerViewModel, colorMode);
-                    },
-                    title: 'Delete Permanently',
-                  ),
-                  20.verticalSpace,
-                ],
-              ),
+        appBar: AppBar(
+          surfaceTintColor: Colors.transparent,
+          backgroundColor: Colors.transparent,
+          title: Text(
+            "My Profile",
+            style: PoppinsStyles.semiBold(
+                    color: colorMode == ColorMode.light
+                        ? const Color(0xff106E27)
+                        : Colors.white)
+                .copyWith(fontSize: 18.sp),
+          ),
+        ),
+        body: SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(top: radius),
+            child: Stack(
+              clipBehavior: Clip.none,
+              alignment: Alignment.center,
+              children: [
+                _cardWidget(colorMode, context, drawerViewModel),
+                Positioned(
+                  top: -radius,
+                  child: ProfileImage(radius: radius),
+                ),
+              ],
             ),
           ),
         ),
@@ -113,81 +83,91 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
     );
   }
 
-  Padding header(UserModel userData, ColorMode colorMode) {
-    return Padding(
-      padding: EdgeInsets.only(top: 40.sp),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 40.sp, // Adjust width as needed
-            height: 40.sp,
-            child: Center(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10.0.r),
-                child: userData.image == null
-                    ? Image.asset(
-                        AppImages.profile,
-                        color:
-                            AppColors.primaryColor, // Adjust height as needed
-                        fit: BoxFit.contain, // Adjust the fit as needed
-                      )
-                    : Center(
-                        child: Image.network(
-                          userData.image ?? "",
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Icon(Icons.error,
-                                color: AppColors.redColor);
-                          },
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-              ),
-            ),
-          ),
-          14.horizontalSpace,
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  userData.name,
-                  style: PoppinsStyles.semiBold(
-                          color: AppColorHelper.getPrimaryTextColor(colorMode))
-                      .copyWith(fontSize: 16.sp),
-                ),
-                6.verticalSpace,
-                Text(
-                  userData.email,
-                  style: PoppinsStyles.light(
-                          color: AppColorHelper.getPrimaryTextColor(colorMode))
-                      .copyWith(fontSize: 12.sp),
-                ),
-              ],
-            ),
-          ),
-          closeIcon(colorMode),
-        ],
+  Widget _cardWidget(ColorMode colorMode, BuildContext context,
+      DrawerViewModel drawerViewModel) {
+    return Card(
+      color: colorMode == ColorMode.light
+          ? AppColors.whiteColor
+          : AppColors.darkCardColor,
+      margin: EdgeInsets.only(left: 16.sp, right: 16.sp, bottom: 50.sp),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.sp),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            radius.verticalSpace,
+            _tiles(
+                img: AppImages.myProfile,
+                title: "My Profile",
+                onTap: () async {
+                  await CustomNavigation().push(const EditProfileScreen());
+                },
+                colorMode: colorMode),
+            _tiles(
+                img: AppImages.contactUs,
+                title: "Contact Us",
+                onTap: () {
+                  CustomNavigation().push(ContactUsPage());
+                },
+                colorMode: colorMode),
+            _tiles(
+                img: AppImages.faq,
+                title: "Helps & FAQ's",
+                onTap: () {
+                  CustomNavigation().push(HelpFaqPage());
+                },
+                colorMode: colorMode),
+            _ThemeSwitcher(),
+            _tiles(
+                img: AppImages.logout,
+                title: 'Delete Account',
+                onTap: () {
+                  _showDeleteDialog(context, drawerViewModel, colorMode);
+                },
+                colorMode: colorMode),
+            const Spacer(),
+            _tiles(
+                img: AppImages.logout,
+                title: "Log Out",
+                onTap: () {
+                  _showLogoutDialog(context, drawerViewModel, colorMode);
+                },
+                colorMode: colorMode),
+            20.verticalSpace,
+          ],
+        ),
       ),
     );
   }
 
-  Widget drawerOption(
+  Widget _tiles(
       {required String img,
       required String title,
       required Function onTap,
       required ColorMode colorMode}) {
     return Padding(
-      padding: EdgeInsets.only(top: 40.sp),
+      padding: EdgeInsets.only(top: 20.sp),
       child: CommonInkWell(
         onTap: () => onTap(),
         child: Row(
           children: [
-            Image.asset(
-              img,
-              width: 18.sp,
-              height: 18.sp,
-              fit: BoxFit.contain,
+            Container(
+              padding: EdgeInsets.all(10.sp),
+              decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: colorMode == ColorMode.dark
+                      ? const Color(0xffD1FDBA)
+                      : AppColors.primaryColor),
+              child: Image.asset(
+                img,
+                width: 15.sp,
+                height: 15.sp,
+                fit: BoxFit.contain,
+                color: colorMode == ColorMode.dark
+                    ? const Color(0xff106E27)
+                    : Colors.white,
+              ),
             ),
             16.horizontalSpace,
             Text(
@@ -195,32 +175,23 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
               style: PoppinsStyles.medium(
                       color: AppColorHelper.getPrimaryTextColor(colorMode))
                   .copyWith(fontSize: 16.sp),
-            )
+            ),
+            const Spacer(),
+            Icon(Icons.chevron_right,
+                color: AppColorHelper.getIconColor(colorMode), size: 30.sp)
           ],
         ),
       ),
     );
   }
 
-  Widget logo() {
+  Widget _logo() {
     return Align(
       alignment: Alignment.center,
       child: Padding(
           padding: EdgeInsets.only(top: 60.sp, bottom: 10.sp),
           child:
               Image.asset(AppImages.logo, height: 100.h, fit: BoxFit.contain)),
-    );
-  }
-
-  Widget closeIcon(ColorMode colorMode) {
-    return CommonInkWell(
-      onTap: () {
-        CustomNavigation().pop();
-      },
-      child: Align(
-          alignment: Alignment.topLeft,
-          child: Icon(Icons.close,
-              color: AppColorHelper.getIconColor(colorMode))),
     );
   }
 

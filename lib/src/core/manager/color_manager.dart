@@ -42,9 +42,7 @@ class AppColorHelper {
   }
 
   static Color getTertiaryTextColor(ColorMode mode) {
-    return mode == ColorMode.light
-        ? AppColors.greyColor
-        : AppColors.whiteColor;
+    return mode == ColorMode.light ? AppColors.greyColor : AppColors.whiteColor;
   }
 
   static Color getIconColor(ColorMode mode) {
@@ -52,6 +50,7 @@ class AppColorHelper {
         ? AppColors.lightSecondaryTextColor
         : AppColors.lightCardColor;
   }
+
   static Color cardColor(ColorMode mode) {
     return mode == ColorMode.light
         ? AppColors.lightCardColor
@@ -64,5 +63,9 @@ class AppColorHelper {
         : AppColors.lightCardColor;
   }
 
-
+  static Color hintColor(ColorMode mode) {
+    return mode == ColorMode.light
+        ? AppColors.hintColor
+        : AppColors.darkSecondaryTextColor;
+  }
 }

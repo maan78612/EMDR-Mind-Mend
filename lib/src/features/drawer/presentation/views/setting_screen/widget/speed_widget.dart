@@ -25,7 +25,7 @@ class SpeedWidget extends ConsumerWidget {
                   AppColorHelper.getPrimaryTextColor(colorMode)).copyWith(fontSize: 22.sp)),
           SizedBox(width: 10.w),
           Text(
-            "1",
+            "Low",
             style: PoppinsStyles.semiBold(
                 color:
                 AppColorHelper.getPrimaryTextColor(colorMode)).copyWith(fontSize: 13.sp),
@@ -36,9 +36,9 @@ class SpeedWidget extends ConsumerWidget {
                   ? settingViewModel.auditorySpeed
                   : settingViewModel.visualSpeed,
               min: 1,
-              max: 5,
+              max: 3,
               inactiveColor: const Color(0xffE7E9F3),
-              divisions: 4,
+              divisions: 2,
               thumbColor: settingViewModel.getColor(settingViewModel.ballColor),
               activeColor:
                   settingViewModel.getColor(settingViewModel.ballColor),
@@ -58,7 +58,7 @@ class SpeedWidget extends ConsumerWidget {
             ),
           ),
           Text(
-            "5",
+            "High",
             style: PoppinsStyles.semiBold(
                 color:
                 AppColorHelper.getPrimaryTextColor(colorMode)).copyWith(fontSize: 13.sp),

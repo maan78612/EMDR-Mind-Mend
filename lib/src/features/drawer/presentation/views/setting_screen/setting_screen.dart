@@ -1,6 +1,8 @@
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
+import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
+import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
 import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/setting_screen/widget/auditory_tab.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/setting_screen/widget/setting_tab_buttons.dart';
@@ -28,21 +30,25 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
     final settingViewModel = ref.watch(settingViewModelProvider);
     final colorMode = ref.watch(colorModeProvider);
 
-    return Material(
-      child: Scaffold(
-        backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
-        appBar: DrawerAppBar(
-          title: 'Settings',
-          onBack: () {
-            CustomNavigation().pop();
-            settingViewModel.stopSound();
-          },
+    return Scaffold(
+      backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
+      appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
+        title: Text(
+          "Settings",
+          style: PoppinsStyles.semiBold(
+                  color: colorMode == ColorMode.light
+                      ? const Color(0xff106E27)
+                      : Colors.white)
+              .copyWith(fontSize: 18.sp),
         ),
-        body: Padding(
+      ),
+      body: SafeArea(
+        child: Padding(
           padding: EdgeInsets.symmetric(horizontal: hMargin),
           child: Column(
             children: [
-              30.verticalSpace,
               const SettingTabButtons(),
               (settingViewModel.settingPageIndex == 0)
                   ? const AuditoryTab()

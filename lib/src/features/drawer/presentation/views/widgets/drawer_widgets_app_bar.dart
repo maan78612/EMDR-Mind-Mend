@@ -1,6 +1,5 @@
 import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
-import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +12,14 @@ class DrawerAppBar extends ConsumerWidget implements PreferredSizeWidget {
   final String title;
   final Color? bgColor;
   final void Function()? onBack;
+  final bool isBackButton;
 
   const DrawerAppBar(
-      {super.key, required this.title, this.bgColor, this.onBack})
+      {super.key,
+      required this.title,
+      this.bgColor,
+      this.onBack,
+      this.isBackButton = true})
       : preferredSize = const Size.fromHeight(kToolbarHeight + 10.0);
 
   @override
@@ -25,23 +29,25 @@ class DrawerAppBar extends ConsumerWidget implements PreferredSizeWidget {
       centerTitle: true,
       surfaceTintColor: Colors.transparent,
       backgroundColor: bgColor ?? AppColorHelper.getScaffoldColor(colorMode),
-      leading: CommonInkWell(
-        onTap: onBack ??
-            () {
-              CustomNavigation().pop();
-            },
-        child: Icon(
-          Icons.arrow_back_ios,
-          color: AppColorHelper.getIconColor(colorMode),
-        ),
-      ),
+      leading: isBackButton
+          ? CommonInkWell(
+              onTap: onBack ??
+                  () {
+                    CustomNavigation().pop();
+                  },
+              child: Icon(
+                Icons.arrow_back_ios,
+                color: AppColorHelper.getIconColor(colorMode),
+              ),
+            )
+          : null,
       title: Text(
         title,
         style: PoppinsStyles.medium(
-            color:
-            AppColorHelper.getPrimaryTextColor(colorMode)).copyWith(fontSize: 18.sp),
+                color: AppColorHelper.getPrimaryTextColor(colorMode))
+            .copyWith(fontSize: 18.sp),
       ),
-      bottom:  PreferredSize(
+      bottom: PreferredSize(
         preferredSize: const Size.fromHeight(2),
         child: Divider(color: AppColorHelper.dividerColor(colorMode)),
       ),

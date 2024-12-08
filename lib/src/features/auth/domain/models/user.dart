@@ -11,6 +11,8 @@ class UserModel {
   String? image;
   Subscription? subscription;
   bool? isTrialValid;
+  String? country;
+  String? dob;
 
   UserModel({
     required this.refreshToken,
@@ -21,6 +23,8 @@ class UserModel {
     required this.image,
     required this.subscription,
     required this.isTrialValid,
+    required this.country,
+    required this.dob,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
@@ -34,6 +38,8 @@ class UserModel {
             ? Subscription.fromJson(json["subscription"])
             : null,
         isTrialValid: json["isTrialValid"],
+        country: json["country"],
+        dob: json["date_of_birth"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -45,18 +51,21 @@ class UserModel {
         "image": image,
         "subscription": subscription?.toJson(),
         "isTrialValid": isTrialValid,
+        "date_of_birth": dob,
+        "country": country,
       };
 
-  UserModel copyWith({
-    String? refreshToken,
-    String? accessToken,
-    String? email,
-    String? name,
-    int? userId,
-    String? image,
-    Subscription? subscription,
-    bool? isTrialValid,
-  }) {
+  UserModel copyWith(
+      {String? refreshToken,
+      String? accessToken,
+      String? email,
+      String? name,
+      int? userId,
+      String? image,
+      Subscription? subscription,
+      bool? isTrialValid,
+      String? country,
+      String? dob}) {
     return UserModel(
       refreshToken: refreshToken ?? this.refreshToken,
       accessToken: accessToken ?? this.accessToken,
@@ -66,6 +75,8 @@ class UserModel {
       image: image ?? this.image,
       subscription: subscription ?? this.subscription,
       isTrialValid: isTrialValid ?? this.isTrialValid,
+      country: country ?? this.country,
+      dob: dob ?? this.dob,
     );
   }
 
@@ -79,6 +90,8 @@ class UserModel {
       image: null,
       subscription: null,
       isTrialValid: false,
+      country: null,
+      dob: null,
     );
   }
 }
@@ -134,11 +147,6 @@ class UserModelProvider extends StateNotifier<UserModel> {
     debugPrint('Authentication token set: $authenticationToken');
   }
 
-  void updateProfileImage(String? imageUrl) {
-    state = state.copyWith(image: imageUrl);
-    debugPrint('updateProfileImage: ${state.image}');
-  }
-
   void updateSubscription(Subscription newSubscription) {
     state = state.copyWith(subscription: newSubscription);
   }
@@ -148,8 +156,13 @@ class UserModelProvider extends StateNotifier<UserModel> {
     authenticationToken = "";
   }
 
-  void updateName(String newName) {
-    state = state.copyWith(name: newName);
+  void updateProfile(
+      {required String newName,
+      required String? imageUrl,
+      required String? country,
+      required String? dob}) {
+    state = state.copyWith(
+        name: newName, image: imageUrl, country: country, dob: dob);
   }
 
   void updateIsTrialValid(bool isValid) {

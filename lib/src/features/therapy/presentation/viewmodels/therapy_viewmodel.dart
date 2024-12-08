@@ -42,8 +42,6 @@ class TherapyViewModel with ChangeNotifier {
     if (introIndex > 0) {
       introIndex--;
       notifyListeners();
-    } else {
-      CustomNavigation().pop();
     }
   }
 
@@ -104,8 +102,8 @@ class TherapyViewModel with ChangeNotifier {
 
   Future<void> setScore({
     required Function({
-    required SnackBarType snackType,
-    required String message,
+      required SnackBarType snackType,
+      required String message,
     }) showSnackBarMsg,
   }) async {
     try {

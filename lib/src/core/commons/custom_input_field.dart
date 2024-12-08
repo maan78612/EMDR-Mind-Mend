@@ -93,9 +93,10 @@ class _CustomInputField extends State<CustomInputField> {
       children: [
         if (widget.title != null) ...[
           Text(widget.title!,
-              style:
-                  PoppinsStyles.medium(color: AppColors.lightSecondaryTextColor)
-                      .copyWith(fontSize: 14.sp)),
+              style: PoppinsStyles.medium(
+                      color:
+                          AppColorHelper.getPrimaryTextColor(widget.colorMode))
+                  .copyWith(fontSize: 14.sp)),
           11.verticalSpace,
         ],
         TextFormField(
@@ -145,7 +146,7 @@ class _CustomInputField extends State<CustomInputField> {
       hintText: widget.hint,
       counterText: "",
       hintStyle: widget.hintStyle ??
-          PoppinsStyles.regular(color: AppColors.hintColor)
+          PoppinsStyles.regular(color: AppColorHelper.hintColor(widget.colorMode))
               .copyWith(fontSize: 15.sp),
       contentPadding: widget.contentPadding ??
           EdgeInsets.symmetric(horizontal: 13.sp, vertical: ((50 - 16) / 2).sp),

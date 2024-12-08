@@ -43,7 +43,6 @@ class TherapyScreen extends ConsumerWidget {
             child: Column(
               children: [
                 10.verticalSpace,
-                // Main content
                 Expanded(
                   child: IndexedStack(
                     index: therapyViewModel.introIndex,
@@ -94,14 +93,14 @@ class TherapyScreen extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        // Back button
+
         CommonInkWell(
           onTap: therapyViewModel.decrementIndex,
           child: _navigationButton(Icons.arrow_back),
         ),
-        // Dots indicator
+
         _buildDotsIndicator(therapyViewModel.introIndex, totalScreens),
-        // Forward button
+
         CommonInkWell(
           onTap: () {
             if (therapyViewModel.incrementIndex(isShort)) {

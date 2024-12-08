@@ -3,7 +3,8 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/drawer_screen.dart';
-import 'package:emdr_mindmend/src/features/drawer/presentation/views/profile_screen/profile_screen.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/views/profile_screen/edit_profile_screen.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/views/setting_screen/setting_screen.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/views/therapy_screen.dart';
 import 'package:emdr_mindmend/src/features/user_stats/presentation/views/user_stats_screen.dart';
 import 'package:flutter/material.dart';
@@ -54,9 +55,9 @@ class _DashBoardScreen extends ConsumerState<DashBoardScreen> {
       case 2:
         return TherapyScreen(isShort: true);
       case 3:
-        return const DrawerScreen();
+        return const SettingScreen();
       case 4:
-        return const ProfileScreen();
+        return const DrawerScreen();
       default:
         return UserStatsScreen();
     }
