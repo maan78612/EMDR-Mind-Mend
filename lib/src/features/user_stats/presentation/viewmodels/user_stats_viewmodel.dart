@@ -1,3 +1,4 @@
+import 'package:emdr_mindmend/src/core/enums/stats_status.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:emdr_mindmend/src/features/user_stats/data/repositories/user_stats_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/user_stats/domain/models/user_stats_model.dart';
@@ -14,13 +15,21 @@ class UserStatsNotifier extends StateNotifier<UserStatsModel> {
     state = userStats;
   }
 
-  Future<void> updateStats(DateTime currentLoginTime, Duration sessionTime) async {
+  void selectStatsStatus(StatsStatus status) {
+    state = state.copyWith(selectedStatsStatus: status);
+    state =
+        state.copyWith(); // Assuming `UserStatsModel` has a `copyWith` method
+  }
+
+  Future<void> updateStats(
+      DateTime currentLoginTime, Duration sessionTime) async {
     int newDayStreak = state.dayStreak;
     int newTotalSessionCount = state.totalSessionCount;
 
     if (state.lastLoginDate != null) {
       final lastLoginDate = state.lastLoginDate!;
-      final differenceInDays = currentLoginTime.difference(lastLoginDate).inDays;
+      final differenceInDays =
+          currentLoginTime.difference(lastLoginDate).inDays;
 
       if (differenceInDays == 1) {
         // Consecutive day login, increment streak
@@ -48,5 +57,4 @@ class UserStatsNotifier extends StateNotifier<UserStatsModel> {
     // Save updated stats to the repository
     await _userStatsRepository.saveUserStats(state);
   }
-
 }

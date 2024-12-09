@@ -76,7 +76,10 @@ class SignUpScreen extends ConsumerWidget {
                   ),
                   CustomInputField(
                     colorMode: colorMode,
-                    prefixWidget: Image.asset(AppImages.email),
+                    prefixWidget: Image.asset(
+                      AppImages.email,
+                      color: AppColorHelper.getIconColor(colorMode),
+                    ),
                     hint: "Email",
                     controller: signupViewModel.emailCon,
                     textInputAction: TextInputAction.next,
@@ -89,7 +92,8 @@ class SignUpScreen extends ConsumerWidget {
                   ),
                   CustomInputField(
                     colorMode: colorMode,
-                    prefixWidget: Image.asset(AppImages.password),
+                    prefixWidget: Image.asset(AppImages.password,
+                      color: AppColorHelper.getIconColor(colorMode)),
                     hint: "Password",
                     controller: signupViewModel.passwordCon,
                     textInputAction: TextInputAction.next,
@@ -103,7 +107,8 @@ class SignUpScreen extends ConsumerWidget {
                   ),
                   CustomInputField(
                     colorMode: colorMode,
-                    prefixWidget: Image.asset(AppImages.password),
+                    prefixWidget: Image.asset(AppImages.password,
+                        color: AppColorHelper.getIconColor(colorMode)),
                     hint: "Confirm Password",
                     textInputAction: TextInputAction.done,
                     controller: signupViewModel.confirmPasswordCon,

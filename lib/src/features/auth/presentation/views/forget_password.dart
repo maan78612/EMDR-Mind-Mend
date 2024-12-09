@@ -48,9 +48,8 @@ class ForgetPasswordScreen extends ConsumerWidget {
                   Text(
                     "Forget Password!",
                     style: PoppinsStyles.bold(
-                            color: colorMode == ColorMode.light
-                                ? AppColors.lightPrimaryTextColor
-                                : AppColors.darkPrimaryTextColor)
+                            color:
+                                AppColorHelper.getPrimaryTextColor(colorMode))
                         .copyWith(fontSize: 22.sp),
                   ),
                   10.verticalSpace,
@@ -63,7 +62,8 @@ class ForgetPasswordScreen extends ConsumerWidget {
                   ),
                   35.verticalSpace,
                   CustomInputField(
-                    prefixWidget: Image.asset(AppImages.email),
+                    prefixWidget: Image.asset(AppImages.email,
+                        color: AppColorHelper.getIconColor(colorMode)),
                     hint: "Email",
                     textInputAction: TextInputAction.next,
                     controller: forgetPassViewModel.emailCon,

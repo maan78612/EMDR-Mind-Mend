@@ -1,8 +1,10 @@
 import 'dart:io';
 
+import 'package:country_picker/country_picker.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_text_controller.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
+import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
@@ -12,10 +14,11 @@ import 'package:emdr_mindmend/src/features/drawer/data/repositories/drawer_repos
 import 'package:emdr_mindmend/src/features/drawer/domain/repositories/drawer_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
-class ProfileViewModel with ChangeNotifier {
+class EditProfileViewModel with ChangeNotifier {
   final DrawerRepository _drawerRepository = DrawerRepositoryImpl();
 
   CustomTextController emailCon = CustomTextController(
@@ -93,43 +96,12 @@ class ProfileViewModel with ChangeNotifier {
 
 
 
-  Future<void> selectDateOfBirthFunction(
-      BuildContext context, ColorMode colorMode) async {
-    final date = await showDatePicker(
-      context: context,
-      initialDate: DateTime(2004),
-      initialDatePickerMode: DatePickerMode.day,
-      firstDate: DateTime(1920),
-      lastDate: DateTime.now(),
-      builder: (BuildContext context, Widget? child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            dialogBackgroundColor: AppColorHelper.cardColor(colorMode),
-            colorScheme: const ColorScheme.light(
-                primary: AppColors.primaryColor, // Selected date's circle color
-                onPrimary: Colors.white, // Text color on selected date
-                onSurface: AppColors
-                    .lightPrimaryTextColor // Text color for unselected dates
-                ),
-            // Background color of the date picker
-          ),
-          child: child!,
-        );
-      },
-    );
-
-    if (date != null) {
-      dob.controller.text = DateFormat('dd / MM / yyyy').format(date);
-      setEnableBtn();
-    }
-  }
-
   Future<void> editProfile(
       {required Function({
-      required SnackBarType snackType,
-      required String message,
+        required SnackBarType snackType,
+        required String message,
       }) showSnackBarMsg,
-        required WidgetRef ref}) async {
+      required WidgetRef ref}) async {
     List<MapEntry<String, File>> files = [];
     try {
       setLoading(true);
@@ -138,20 +110,21 @@ class ProfileViewModel with ChangeNotifier {
       }
 
       final body = {
-        "first_name": nameCon.controller.text,
-
-        if(countryCon.controller.text.isNotEmpty)"date_of_birth": countryCon.controller.text,
-        if(dob.controller.text.isNotEmpty)"country": dob.controller.text,
+        "name": nameCon.controller.text,
+        if (dob.controller.text.isNotEmpty)
+          "date_of_birth": dob.controller.text,
+        if (countryCon.controller.text.isNotEmpty)
+          "country": countryCon.controller.text,
       };
       final response =
-      await _drawerRepository.editProfile(body: body, files: files);
+          await _drawerRepository.editProfile(body: body, files: files);
 
       ref.read(userModelProvider.notifier).updateProfile(
-        newName: response.data.name,
-        imageUrl: response.data.image,
-        country: response.data.country,
-        dob: response.data.dob,
-      );
+            newName: response.data.name,
+            imageUrl: response.data.image,
+            country: response.data.country,
+            dob: response.data.dob,
+          );
 
       notifyListeners();
 

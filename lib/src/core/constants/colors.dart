@@ -14,6 +14,7 @@ class AppColors {
   static const Color whiteBg = Color(0xffFAFAFC);
   static const Color lightScaffoldColor = Colors.white;
   static const Color whiteColor = Colors.white;
+  static const Color blackColor = Colors.black;
   static const Color lightPrimaryTextColor = Colors.black;
   static Color focusedBorderColor = primaryColor.withOpacity(.65);
   static const Color lightCardColor = Color(0xffE3F2E4);

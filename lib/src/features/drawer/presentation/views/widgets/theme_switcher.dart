@@ -52,13 +52,13 @@ class CustomSwitchTile extends StatelessWidget {
           padding: EdgeInsets.all(10.sp),
           decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: colorMode == ColorMode.dark
+              color: colorMode == ColorMode.light
                   ? const Color(0xffD1FDBA)
                   : AppColors.primaryColor),
           child: Icon(
             colorMode == ColorMode.dark ? Icons.sunny : Icons.mode_night,
             size: 15.sp,
-            color: colorMode == ColorMode.dark
+            color: colorMode == ColorMode.light
                 ? const Color(0xff106E27)
                 : Colors.white,
           ),

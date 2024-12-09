@@ -89,7 +89,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
                   35.verticalSpace,
                   CustomInputField(
-                    prefixWidget: Image.asset(AppImages.email),
+                    prefixWidget: Image.asset(AppImages.email,
+                        color: AppColorHelper.getIconColor(colorMode)),
                     hint: "Email",
                     textInputAction: TextInputAction.next,
                     controller: loginViewModel.emailCon,
@@ -102,7 +103,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     colorMode: colorMode,
                   ),
                   CustomInputField(
-                    prefixWidget: Image.asset(AppImages.password),
+                    prefixWidget: Image.asset(AppImages.password,
+                        color: AppColorHelper.getIconColor(colorMode)),
                     hint: "Password",
                     textInputAction: TextInputAction.done,
                     controller: loginViewModel.passwordCon,
@@ -255,7 +257,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget separator(ColorMode colorMode) {
     return Row(
       children: [
-         Expanded(
+        Expanded(
           child: Divider(
             endIndent: 30,
             indent: 10,
@@ -269,7 +271,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             fontSize: 15.sp,
           ),
         ),
-         Expanded(
+        Expanded(
           child: Divider(
             endIndent: 10,
             indent: 30,

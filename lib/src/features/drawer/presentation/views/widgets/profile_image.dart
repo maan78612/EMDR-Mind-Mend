@@ -1,12 +1,15 @@
 import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
+import 'package:emdr_mindmend/src/core/commons/network_image_with_loader.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
 import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
+import 'package:emdr_mindmend/src/core/utilities/dialog_box.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
-import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/profile_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/edit_profile_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/drawer/presentation/views/profile_screen/widget/image_option_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,23 +17,23 @@ import 'package:image_picker/image_picker.dart';
 
 class ProfileImage extends ConsumerWidget {
   final double radius;
-
-  final ChangeNotifierProvider<ProfileViewModel>? profileViewModelProvider;
+  final ChangeNotifierProvider<EditProfileViewModel>?
+      editProfileViewModelProvider;
 
   const ProfileImage(
-      {super.key, this.profileViewModelProvider, required this.radius});
+      {super.key, this.editProfileViewModelProvider, required this.radius});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userData = ref.watch(userModelProvider);
     final colorMode = ref.watch(colorModeProvider);
-    final profileViewModel = profileViewModelProvider != null
-        ? ref.watch(profileViewModelProvider!)
+    final editProfileViewModel = editProfileViewModelProvider != null
+        ? ref.watch(editProfileViewModelProvider!)
         : null;
 
     return getProfileImageWidget(
       context: context,
-      profileViewModel: profileViewModel,
+      editProfileViewModel: editProfileViewModel,
       userData: userData,
       colorMode: colorMode,
     );
@@ -38,26 +41,24 @@ class ProfileImage extends ConsumerWidget {
 
   Widget getProfileImageWidget({
     required BuildContext context,
-    required ProfileViewModel? profileViewModel,
+    required EditProfileViewModel? editProfileViewModel,
     required UserModel userData,
     required ColorMode colorMode,
   }) {
-    if (profileViewModel != null) {
+    if (editProfileViewModel != null) {
       // Editable context
-      if (profileViewModel.profileImage != null) {
-        return imageAddedFromFile(profileViewModel, colorMode);
+      if (editProfileViewModel.profileImage != null) {
+        return _fileImageWidget(editProfileViewModel, colorMode);
       } else if (userData.image != null) {
-        return imageAddedFromNetwork(
-            profileViewModel, context, userData, colorMode);
+        return _networkImageWidget(
+            editProfileViewModel, context, userData, colorMode);
       } else {
-        return noImageAdded(context, profileViewModel, colorMode);
+        return _imagePlaceWidget(context, editProfileViewModel, colorMode);
       }
     } else {
       // View-only context
       if (userData.image != null) {
-        return Center(
-          child: _networkImage(userData),
-        );
+        return NetworkImageWithLoader(imageUrl: userData.image!, size: radius);
       } else {
         return Center(
           child: _placeHolderImage(),
@@ -66,30 +67,25 @@ class ProfileImage extends ConsumerWidget {
     }
   }
 
-  Widget imageAddedFromNetwork(ProfileViewModel profileViewModel,
+  Widget _networkImageWidget(EditProfileViewModel editProfileViewModel,
       BuildContext context, UserModel userData, ColorMode colorMode) {
     return Center(
       child: Stack(
+        clipBehavior: Clip.none,
         children: [
-          _networkImage(userData),
+          NetworkImageWithLoader(imageUrl: userData.image!, size: radius),
           positionedIcon(
               colorMode: colorMode,
               icon: Icons.edit,
-              onTap: () => _showImageOptions(context, profileViewModel))
+              onTap: () =>
+                  _showImageOptions(context, editProfileViewModel, colorMode))
         ],
       ),
     );
   }
 
-  Widget _networkImage(UserModel userData) {
-    return CircleAvatar(
-      radius: radius,
-      backgroundImage: NetworkImage(userData.image!),
-    );
-  }
-
-  Widget noImageAdded(BuildContext context, ProfileViewModel profileViewModel,
-      ColorMode colorMode) {
+  Widget _imagePlaceWidget(BuildContext context,
+      EditProfileViewModel editProfileViewModel, ColorMode colorMode) {
     return Center(
       child: Stack(
         clipBehavior: Clip.none,
@@ -98,89 +94,45 @@ class ProfileImage extends ConsumerWidget {
           positionedIcon(
               colorMode: colorMode,
               icon: Icons.add,
-              onTap: () => _showImageOptions(context, profileViewModel))
+              onTap: () =>
+                  _showImageOptions(context, editProfileViewModel, colorMode))
         ],
       ),
     );
   }
 
   Widget _placeHolderImage() {
-    return CircleAvatar(
-      backgroundColor: AppColors.darkSecondaryTextColor,
-      radius: radius,
-      child: Icon(
-        Icons.person,
-        size: radius,
-        color: AppColors.whiteColor,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(1000.sp),
+      child: Container(
+        width: radius,
+        height: radius,
+        color: AppColors.lightGreyColor,
+        child: Icon(
+          Icons.person,
+          size: radius,
+          color: AppColors.whiteColor,
+        ),
       ),
     );
   }
 
-  void _showImageOptions(
-      BuildContext context, ProfileViewModel profileViewModel) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          decoration: BoxDecoration(
-            color: AppColors.primaryColor,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(10.r),
-              topRight: Radius.circular(10.r),
-            ),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              CommonInkWell(
-                onTap: () => CustomNavigation().pop(),
-                child: const Align(
-                  alignment: Alignment.topRight,
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(Icons.close, color: AppColors.whiteColor),
-                  ),
-                ),
-              ),
-              ListTile(
-                leading: const Icon(Icons.camera, color: AppColors.whiteColor),
-                title: Text('Camera',
-                    style: PoppinsStyles.regular(color: AppColors.whiteColor)),
-                onTap: () async {
-                  await profileViewModel.imageOptionClick(ImageSource.camera);
-                  CustomNavigation().pop();
-                },
-              ),
-              const Divider(color: AppColors.whiteColor),
-              ListTile(
-                leading: const Icon(Icons.image, color: AppColors.whiteColor),
-                title: Text('Gallery',
-                    style: PoppinsStyles.regular(color: AppColors.whiteColor)),
-                onTap: () async {
-                  await profileViewModel.imageOptionClick(ImageSource.gallery);
-                  CustomNavigation().pop();
-                },
-              ),
-              20.verticalSpace,
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget imageAddedFromFile(
-      ProfileViewModel profileViewModel, ColorMode colorMode) {
+  Widget _fileImageWidget(
+      EditProfileViewModel editProfileViewModel, ColorMode colorMode) {
     return Center(
       child: Stack(
         children: [
-          CircleAvatar(
-            radius: radius,
-            backgroundImage: Image.file(profileViewModel.profileImage!).image,
+          ClipRRect(
+            borderRadius: BorderRadius.circular(1000.sp),
+            child: Container(
+              width: radius,
+              height: radius,
+              color: AppColors.lightGreyColor,
+              child: Image.file(editProfileViewModel.profileImage!),
+            ),
           ),
           positionedIcon(
-              onTap: profileViewModel.deleteImage,
+              onTap: editProfileViewModel.deleteImage,
               colorMode: colorMode,
               iconColor: Colors.red,
               icon: Icons.delete)
@@ -194,10 +146,10 @@ class ProfileImage extends ConsumerWidget {
       required ColorMode colorMode,
       required IconData icon,
       Color? iconColor}) {
-    double size = radius * 0.35; // Size of the icon container
+    double size = radius * 0.25; // Size of the icon container
     return Positioned(
-      bottom: size / 2,
-      right: size / 2,
+      bottom: 0,
+      right: 0,
       child: CommonInkWell(
         onTap: onTap,
         child: Container(
@@ -215,5 +167,11 @@ class ProfileImage extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+  void _showImageOptions(BuildContext context,
+      EditProfileViewModel editProfileViewModel, ColorMode colorMode) {
+    DialogBoxUtils.show(ImageOptionsDialog(
+        editProfileViewModelProvider: editProfileViewModelProvider!));
   }
 }

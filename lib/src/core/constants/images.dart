@@ -18,6 +18,7 @@ class AppImages {
   static const String contactUs = "assets/images/contact_us.png";
   static const String faq = "assets/images/faq.png";
   static const String logout = "assets/images/logout.png";
+  static const String deleteUser = "assets/images/delete_user.png";
   static const String left = "assets/images/left.png";
   static const String right = "assets/images/right.png";
   static const String loader = "assets/images/loader.png";

@@ -1,10 +1,8 @@
-import 'package:emdr_mindmend/src/core/commons/custom_button.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_inkwell.dart';
 import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
 import 'package:emdr_mindmend/src/core/commons/loader.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/core/constants/fonts.dart';
-import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
@@ -14,7 +12,6 @@ import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/drawer
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/contact_us.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/help_faq_screen/help_faq_screen.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/profile_screen/edit_profile_screen.dart';
-import 'package:emdr_mindmend/src/features/drawer/presentation/views/widgets/drawer_widgets_app_bar.dart';
 import 'package:emdr_mindmend/src/features/drawer/presentation/views/widgets/profile_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,7 +32,7 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
     return DrawerViewModel();
   });
 
-  final radius = 75.sp;
+  final radius = 120.sp;
 
   @override
   void initState() {
@@ -65,14 +62,14 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
         ),
         body: SafeArea(
           child: Padding(
-            padding: EdgeInsets.only(top: radius),
+            padding: EdgeInsets.only(top: radius / 2),
             child: Stack(
               clipBehavior: Clip.none,
               alignment: Alignment.center,
               children: [
                 _cardWidget(colorMode, context, drawerViewModel),
                 Positioned(
-                  top: -radius,
+                  top: -(radius / 2),
                   child: ProfileImage(radius: radius),
                 ),
               ],
@@ -86,6 +83,7 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
   Widget _cardWidget(ColorMode colorMode, BuildContext context,
       DrawerViewModel drawerViewModel) {
     return Card(
+      elevation: 5,
       color: colorMode == ColorMode.light
           ? AppColors.whiteColor
           : AppColors.darkCardColor,
@@ -96,7 +94,7 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            radius.verticalSpace,
+            (radius / 2).verticalSpace,
             _tiles(
                 img: AppImages.myProfile,
                 title: "My Profile",
@@ -120,7 +118,7 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                 colorMode: colorMode),
             _ThemeSwitcher(),
             _tiles(
-                img: AppImages.logout,
+                img: AppImages.deleteUser,
                 title: 'Delete Account',
                 onTap: () {
                   _showDeleteDialog(context, drawerViewModel, colorMode);
@@ -156,7 +154,7 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
               padding: EdgeInsets.all(10.sp),
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: colorMode == ColorMode.dark
+                  color: colorMode == ColorMode.light
                       ? const Color(0xffD1FDBA)
                       : AppColors.primaryColor),
               child: Image.asset(
@@ -164,7 +162,7 @@ class _DrawerScreenState extends ConsumerState<DrawerScreen> {
                 width: 15.sp,
                 height: 15.sp,
                 fit: BoxFit.contain,
-                color: colorMode == ColorMode.dark
+                color: colorMode == ColorMode.light
                     ? const Color(0xff106E27)
                     : Colors.white,
               ),

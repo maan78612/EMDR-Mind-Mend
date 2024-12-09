@@ -4,6 +4,7 @@ import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
 import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
+import 'package:emdr_mindmend/src/features/user_stats/presentation/views/widgets/status_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:emdr_mindmend/src/features/user_stats/domain/models/user_stats_model.dart';
@@ -36,6 +37,8 @@ class UserStatsScreen extends ConsumerWidget {
                         color: AppColorHelper.getPrimaryTextColor(colorMode))
                     .copyWith(fontSize: 18.sp),
               ),
+              40.verticalSpace,
+              StatusBar(userStatsNotifierProvider: userStatsNotifierProvider),
               40.verticalSpace,
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

@@ -45,14 +45,14 @@ class Data {
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        name: json["first_name"],
+        name: json["name"],
         image: json["image"],
         country: json["country"],
         dob: json["date_of_birth"],
       );
 
   Map<String, dynamic> toJson() => {
-        "first_name": name,
+        "name": name,
         "image": image,
         "country": country,
         "date_of_birth": dob,
