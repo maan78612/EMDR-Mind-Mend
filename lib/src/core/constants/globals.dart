@@ -1,6 +1,5 @@
 import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
-import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/setting_viewmodel.dart';
-import 'package:flutter/material.dart';
+import 'package:emdr_mindmend/src/features/settings/presentation/viewmodels/setting_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -14,10 +13,8 @@ final settingViewModelProvider =
 });
 
 final userModelProvider =
-StateNotifierProvider<UserModelProvider, UserModel>((ref) {
+    StateNotifierProvider<UserModelProvider, UserModel>((ref) {
   return UserModelProvider();
 });
 
 String authenticationToken = "";
-
-

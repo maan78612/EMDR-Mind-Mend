@@ -5,7 +5,7 @@ import 'package:emdr_mindmend/src/core/constants/fonts.dart';
 import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
 import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
-import 'package:emdr_mindmend/src/features/drawer/presentation/viewmodels/setting_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/settings/presentation/viewmodels/setting_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/viewmodels/therapy_viewmodel.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/views/info_views/pendulum_animation_screen.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/views/widgets/info_description.dart';

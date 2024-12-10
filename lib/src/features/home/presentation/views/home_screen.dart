@@ -9,8 +9,8 @@ import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/enums/color_enum.dart';
 import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
-import 'package:emdr_mindmend/src/features/drawer/presentation/views/drawer_screen.dart';
 import 'package:emdr_mindmend/src/features/home/presentation/viewmodels/home_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/profile/presentation/views/profile_screen.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/views/therapy_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -104,7 +104,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       right: 0,
       child: CommonInkWell(
         onTap: () {
-          CustomNavigation().push(const DrawerScreen());
+          CustomNavigation().push(const ProfileScreen());
         },
         child: Container(
           width: 40.sp,
