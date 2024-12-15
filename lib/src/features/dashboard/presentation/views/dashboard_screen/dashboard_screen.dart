@@ -1,5 +1,4 @@
-// dashboard_screen.dart
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
+
 import 'package:emdr_mindmend/src/core/constants/images.dart';
 import 'package:emdr_mindmend/src/core/manager/color_manager.dart';
 import 'package:emdr_mindmend/src/features/profile/presentation/views/profile_screen.dart';
@@ -11,6 +10,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:emdr_mindmend/src/core/commons/loader.dart';
 import 'package:emdr_mindmend/src/core/constants/colors.dart';
 import 'package:emdr_mindmend/src/features/dashboard/presentation/viewmodels/dashboard_viewmodel.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 part 'widgets/bottom_navigation_bar.dart';
 
@@ -35,7 +35,7 @@ class _DashBoardScreen extends ConsumerState<DashBoardScreen> {
         resizeToAvoidBottomInset: false,
         backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
         body: _getPage(dashBoardViewModel),
-        bottomNavigationBar: _CustomBottomNavigationBar(
+        bottomNavigationBar: _BottomNavigationBar(
           selectedIndex: dashBoardViewModel.selectedIndex,
           onItemSelected: (index) {
             dashBoardViewModel.selectIndex(index);
@@ -48,17 +48,17 @@ class _DashBoardScreen extends ConsumerState<DashBoardScreen> {
   Widget _getPage(DashBoardViewModel dashBoardViewModel) {
     switch (dashBoardViewModel.selectedIndex) {
       case 0:
-        return UserStatsScreen();
+        return const UserStatsScreen();
       case 1:
-        return TherapyScreen(isShort: false);
+        return const TherapyScreen(isShort: false);
       case 2:
-        return TherapyScreen(isShort: true);
+        return const TherapyScreen(isShort: true);
       case 3:
         return const SettingScreen();
       case 4:
         return const ProfileScreen();
       default:
-        return UserStatsScreen();
+        return const UserStatsScreen();
     }
   }
 }

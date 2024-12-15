@@ -23,6 +23,10 @@ Future<void> _initMethod() async {
 
   //Load our .env file that contains our Stripe Secret key
   await dotenv.load(fileName: "assets/.env");
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent, // Make the status bar transparent
+    statusBarIconBrightness: Brightness.light, // You can change the icon brightness as per your design
+  ));
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
   ]);

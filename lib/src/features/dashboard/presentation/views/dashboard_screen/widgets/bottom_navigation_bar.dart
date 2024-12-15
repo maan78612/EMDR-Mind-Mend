@@ -1,68 +1,94 @@
 part of 'package:emdr_mindmend/src/features/dashboard/presentation/views/dashboard_screen/dashboard_screen.dart';
 
-class _CustomBottomNavigationBar extends ConsumerWidget {
+class _BottomNavigationBar extends StatelessWidget {
   final int selectedIndex;
   final ValueChanged<int> onItemSelected;
 
-  const _CustomBottomNavigationBar({
+  const _BottomNavigationBar({
     required this.selectedIndex,
     required this.onItemSelected,
   });
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
-    final colorMode = ref.watch(colorModeProvider);
-    return CurvedNavigationBar(
-      backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
-      color: AppColors.darkCardColor,
-      animationDuration: const Duration(milliseconds: 300),
-      items: _buildNavigationBarItems(),
-      onTap:
-          onItemSelected, // Trigger callback directly when the animation completes
+  Widget build(BuildContext context) {
+    return Stack(
+      clipBehavior: Clip.none,
+      alignment: Alignment.bottomCenter,
+      children: [
+        BottomSheetContent(
+          selectedIndex: selectedIndex,
+          onItemSelected: onItemSelected,
+        ),
+        Positioned(
+          top: -25.sp,
+          child: GestureDetector(
+            onTap: () => onItemSelected(2),
+            child: Container(
+              width: 56.sp,
+              height: 56.sp,
+              decoration: BoxDecoration(
+                color: AppColors.primaryColor,
+                shape: BoxShape.circle,
+                border:
+                    Border.all(color: AppColors.darkScaffoldColor, width: 4),
+              ),
+              child: Padding(
+                padding: EdgeInsets.all(8.sp),
+                child: Image.asset(
+                  AppImages.dashboardMainIconSelected,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
+}
 
-  List<Widget> _buildNavigationBarItems() {
-    const icons = [
+class BottomSheetContent extends StatelessWidget {
+  final int selectedIndex;
+  final ValueChanged<int> onItemSelected;
+
+  const BottomSheetContent({
+    super.key,
+    required this.selectedIndex,
+    required this.onItemSelected,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final icons = [
       AppImages.home,
       AppImages.info,
-      AppImages.dashboardMainIconUnselected,
+      AppImages.dashboardMainIconSelected,
       AppImages.setting,
       AppImages.profile,
     ];
-
-    return List.generate(
-      icons.length,
-      (index) => _buildNavItem(
-        assetPath: icons[index],
-        isSelected: index == selectedIndex,
-      ),
-    );
-  }
-
-  Widget _buildNavItem({required String assetPath, required bool isSelected}) {
-    final bool isDashboardIcon =
-        assetPath == AppImages.dashboardMainIconUnselected;
-
+    final padding = MediaQuery.of(context).padding;
     return Container(
-      decoration: isSelected
-          ? const BoxDecoration(
-              color: AppColors.primaryColor,
-              shape: BoxShape.circle,
-            )
-          : null,
-      padding: isSelected ? const EdgeInsets.all(8.0) : EdgeInsets.zero,
-      child: Image.asset(
-        isDashboardIcon && isSelected
-            ? AppImages.dashboardMainIconSelected
-            : assetPath,
-        width: 30,
-        height: 30,
-        color: isDashboardIcon
-            ? null
-            : (isSelected ? Colors.white :
-        const Color(0xff68937E)),
-        fit: BoxFit.contain,
+      padding: EdgeInsets.only(top: 16.sp,bottom: 12.sp).add(padding),
+      decoration: const BoxDecoration(color: AppColors.darkCardColor),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: List.generate(icons.length, (index) {
+          if (index == 2) {
+            return const Spacer(); // Space for the center icon
+          }
+          return Expanded(
+            child: GestureDetector(
+              onTap: () => onItemSelected(index),
+              child: Image.asset(
+                icons[index],
+                color: selectedIndex == index
+                    ? Colors.white
+                    : const Color(0xff68937E),
+                width: 28.sp,
+                height: 28.sp,
+              ),
+            ),
+          );
+        }),
       ),
     );
   }

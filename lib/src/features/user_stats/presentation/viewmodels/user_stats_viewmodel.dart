@@ -1,60 +1,142 @@
+import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
 import 'package:emdr_mindmend/src/core/enums/stats_status.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:emdr_mindmend/src/core/utilities/custom_snack_bar.dart';
+import 'package:emdr_mindmend/src/features/therapy/data/repositories/therapy_repository_impl.dart';
+import 'package:emdr_mindmend/src/features/therapy/domain/repositories/therapy_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:emdr_mindmend/src/features/user_stats/data/repositories/user_stats_repository_impl.dart';
 import 'package:emdr_mindmend/src/features/user_stats/domain/models/user_stats_model.dart';
 import 'package:emdr_mindmend/src/features/user_stats/domain/repositories/user_stats_repository.dart';
 
-class UserStatsNotifier extends StateNotifier<UserStatsModel> {
+class UserStatsViewModel with ChangeNotifier {
   final UserStatsRepository _userStatsRepository = UserStatsRepositoryImpl();
+  final TherapyRepository _therapyRepository = TherapyRepositoryImpl();
 
-  UserStatsNotifier() : super(UserStatsModel.empty());
+  UserStatsModel _userStats = UserStatsModel.empty();
 
+  UserStatsModel get userStats => _userStats;
+
+  bool _isLoading = false;
+
+  bool get isLoading => _isLoading;
+
+  StatsStatus _selectedStatsStatus = StatsStatus.today;
+
+  StatsStatus get selectedStatsStatus => _selectedStatsStatus;
+
+  int _improvementValue = 0;
+
+  int get improvementValue => _improvementValue;
+
+  /// Load user stats from the repository
   Future<void> loadUserStats() async {
-    final userStats = await _userStatsRepository.fetchUserStats();
+    try {
+      _setLoading(true);
+      _improvementValue = await getScore();
+      final userStats = await _userStatsRepository.fetchUserStats();
+      _userStats = userStats;
+      notifyListeners();
+      await updateStreak();
 
-    state = userStats;
+      notifyListeners();
+    } catch (error) {
+      SnackBarUtils.show(error.toString(), SnackBarType.error);
+    } finally {
+      _setLoading(false);
+    }
   }
 
+  /// Update the selected stats status
   void selectStatsStatus(StatsStatus status) {
-    state = state.copyWith(selectedStatsStatus: status);
-    state =
-        state.copyWith(); // Assuming `UserStatsModel` has a `copyWith` method
+    _selectedStatsStatus = status;
+    notifyListeners();
   }
 
-  Future<void> updateStats(
-      DateTime currentLoginTime, Duration sessionTime) async {
-    int newDayStreak = state.dayStreak;
-    int newTotalSessionCount = state.totalSessionCount;
+  /// Update day streak and session count when the user logs in
+  Future<void> updateStreak() async {
+    try {
+      DateTime currentLoginTime = DateTime.now();
+      int newDayStreak = _userStats.dayStreak;
+      int newTotalSessionCount = _userStats.totalSessionCount;
+      DateTime? lastLoginDate = _userStats.lastLoginDate;
 
-    if (state.lastLoginDate != null) {
-      final lastLoginDate = state.lastLoginDate!;
-      final differenceInDays =
-          currentLoginTime.difference(lastLoginDate).inDays;
+      bool shouldUpdateStats = false;
+      int differenceInDays = 0;
 
-      if (differenceInDays == 1) {
-        // Consecutive day login, increment streak
-        newDayStreak++;
-      } else if (differenceInDays > 1) {
-        // More than 1 day gap, reset streak
-        newDayStreak = 1;
+      if (lastLoginDate != null) {
+        differenceInDays = currentLoginTime.difference(lastLoginDate).inDays;
+        debugPrint("lastLoginDate = $lastLoginDate");
+        debugPrint("currentLoginTime = $currentLoginTime");
+        debugPrint("Difference In Days = $differenceInDays");
+
+        if (differenceInDays == 1) {
+          newDayStreak++;
+          shouldUpdateStats = true;
+        } else if (differenceInDays > 1) {
+          newDayStreak = 1; // Reset streak
+          shouldUpdateStats = true;
+        }
+      } else {
+        newDayStreak = 1; // First-time login
+        shouldUpdateStats = true;
       }
-    } else {
-      newDayStreak = 1; // First-time login
+
+      if (lastLoginDate == null || differenceInDays > 0) {
+        newTotalSessionCount++;
+        shouldUpdateStats = true;
+      }
+
+      if (shouldUpdateStats) {
+        _userStats = _userStats.copyWith(
+          dayStreak: newDayStreak,
+          lastLoginDate: currentLoginTime,
+          totalSessionCount: newTotalSessionCount,
+        );
+
+        await _userStatsRepository.saveUserStats(_userStats);
+      }
+    } catch (error) {
+      rethrow;
+    }
+  }
+
+  /// Calculate session time while the user is on a specific screen
+  Future<void> calculateSessionTime(
+      DateTime sessionStartTime, UserStatsModel userStats) async {
+    try {
+      final sessionEndTime = DateTime.now();
+      final sessionDuration = sessionEndTime.difference(sessionStartTime);
+
+      userStats = userStats.copyWith(
+        totalOnlineTime: userStats.totalOnlineTime + sessionDuration,
+      );
+
+      notifyListeners();
+      await _userStatsRepository.saveUserStats(userStats);
+    } catch (error) {
+      SnackBarUtils.show(error.toString(), SnackBarType.error);
+    }
+  }
+
+  /// Calculate the average time per day
+  Duration calculateAverageTimePerDay() {
+    if (_userStats.totalSessionCount == 0) {
+      return Duration.zero; // Avoid division by zero
     }
 
-    // Update total online time and session count
-    final updatedTotalOnlineTime = state.totalOnlineTime + sessionTime;
-    newTotalSessionCount++;
+    return _userStats.totalOnlineTime ~/ _userStats.totalSessionCount;
+  }
 
-    // Update the state
-    state = state.copyWith(
-      dayStreak: newDayStreak,
-      totalOnlineTime: updatedTotalOnlineTime,
-      lastLoginDate: currentLoginTime,
-      totalSessionCount: newTotalSessionCount, // Increment session count
-    );
+  void _setLoading(bool loading) {
+    _isLoading = loading;
+    notifyListeners();
+  }
 
-    // Save updated stats to the repository
-    await _userStatsRepository.saveUserStats(state);
+  Future<int> getScore() async {
+    try {
+      return await _therapyRepository.getScore();
+    } catch (e) {
+      rethrow;
+    }
   }
 }

@@ -1,5 +1,6 @@
 import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
 import 'package:emdr_mindmend/src/features/settings/presentation/viewmodels/setting_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/user_stats/presentation/viewmodels/user_stats_viewmodel.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -17,4 +18,10 @@ final userModelProvider =
   return UserModelProvider();
 });
 
+final userStatsViewModelProvider =
+ChangeNotifierProvider<UserStatsViewModel>((ref) {
+  return UserStatsViewModel();
+});
+
 String authenticationToken = "";
+

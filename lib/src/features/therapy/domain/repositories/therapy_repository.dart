@@ -1,5 +1,7 @@
-import 'package:emdr_mindmend/src/features/on_boarding/domain/models/on_boarding.dart';
+
 
 abstract class TherapyRepository {
-  List<OnBoardingModel> populateData();
+  Future<int> getScore();
+  Future<void> sendScore({required Map<String, dynamic> body});
+
 }

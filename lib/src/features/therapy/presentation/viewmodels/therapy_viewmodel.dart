@@ -1,15 +1,19 @@
-import 'package:emdr_mindmend/src/features/home/data/repositories/home_repository_impl.dart';
+import 'package:chewie/chewie.dart';
+import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
+import 'package:emdr_mindmend/src/core/constants/colors.dart';
+import 'package:emdr_mindmend/src/core/constants/globals.dart';
+import 'package:emdr_mindmend/src/features/therapy/data/repositories/therapy_repository_impl.dart';
+import 'package:emdr_mindmend/src/features/therapy/domain/repositories/therapy_repository.dart';
+import 'package:emdr_mindmend/src/features/therapy/presentation/views/widgets/video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
-import 'package:emdr_mindmend/src/core/commons/custom_navigation.dart';
-import 'package:emdr_mindmend/src/features/home/domain/repositories/home_repository.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:video_player/video_player.dart';
 
 class TherapyViewModel with ChangeNotifier {
-  final HomeRepository _homeRepository = HomeRepositoryImpl();
+  final TherapyRepository _therapyRepository = TherapyRepositoryImpl();
 
-  TherapyViewModel();
-
-  // Loading state
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;
@@ -31,7 +35,9 @@ class TherapyViewModel with ChangeNotifier {
     final totalScreens = getTotalScreens(isShort);
     if (introIndex < totalScreens - 1) {
       introIndex++;
+      _stopVideoPlayer();
       notifyListeners();
+
       return false;
     }
     return true;
@@ -41,6 +47,7 @@ class TherapyViewModel with ChangeNotifier {
   void decrementIndex() {
     if (introIndex > 0) {
       introIndex--;
+      _stopVideoPlayer();
       notifyListeners();
     }
   }
@@ -115,7 +122,7 @@ class TherapyViewModel with ChangeNotifier {
         "revaluation_two": revaluationTwo,
         "selected_emotions": addedEmotions.toList(),
       };
-      await _homeRepository.sendScore(body: body);
+      await _therapyRepository.sendScore(body: body);
       _resetFields();
       showSnackBarMsg(
         message: "Therapy info saved successfully",
@@ -139,5 +146,65 @@ class TherapyViewModel with ChangeNotifier {
     revaluationTwo = 1;
     introIndex = 0;
     notifyListeners();
+  }
+
+  /*------------------- video player ----------------------------*/
+
+  ChewieController? _chewieController;
+
+  ChewieController? get chewieController => _chewieController;
+
+  Future<void> initializeVideoPlayer() async {
+    final videoPlayerController = VideoPlayerController.networkUrl(Uri.parse(
+        'https://flutter.github.io/assets-for-api-docs/assets/videos/butterfly.mp4'));
+
+    await videoPlayerController.initialize();
+
+    _chewieController = ChewieController(
+      videoPlayerController: videoPlayerController,
+      autoPlay: false,
+      looping: false,
+      showControls: true,
+      allowFullScreen: true,
+      cupertinoProgressColors: ChewieProgressColors(
+          playedColor: AppColors.primaryColor,
+          handleColor: AppColors.darkScaffoldColor,
+          backgroundColor: Colors.black26,
+          bufferedColor: Colors.white),
+      materialProgressColors: ChewieProgressColors(
+          playedColor: AppColors.primaryColor,
+          handleColor: AppColors.darkScaffoldColor,
+          backgroundColor: Colors.black26,
+          bufferedColor: Colors.white),
+    );
+
+    // Initialize the Chewie controller
+    await _chewieController?.videoPlayerController.initialize();
+
+    _chewieController?.videoPlayerController.pause();
+    notifyListeners();
+  }
+
+  // Stop and reset the video
+  void stopAndResetVideo() {
+    _chewieController?.videoPlayerController.pause();
+    _chewieController?.videoPlayerController.seekTo(Duration.zero);
+    notifyListeners();
+  }
+
+  // Reset Chewie controller and listeners
+  void resetVideoController() {
+    _chewieController?.videoPlayerController.pause();
+    _chewieController?.dispose();
+    _chewieController = null;
+  }
+
+  // Stop the video player based on conditions
+  void _stopVideoPlayer() {
+    if (introIndex == 1) {
+      return;
+    } else if (introIndex != 1) {
+      stopAndResetVideo();
+    }
   }
 }

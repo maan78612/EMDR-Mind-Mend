@@ -41,6 +41,7 @@ class _SettingScreenState extends ConsumerState<SettingScreen> {
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
         backgroundColor: Colors.transparent,
+        centerTitle: true,
         title: Text(
           "Settings",
           style: PoppinsStyles.semiBold(

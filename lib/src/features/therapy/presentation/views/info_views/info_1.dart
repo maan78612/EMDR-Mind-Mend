@@ -1,16 +1,37 @@
+
+import 'package:emdr_mindmend/src/core/constants/colors.dart';
+import 'package:emdr_mindmend/src/features/therapy/presentation/viewmodels/therapy_viewmodel.dart';
+import 'package:emdr_mindmend/src/features/therapy/presentation/views/widgets/video_player.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/views/widgets/info_description.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/views/widgets/info_heading.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/views/widgets/info_title.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Info1 extends StatelessWidget {
-  const Info1({super.key});
+  final ChangeNotifierProvider<TherapyViewModel> therapyViewModelProvider;
+
+
+
+  // final String videoUrl = 'https://www.youtube.com/watch?v=vLmlcLLdkoA';
+
+  const Info1({super.key,required this.therapyViewModelProvider});
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: [
+        Container(
+          height: 280.h,
+          decoration: BoxDecoration(
+            color: AppColors.primaryColor,
+              borderRadius: BorderRadius.all(Radius.circular(12.r))),
+          width: double.infinity,
+          child: CustomVideoPlayer(therapyViewModelProvider: therapyViewModelProvider,),
+        ),
+        20.verticalSpace,
         const infoHeading(heading: 'Intro'),
         const InfoDescriptionWidget(
           descriptions: [

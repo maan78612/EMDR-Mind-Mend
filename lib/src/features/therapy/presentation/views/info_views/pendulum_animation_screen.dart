@@ -22,6 +22,8 @@ class _PendulumAnimationState extends ConsumerState<PendulumAnimation>
   late AnimationController _controller;
   late Animation<double> _animation;
 
+  DateTime sessionStartTime = DateTime.now();
+
   @override
   void dispose() {
     _controller.dispose();
@@ -54,7 +56,7 @@ class _PendulumAnimationState extends ConsumerState<PendulumAnimation>
   @override
   Widget build(BuildContext context) {
     final settingViewModel = ref.watch(settingViewModelProvider);
-
+    final userStatsViewModel = ref.watch(userStatsViewModelProvider);
     return Scaffold(
       backgroundColor: settingViewModel.bgColor,
       appBar: AppBar(
@@ -67,6 +69,8 @@ class _PendulumAnimationState extends ConsumerState<PendulumAnimation>
               DeviceOrientation.portraitUp,
             ]);
             ref.read(settingViewModelProvider).initAnimation(false);
+            userStatsViewModel.calculateSessionTime(
+                sessionStartTime, userStatsViewModel.userStats);
             CustomNavigation().pop();
           },
           child: Icon(Icons.arrow_back_ios,
@@ -143,8 +147,9 @@ class _PendulumAnimationState extends ConsumerState<PendulumAnimation>
                   Expanded(
                       child: Text(
                     "Please turn the device to landscape mode",
-                    style: PoppinsStyles.bold(color: AppColors.redColor,)
-                        .copyWith( fontSize: 16.sp),
+                    style: PoppinsStyles.bold(
+                      color: AppColors.redColor,
+                    ).copyWith(fontSize: 16.sp),
                   ))
                 ],
               ),

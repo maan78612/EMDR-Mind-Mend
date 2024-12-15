@@ -11,6 +11,7 @@ class ApiUrls {
   static const setSubscription = "${baseUrl}subscriptions/create/";
   static const appleLogin = "${baseUrl}apple_login/";
   static const googleLogin = "${baseUrl}google_login/";
-
+  static const getScore = "${baseUrl}score-records/";
   static const deleteUser = "${baseUrl}delete/?user_id=";
+  static const userStats = "${baseUrl}statistics/";
 }

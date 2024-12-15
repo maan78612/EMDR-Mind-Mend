@@ -10,15 +10,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class StatusBar extends ConsumerWidget {
-  final StateNotifierProvider<UserStatsNotifier, UserStatsModel>
-      userStatsNotifierProvider;
+  final ChangeNotifierProvider<UserStatsViewModel> userStatsNotifierProvider;
 
   const StatusBar({super.key, required this.userStatsNotifierProvider});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final userStats = ref.watch(userStatsNotifierProvider);
-    final userStatsNotifier = ref.watch(userStatsNotifierProvider.notifier);
 
     return Container(
       padding: EdgeInsets.all(8.sp),
@@ -35,7 +33,7 @@ class StatusBar extends ConsumerWidget {
               status: status,
               isSelected: userStats.selectedStatsStatus == status,
               onTap: () {
-                userStatsNotifier.selectStatsStatus(status);
+                userStats.selectStatsStatus(status);
               },
             );
           }).toList(),

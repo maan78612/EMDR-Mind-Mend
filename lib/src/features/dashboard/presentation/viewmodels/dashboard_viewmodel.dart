@@ -4,8 +4,9 @@ import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
 import 'package:emdr_mindmend/src/features/dashboard/data/repositories/dashboard_repository_impl.dart';
+import 'package:emdr_mindmend/src/features/dashboard/domain/models/subscription.dart';
 import 'package:emdr_mindmend/src/features/dashboard/domain/repositories/dashboard_repository.dart';
-import 'package:emdr_mindmend/src/features/home/domain/models/subscription.dart';
+
 
 import 'package:flutter/material.dart';
 

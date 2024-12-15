@@ -3,14 +3,14 @@ import 'package:emdr_mindmend/src/core/constants/globals.dart';
 import 'package:emdr_mindmend/src/core/enums/snackbar_status.dart';
 import 'package:emdr_mindmend/src/core/services/stripe/stripe_methods.dart';
 import 'package:emdr_mindmend/src/features/auth/domain/models/user.dart';
-import 'package:emdr_mindmend/src/features/home/data/repositories/home_repository_impl.dart';
-import 'package:emdr_mindmend/src/features/home/domain/models/subscription.dart';
-import 'package:emdr_mindmend/src/features/home/domain/repositories/home_repository.dart';
+import 'package:emdr_mindmend/src/features/dashboard/data/repositories/dashboard_repository_impl.dart';
+import 'package:emdr_mindmend/src/features/dashboard/domain/models/subscription.dart';
+import 'package:emdr_mindmend/src/features/dashboard/domain/repositories/dashboard_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SubscriptionViewModel with ChangeNotifier {
-  final HomeRepository _homeRepository = HomeRepositoryImpl();
+  final DashBoardRepository _dashBoardRepository = DashBoardRepositoryImpl();
   bool _isLoading = false;
 
   bool get isLoading => _isLoading;
@@ -79,7 +79,7 @@ class SubscriptionViewModel with ChangeNotifier {
       }
 
       final body = {"subscription_id": selectedSubscription?.id};
-      final data = await _homeRepository.setSubscription(body: body);
+      final data = await _dashBoardRepository.setSubscription(body: body);
 
       _setSubscriptionDataLocally(data, ref);
 

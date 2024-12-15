@@ -19,19 +19,43 @@ import 'package:emdr_mindmend/src/features/therapy/presentation/views/info_views
 import 'package:emdr_mindmend/src/features/therapy/presentation/views/info_views/info_9.dart';
 import 'package:emdr_mindmend/src/features/therapy/presentation/views/info_views/info_11.dart';
 
-class TherapyScreen extends ConsumerWidget {
+class TherapyScreen extends ConsumerStatefulWidget {
   final bool isShort;
 
-  TherapyScreen({super.key, required this.isShort});
-
-  final therapyViewModelProvider =
-      ChangeNotifierProvider((ref) => TherapyViewModel());
+  const TherapyScreen({super.key, required this.isShort});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final therapyViewModel = ref.watch(therapyViewModelProvider);
+  ConsumerState<TherapyScreen> createState() => _TherapyScreenState();
+}
+
+class _TherapyScreenState extends ConsumerState<TherapyScreen> {
+  final therapyViewModelProvider =
+      ChangeNotifierProvider((ref) => TherapyViewModel());
+  late TherapyViewModel therapyViewModel;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      therapyViewModel = ref.read(therapyViewModelProvider);
+      await therapyViewModel.initializeVideoPlayer();
+    });
+  }
+
+  @override
+  void dispose() {
+    // Safely dispose the controller only if the widget is not disposed
+    if (mounted) {
+      therapyViewModel.resetVideoController();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    therapyViewModel = ref.watch(therapyViewModelProvider);
     final colorMode = ref.watch(colorModeProvider);
-    final int totalScreens = isShort ? 4 : 10;
+    final int totalScreens = widget.isShort ? 4 : 10;
 
     return Scaffold(
       backgroundColor: AppColorHelper.getScaffoldColor(colorMode),
@@ -46,10 +70,9 @@ class TherapyScreen extends ConsumerWidget {
                 Expanded(
                   child: IndexedStack(
                     index: therapyViewModel.introIndex,
-                    children: isShort ? _shortScreens() : _longScreens(),
+                    children: widget.isShort ? _shortScreens() : _longScreens(),
                   ),
                 ),
-                // Navigation controls
                 _buildNavigationControls(
                     context, therapyViewModel, totalScreens),
                 20.verticalSpace,
@@ -75,7 +98,7 @@ class TherapyScreen extends ConsumerWidget {
   List<Widget> _longScreens() {
     return [
       const WelcomeInfo(),
-      const Info1(),
+      Info1(therapyViewModelProvider: therapyViewModelProvider),
       const Info2(),
       const Info3(),
       const Info4(),
@@ -93,17 +116,14 @@ class TherapyScreen extends ConsumerWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-
         CommonInkWell(
           onTap: therapyViewModel.decrementIndex,
           child: _navigationButton(Icons.arrow_back),
         ),
-
         _buildDotsIndicator(therapyViewModel.introIndex, totalScreens),
-
         CommonInkWell(
           onTap: () {
-            if (therapyViewModel.incrementIndex(isShort)) {
+            if (therapyViewModel.incrementIndex(widget.isShort)) {
               therapyViewModel.setScore(
                 showSnackBarMsg: ({
                   required snackType,

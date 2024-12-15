@@ -1,4 +1,5 @@
-import 'package:emdr_mindmend/src/features/home/domain/models/subscription.dart';
+import 'package:emdr_mindmend/src/features/dashboard/domain/models/subscription.dart';
+
 
 abstract class DashBoardRepository {
 

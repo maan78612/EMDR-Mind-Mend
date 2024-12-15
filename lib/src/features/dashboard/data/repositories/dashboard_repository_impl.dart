@@ -1,7 +1,7 @@
 import 'package:emdr_mindmend/src/core/constants/api_urls.dart';
 import 'package:emdr_mindmend/src/core/services/network/api_data_source.dart';
+import 'package:emdr_mindmend/src/features/dashboard/domain/models/subscription.dart';
 import 'package:emdr_mindmend/src/features/dashboard/domain/repositories/dashboard_repository.dart';
-import 'package:emdr_mindmend/src/features/home/domain/models/subscription.dart';
 
 class DashBoardRepositoryImpl implements DashBoardRepository {
 

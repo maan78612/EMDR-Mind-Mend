@@ -50,6 +50,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         appBar: AppBar(
           surfaceTintColor: Colors.transparent,
           backgroundColor: Colors.transparent,
+          centerTitle: true,
           title: Text(
             "My Profile",
             style: PoppinsStyles.semiBold(
@@ -101,7 +102,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   await CustomNavigation().push(const EditProfileScreen());
                 },
                 colorMode: colorMode),
-
             _tiles(
                 img: AppImages.faq,
                 title: "Helps & FAQ's",
@@ -175,8 +175,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       ),
     );
   }
-
-
 
   void _showLogoutDialog(BuildContext context,
       ProfileViewModel profileViewModel, ColorMode colorMode) {

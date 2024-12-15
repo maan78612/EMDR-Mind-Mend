@@ -2,13 +2,25 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+   <key>NSAppTransportSecurity</key>
+   <dict>
+       <key>NSExceptionDomains</key>
+       <dict>
+           <key>yourdomain.com</key>
+           <dict>
+               <key>NSIncludesSubdomains</key>
+               <true/>
+               <key>NSExceptionAllowsInsecureHTTPLoads</key>
+               <true/>
+           </dict>
+       </dict>
+   </dict>
     <key>NSCameraUsageDescription</key>
     <string>Scan your card to add it automatically</string>
-    <key>NSCameraUsageDescription
-    &lt;string&gt;To scan cards&lt;/string&gt;</key>
-    <string>To scan cards</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>This app needs access to your photo library in order to select photos.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>This app needs access to the microphone for video playback.</string>
     <key>NSUserTrackingUsageDescription</key>
     <string>This identifier will be used to fetch information before and after EMDR therapy.</string>
 	<key>CFBundleDevelopmentRegion</key>
